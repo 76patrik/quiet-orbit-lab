@@ -1,8 +1,18 @@
-# Orbit · Theoretische Informatik
+# Orbit · Lernstudio
 
-Ein persönliches Lernstudio für die Klausurvorbereitung: erst verstehen, dann selbst anwenden, danach gezielt wiederholen.
+Ein persönliches Lernstudio für die Klausurvorbereitung in mehreren Fächern: erst verstehen, dann selbst anwenden, danach gezielt wiederholen.
 
-## Was bereits funktioniert
+## Fächer
+
+| Fach | Prüfung | Stand |
+|---|---|---|
+| Theoretische Informatik | 20.11.2026 | Woche 1 interaktiv, Wochen 2–9 geplant |
+| Finanzierung und Rechnungswesen | 27.11.2026 | Angelegt, Lernmaterialien folgen |
+| Mikro- und Makroökonomik | 02.12.2026 | Angelegt, Lernmaterialien folgen |
+
+Die Seite **Fächer** zeigt alle Prüfungen mit Countdown. Sidebar und Kopfzeile zeigen die nächste Prüfung. Die Termine lassen sich in den Einstellungen ändern. Für Fächer ohne Unterlagen gibt es noch keine Lektionen oder Aufgaben.
+
+## Theoretische Informatik: Was bereits funktioniert
 
 - **Woche 1:** 19 erklärte Lektionen, 62 Übungsaufgaben und ein separater Check mit 10 Fragen.
 - **Fünf Lernlabore:** Sprachoperationen, RegEx, DEA-Läufe, eigene Automaten und Komplexitätswachstum.
@@ -51,7 +61,8 @@ Freitext-Begründungen werden privat als Notizen gespeichert. Die App bewertet s
 
 | Datei | Aufgabe |
 |---|---|
-| `src/curriculum.js` | Lerntexte, Aufgaben, Wochenplan und Pokalkriterien |
+| `src/subjects.js` | Fächer, Prüfungstermine und Countdowns |
+| `src/curriculum.js` | TI: Lerntexte, Aufgaben, Wochenplan und Pokalkriterien |
 | `src/engine.js` | Mengenoperationen, Thompson-NEA, Sprachgleichheit, DEA-Läufe |
 | `src/progress.js` | Wiederholung, XP, Kompetenzstatus, validierte Sicherungen |
 | `src/app.js` | Oberfläche und Interaktionen |
