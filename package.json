@@ -1,0 +1,14 @@
+{
+  "name": "quiet-orbit-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Orbit – interaktives Lernstudio für Theoretische Informatik",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.js",
+    "build": "node scripts/build.mjs"
+  },
+  "engines": { "node": ">=22" }
+}

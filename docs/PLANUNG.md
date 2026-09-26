@@ -1,0 +1,72 @@
+# Lern- und Umsetzungsplanung
+
+## Ziel und Umfang der ersten Version
+
+Die App ergänzt das 42-seitige Woche-1-Skript und den Masterplan mit aktiver Anwendung. Woche 1 ist vollständig erschlossen; die übrigen acht Wochen sind als transparente Roadmap vorhanden. Keine gesperrten oder scheinbar bereits fertigen Folgelektionen.
+
+## Lernschleife
+
+1. **Verstehen:** kurze Erklärung vom Grundbegriff aus, mit Fachnotation und Bedeutung in Alltagssprache.
+2. **Nachvollziehen:** ein gelöstes Beispiel und eine typische Stolperstelle.
+3. **Selbst erklären:** lokale Notiz zu einer offenen Begründungsfrage.
+4. **Anwenden:** Auswahl, Menge, Zahl oder RegEx eingeben; Zustände und Übergänge konstruieren.
+5. **Korrigieren:** inhaltliche Erklärung, Gegenbeispiele und eigene Fehlerursache.
+6. **Abrufen:** Wiederholungen nach 1, 3, 7 und 14 Tagen, mit Datum in Europe/Berlin.
+
+## Woche 1: Zuordnung zum Skript
+
+| Abschnitt | Lektionen | Nachweis / Werkzeug |
+|---|---|---|
+| S. 3–9 | Motivation, Komplexität, Notation, Alphabet, Leere | Anwendungsfragen, Mengeneingabe, Wachstumsregler |
+| S. 10–14 und 31 | Sprache, Mengenoperationen, Konkatenation, Abschluss, Rechtsquotient | Eigene Berechnungen, Operationenlabor mit Herleitung |
+| S. 17–20, 28 | RegEx lesen und bauen | Vollständiger Sprachvergleich, Gegenbeispiele |
+| S. 21–27, 32 | DEA, Parität, Alternation, Komplement | Schrittweise Simulation, vier Konstruktionsaufgaben |
+| S. 15–16, 28–33 | Grammatik, Hierarchie, Transfer | Begründen, Fehlannahmen erkennen, private Notizen |
+| S. 34–40 | Vertiefung und Wochencheck | 62 Aufgaben, separater Check, zwei Pflicht-DEAs |
+
+Die Vorschau endlicher Wörter in einem Labor ersetzt keinen mathematischen Beweis. Der RegEx-Prüfer konstruiert Thompson-NEAs, verfolgt ε-Abschlüsse und untersucht das erreichbare Produkt der Zustandsmengen. Der DEA-Prüfer untersucht das Produkt der Zustände. Beide Verfahren sind für die jeweils unterstützten Eingaben vollständig; der RegEx-Vergleich besitzt eine explizite Ressourcenbegrenzung und meldet dann eine Grenze statt eines falschen Urteils.
+
+## Fortschritt ohne Scheinsicherheit
+
+- Abschluss: mindestens 80 % der Lektionsfragen ohne eingeblendete Hilfe.
+- Kompetenz „sicher“: zwei unterschiedliche Aufgaben an unterschiedlichen Tagen, keine offenen Fehler im Thema.
+- XP werden pro erstmaligem Ergebnis vergeben; fällige Wiederholungen höchstens einmal täglich pro Aufgabe.
+- Freie Laborversuche haben keine beliebig vervielfachbaren Punkte.
+- Wochenpokal: 8/10 im Check plus beide Pflicht-DEAs ohne Zustands-Hinweis.
+- Keine fiktiven Nutzer, Ranglisten, vorgefüllten Erfolge oder erfundenen Statistiken.
+- Offene Begründungen werden nicht durch Stichwortsuche als „richtig“ bewertet.
+
+## Weitere Wochen
+
+| Woche | Geplante Interaktionen | Fachlicher Fokus |
+|---|---|---|
+| 2 | NEA-Zustandsmengen wählen; Potenzmengen-Tabelle ausfüllen; Partitionen verfeinern | NEA → DEA, Minimierung, reguläre Grammatik, Kleene |
+| 3 | Ableitungsschritte wählen; Syntaxbäume aufbauen; CNF-Regeln bearbeiten | Grenzen, Pumping, Mehrdeutigkeit, CNF |
+| 4 | CYK-Dreieck ausfüllen und Zerlegungen begründen; Stack simulieren | CYK, Parserbezug, Kellerautomaten |
+| 5 | Band und Kopf schrittweise bewegen; Konfigurationen eingeben | TM-Entwurf, DTM/NTM, P/NP-Einstieg |
+| 6 | Graphen modellieren; Zertifikate prüfen; Reduktionsrichtung wählen | Clique, Vertex Cover, Färbung, TSP, Knapsack |
+| 7 | Entscheidbarkeitsaussagen begründen; Hierarchie zuordnen | Halteproblem, Rice, Simulation 1 am 07.11. |
+| 8 | Aufgabenmix anhand individueller Fehlermuster | Simulation 2 am 14.11., Ziel 75 % |
+| 9 | Neue Varianten und fokussierte Lückenbearbeitung | Simulation 3 am 17.11., zwei Nachweise mit 80 % |
+
+## Technische Entscheidungen
+
+Statische ES-Module ohne Abhängigkeiten oder Backend: auf GitHub Pages günstig betreibbar, offline nutzbar und leicht erweiterbar. Hash-Routen vermeiden 404 beim direkten Öffnen auf Unterpfaden. Alle Assets sind relativ adressiert. Persönliche Antworten liegen nur in localStorage, Sicherungen werden strikt validiert und erst nach einer sichtbaren Vorschau übernommen. Importierte Texte werden für HTML maskiert. Keine Originaldateien, Kontaktdaten oder personenbezogene Profilinhalte werden veröffentlicht.
+
+Cloud-Synchronisation ist eine mögliche spätere Erweiterung mit Anmeldung und privaten Datensätzen; sie ist in dieser Version nicht implementiert. Die App behauptet keine geräteübergreifende Synchronisation.
+
+## Abnahmekriterien
+
+- Vollständige Beispiele und Erklärungen für alle W1-Bausteine.
+- Jede Lektion hat mindestens drei bewertbare Aufgaben.
+- Fachliche Randfälle werden gegen unabhängige Definitionen geprüft.
+- Ungültige RegEx, unvollständige DEAs und fehlerhafte Importe werden verständlich abgefangen.
+- Fortschritt beginnt bei null und übersteht Neuladen.
+- Hinweisgestützte Antworten verleihen keinen unabhängigen Kompetenznachweis.
+- Der Wochencheck verrät vor Abschluss keine Lösungen.
+- Touch-Bedienung, klar beschriftete Eingaben und Tastaturfokus; reduzierte Bewegung wird respektiert.
+- Pages-Build enthält nur öffentliche App-Dateien.
+
+## Inhaltliche Grenzen
+
+Eine App allein ersetzt keine handschriftlichen Rechenwege und keine neuen Klausurvarianten. Der Wochencheck verwendet feste Fragen und dient daher nach dem ersten Durchlauf besonders der Wiederholung. Die endgültige Klausurdauer, erlaubte Hilfsmittel und der tatsächliche Umfang sind in den bereitgestellten Unterlagen nicht bestätigt.
