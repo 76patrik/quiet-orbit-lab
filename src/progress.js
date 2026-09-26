@@ -5,7 +5,7 @@ export const today=(date=new Date())=>{
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 export const addDays=(day,n)=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);};
-export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0});
+export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,confidence:{}});
 export function loadState(storage) {
   try {const raw=storage.getItem(KEY);return {state:raw?validateImport(JSON.parse(raw)):blankState(),error:null};}
   catch {return {state:blankState(),error:'Dein Speicherstand konnte nicht gelesen werden. Er wurde nicht überschrieben. Exportiere vorhandene Sicherungen, bevor du neu speicherst.'};}
@@ -25,7 +25,9 @@ export function touchActivity(state,day=today()) {
 export function dueQuestions(state,day=today()){
   return Object.entries(state.results).filter(([id,r])=>questionById[id]&&r.due<=day).sort((a,b)=>a[1].due.localeCompare(b[1].due)).map(([id])=>questionById[id]);
 }
-export function recordAnswer(state,qid,correct,{assisted=false,day=today(),review=false}={}) {
+export function recordAnswer(state,qid,correct,{assisted=false,day=today(),review=false,confidence=null}={}) {
+  if(!Object.hasOwn(questionById,qid))throw new Error('Unbekannte Aufgabe.');
+  if(['guess','unsure','sure'].includes(confidence)){const c=state.confidence[qid]||{guess:0,unsure:0,sure:0,wrongSure:0,last:null,lastCorrect:false};c[confidence]++;if(confidence==='sure'&&!correct)c.wrongSure++;c.last=confidence;c.lastCorrect=correct;state.confidence[qid]=c;}
   const old=state.results[qid]||{attempts:0,correct:0,stage:0,due:day,successes:[],everWrong:false,repaired:false};
   const wasDue=old.attempts>0&&old.due<=day;
   const wrongBefore=old.everWrong;
@@ -35,7 +37,7 @@ export function recordAnswer(state,qid,correct,{assisted=false,day=today(),revie
     if(wrongBefore)old.repaired=true;
     award(state,`solve:${qid}`,10,day);
     if(review&&wasDue) award(state,`review:${day}:${qid}`,5,day);
-    if(old.lastAdvance!==day){const intervals=[1,3,7,14];old.due=addDays(day,intervals[Math.min(old.stage,3)]);old.stage=Math.min(3,old.stage+1);old.lastAdvance=day;}
+    if(old.lastAdvance!==day){const intervals=[1,3,7,14];old.due=addDays(day,intervals[Math.min(old.stage,3)]);old.stage=Math.min(3,old.stage+1);old.lastAdvance=day;}else if(old.due<=day){old.due=addDays(day,1);}
     if(state.errors[qid])state.errors[qid].resolved=true;
   } else {
     old.stage=0;old.due=day;
@@ -94,5 +96,6 @@ export function validateImport(data) {
     if(!validKey||!obj(v)||v.xp!==expected||!validDay(v.date))fail();s.awards[key]={xp:v.xp,date:v.date};
   }
   if(!Array.isArray(data.badges)||!data.badges.every(id=>achievements.some(a=>a.id===id)))fail();s.badges=[...new Set(data.badges)];
+  if(data.confidence!==undefined){if(!obj(data.confidence))fail();for(const [id,v] of Object.entries(data.confidence)){if(!Object.hasOwn(questionById,id)||!obj(v)||!['guess','unsure','sure'].includes(v.last)||typeof v.lastCorrect!=='boolean'||!['guess','unsure','sure','wrongSure'].every(k=>integer(v[k]))||v.wrongSure>v.sure)fail();s.confidence[id]={guess:v.guess,unsure:v.unsure,sure:v.sure,wrongSure:v.wrongSure,last:v.last,lastCorrect:v.lastCorrect};}}
   if(data.lastLesson!==null&&!lids.has(data.lastLesson))fail();s.lastLesson=data.lastLesson;return s;
 }

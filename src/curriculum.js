@@ -1,3 +1,5 @@
+import {extraQuestions} from './practice-bank.js';
+import {laterTopics} from './topics.js';
 export const weeks = [
  {n:1,start:'2026-09-21',end:'2026-09-27',title:'Das Fundament',subtitle:'Wörter, Sprachen, RegEx & DEA',hours:8,tasks:'Aufgaben 1–3 und 4a/c; 4b/d besprechen.',goal:'8 von 10 Checkfragen und zwei selbst gebaute DEAs.',topics:['Grundbegriffe & Komplexität','Sprachoperationen','Reguläre Ausdrücke','Deterministische Automaten']},
  {n:2,start:'2026-09-28',end:'2026-10-04',title:'Automaten verstehen',subtitle:'NEA, Potenzmenge & Minimierung',hours:8,tasks:'Aufgaben 5–8 und 4d.',goal:'Einen NEA umwandeln, einen DEA minimieren und Darstellungen übersetzen.',topics:['NEA & Potenzmengenkonstruktion','Minimierung','Reguläre Grammatik','Satz von Kleene']},
@@ -139,7 +141,7 @@ const q=(id,lesson,prompt,options,answer,explanation,hint)=>({id,lesson,type:'ch
 const s=(id,lesson,prompt,answer,explanation,hint)=>({id,lesson,type:'set',prompt,answer,explanation,hint:hint||'Bilde alle möglichen Ergebnisse. Streiche Doppelungen und prüfe ε.'});
 const n=(id,lesson,prompt,answer,explanation,hint)=>({id,lesson,type:'number',prompt,answer,explanation,hint:hint||'Setze die Werte Schritt für Schritt in die Regel ein.'});
 const r=(id,prompt,answer,explanation)=>({id,lesson:'construct',type:'regex',prompt,answer,explanation,hint:'Zerlege die Sprache in einen freien Anfang, Pflichtzeichen und einen erlaubten Rest.'});
-export const questions=[
+const originalQuestions=[
  q('m1','motivation','„Sortiere die Liste [7,2,5].“ Was ist [7,2,5]?',['Ein Algorithmus','Eine konkrete Instanz','Die Laufzeitklasse'],1,'Das allgemeine Problem ist Sortieren. Diese bestimmte Liste ist eine Eingabeinstanz.'),
  q('m2','motivation','Ein Code hat das vorgeschriebene Format. Was folgt daraus?',['Er ist tatsächlich vergeben.','Seine Syntax ist gültig.','Seine Bedeutung ist korrekt.'],1,'Eine Formatprüfung entscheidet den syntaktischen Aufbau, nicht die tatsächliche Zuordnung.'),
  q('m3','motivation','Welche Frage betrifft Komplexität?',['Wie wächst die Zahl der Rechenschritte mit der Eingabe?','Was bedeutet das Symbol ε?','Welchen Namen hat die Startvariable?'],0,'Komplexität misst Ressourcenverbrauch abhängig von der Eingabegröße.'),
@@ -215,9 +217,15 @@ export const checkQuestions = [
  q('w9','complement','Wie komplementierst du einen vollständigen DEA?',['Start und Endzustände vertauschen','F durch Q ∖ F ersetzen','Alle Pfeile umdrehen'],1,'Alle übrigen Bestandteile bleiben gleich.'),
  q('w10','parity','Welche Information genügt für „gerade Anzahl Einsen“?',['Die genaue Wortlänge','Die genaue Anzahl Einsen','Nur gerade oder ungerade'],2,'Eine 1 wechselt zwischen den beiden Möglichkeiten; 0 lässt sie unverändert.')
 ];
+export const questions=[...originalQuestions.map(q=>({...q,level:q.type==='choice'?1:2,kind:q.type==='choice'?'concept':q.type==='regex'?'construct':'calculate',family:q.id})),...extraQuestions];
+export const allTopics=[...lessons.map(l=>({...l,week:1})),...laterTopics];
+export const topicById=Object.fromEntries(allTopics.map(t=>[t.id,t]));
 export const allQuestions=[...questions,...checkQuestions];
 export const questionById=Object.fromEntries(allQuestions.map(q=>[q.id,q]));
 export const achievements=[
+ {id:'hundred',title:'Wissenssammler',description:'100 verschiedene Aufgaben ohne Hinweis lösen.',icon:'book',rule:s=>Object.values(s.results).filter(r=>r.successes?.length).length>=100},
+ {id:'detective',title:'Fehlerdetektiv',description:'10 verschiedene Fehler-Suchaufgaben ohne Hilfe lösen.',icon:'search',rule:s=>questions.filter(q=>q.kind==='debug'&&s.results[q.id]?.successes.length).length>=10},
+ {id:'explorer',title:'Horizont erweitert',description:'In fünf Themen ab Woche 2 je drei Aufgaben ohne Hilfe lösen.',icon:'orbit',rule:s=>laterTopics.filter(t=>questions.filter(q=>q.lesson===t.id&&s.results[q.id]?.successes.length).length>=3).length>=5},
  {id:'first',title:'Zündung',description:'Die erste Aufgabe richtig lösen.',icon:'spark',rule:s=>Object.values(s.results).some(r=>r.successes?.length)},
  {id:'ten',title:'Im Lernorbit',description:'10 verschiedene Aufgaben richtig lösen.',icon:'orbit',rule:s=>Object.values(s.results).filter(r=>r.successes?.length).length>=10},
  {id:'lesson',title:'Ein Baustein sitzt',description:'Eine Lektion mit mindestens 80 % abschließen.',icon:'book',rule:s=>Object.keys(s.completed).length>=1},

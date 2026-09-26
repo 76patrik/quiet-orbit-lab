@@ -1,0 +1,47 @@
+// Page references identify the uploaded lecture PDFs; explanations and tasks are newly authored.
+const t=(id,title,week,source,intro,steps,example,trap)=>({id,title,week,source,intro,steps,example,trap});
+export const laterTopics=[
+ t('nea','NEA & Potenzmengenkonstruktion',2,'Reguläre Sprachen 1 · S. 53–97','Ein NEA kann mehrere mögliche Zustände zugleich verfolgen. Akzeptiert wird, wenn mindestens ein vollständiger Lauf akzeptiert.',
+ ['Bilde zuerst die ε-Hülle des Starts.','Vereinige für jedes Zeichen alle erreichbaren Nachfolger und ergänze deren ε-Hülle.','Jede erreichte Zustandsmenge wird ein DEA-Zustand. Mengen mit mindestens einem Endzustand akzeptieren.'],
+ 'δ(p,0)={p,q}, δ(q,0)={r}: Aus {p,q} wird bei 0 die Menge {p,q,r}. Die leere Menge ist ein möglicher Fangzustand.',
+ 'Endzustände einfach umdrehen komplementiert einen NEA im Allgemeinen nicht. Zuerst determinisieren und vervollständigen.'),
+ t('minimize','DEA minimieren',2,'Reguläre Sprachen 2 · S. 14–58','Zwei Zustände sind genau dann gleichwertig, wenn jedes mögliche Restwort aus beiden dieselbe Annahmeentscheidung ergibt.',
+ ['Entferne vom Start unerreichbare Zustände.','Trenne akzeptierende und nicht akzeptierende Zustände.','Verfeinere die Gruppen, sobald ein Zeichen in verschiedene Gruppen führt; wiederhole bis zur Stabilität.'],
+ 'Führt 1 von p in einen Endzustand, von q aber in einen Nichtendzustand, unterscheidet das Suffix 1 die Zustände p und q.',
+ 'Gleicher Akzeptanzstatus allein genügt nicht. Entscheidend sind sämtliche Restwörter.'),
+ t('pumping','Pumping & Grenzen endlicher Automaten',3,'Reguläre Sprachen 2 · S. 70–81','Das Pumping-Lemma liefert eine notwendige Eigenschaft regulärer Sprachen. Für einen Widerspruch musst du jede erlaubte Zerlegung berücksichtigen.',
+ ['Nimm eine Pumpinglänge p an und wähle ein passendes langes Wort w aus L.','Betrachte alle w=xyz mit |xy|≤p und |y|≥1.','Zeige: Zu jeder erlaubten Zerlegung gibt es i≥0 mit xyⁱz nicht in L.'],
+ 'Für {0ⁿ1ⁿ} wähle 0ᵖ1ᵖ. y enthält nur Nullen. Mit i=0 fehlen Nullen, die Einsen bleiben: kein Wort der Sprache.',
+ 'Du darfst y nicht frei festlegen. Das Lemma beweist mit erfolgreichem Pumpen auch nicht automatisch Regularität.'),
+ t('cnf','Grammatiken, CNF & Syntaxbäume',3,'Kontextfreie Sprachen · S. 7–33','In strenger Chomsky-Normalform haben Regeln die Form A→BC oder A→a. Für ε ist eine gesonderte Startregel erlaubt, deren Startsymbol nie rechts vorkommt.',
+ ['Beseitige ε-Regeln unter Erhalt der Ausnahme und entferne Kettenregeln.','Ersetze Terminale in längeren rechten Seiten durch eigene Variablen.','Zerlege rechte Seiten mit mehr als zwei Variablen durch Hilfsvariablen.'],
+ 'S→aSb wird S→AC, C→SB, A→a, B→b. Eine Basisregel S→ab wird zusätzlich S→AB.',
+ 'A→B ist keine CNF-Regel. Mehrere Ableitungsreihenfolgen allein bedeuten noch nicht mehrere Syntaxbäume.'),
+ t('cyk','CYK & Ableitungen',4,'Kontextfreie Sprachen · S. 35–82','CYK prüft für eine CNF-Grammatik, welche Variablen jedes zusammenhängende Teilwort erzeugen können.',
+ ['Trage zu jedem einzelnen Zeichen alle passenden A→a in die unterste Zeile ein.','Prüfe für jedes längere Teilwort jede Zerlegung und jede passende Regel A→BC.','Das ganze Wort gehört zur Sprache genau dann, wenn S in der obersten Zelle steht.'],
+ 'S→AB, A→a, B→b: Für ab stehen unten {A} und {B}, darüber {S}. Für ba bleibt die oberste Zelle leer.',
+ 'Die Reihenfolge BC zählt. Eine beliebige gefüllte oberste Zelle reicht nicht: Das Startsymbol muss enthalten sein.'),
+ t('stack','Kellerautomaten & Abschlüsse',4,'Kontextfreie Sprachen · S. 84–114','Ein Keller speichert unbeschränkt viele Symbole nach dem Prinzip „zuletzt hinein, zuerst hinaus“. Nichtdeterministische Kellerautomaten erkennen genau die kontextfreien Sprachen.',
+ ['Lege fest, was jedes Kellersymbol bedeutet.','Beschreibe Aufbauphase, Phasenwechsel und Abbauphase.','Prüfe die ganze Eingabe und das vereinbarte Akzeptanzkriterium, insbesondere ε.'],
+ 'Für aⁿb²ⁿ mit n≥1: pro a zwei Marker ablegen, pro b einen entfernen. Nach dem ersten b kein a mehr zulassen.',
+ 'Kontextfreie Sprachen sind unter Vereinigung, Konkatenation und Stern abgeschlossen, aber nicht allgemein unter Schnitt oder Komplement.'),
+ t('tm','Turingmaschinen & Konfigurationen',5,'Kontextsensitive Sprachen · S. 24–64','Eine Konfiguration legt Bandinhalt, Kopfposition und Zustand fest. Jeder Schritt liest ein Zeichen, schreibt eines, bewegt den Kopf und wechselt den Zustand.',
+ ['Notiere das Zustandszeichen direkt vor der gelesenen Bandzelle.','Wende genau die passende Übergangsregel an.','Prüfe Randfälle wie leere Eingabe und Übertrag; eine universelle Aussage braucht mehr als Beispieltests.'],
+ 'Ein Binärinkrementierer läuft nach rechts, überträgt von hinten über Einsen (1→0) und macht die erste 0 zu 1. 1011 wird 1100.',
+ 'Eine NTM akzeptiert, wenn ein Lauf akzeptiert. Äquivalente Berechenbarkeit von DTM und NTM bedeutet nicht gleiche Laufzeit.'),
+ t('np','P, NP & Graphprobleme',6,'Kontextsensitive Sprachen · S. 66–79; NP-Probleme · S. 3–86','P umfasst in Polynomialzeit entscheidbare Probleme. Bei NP lassen sich Ja-Zertifikate polynomial prüfen. NP bedeutet nicht „nicht polynomial“.',
+ ['Formuliere die Ja/Nein-Frage mit Schwellenwert k.','Nenne ein Zertifikat und erkläre den Prüfer sowie seine Laufzeit.','Trenne leichte Spezialfälle von der allgemeinen Problemklasse.'],
+ 'Clique: jede Paarverbindung innerhalb der Auswahl existiert. Vertex Cover: jede Kante hat mindestens einen ausgewählten Endpunkt.',
+ 'Eine maximale Clique lässt sich nicht mehr erweitern; eine größte Clique hat die größtmögliche Größe. Das ist ein Unterschied.'),
+ t('reduction','Reduktionen & NP-Vollständigkeit',6,'Kontextsensitive Sprachen · S. 82–98; NP-Probleme · S. 88–94','A≤ₚB bedeutet: Ein polynomialer Übersetzer wandelt jede A-Instanz in eine B-Instanz um und erhält Ja/Nein-Antworten.',
+ ['Für NP-Vollständigkeit von B: zuerst B∈NP zeigen.','Reduziere ein bekanntes NP-schweres A auf B.','Begründe beide Richtungen der Äquivalenz und die polynomiale Größe und Laufzeit.'],
+ 'CLIQUE auf INDEPENDENT SET: Komplementgraph bilden und k beibehalten. Eine Clique in G ist eine unabhängige Menge in seinem Komplement.',
+ 'B≤ₚA allein zeigt nicht die Schwere von B. Ein Algorithmus für B würde mittels A≤ₚB auch A lösen.'),
+ t('decidable','Entscheidbarkeit & Rice',7,'Entscheidbarkeit · S. 3–25','Ein Entscheider hält auf jeder Eingabe. Ein Semi-Entscheider akzeptiert Mitglieder nach endlich vielen Schritten und darf bei Nichtmitgliedern endlos laufen.',
+ ['Unterscheide Eigenschaften des Quelltexts von Eigenschaften der berechneten Funktion.','Prüfe für Rice: semantisch und nichttrivial über partiell berechenbare Funktionen?','Für L und sein Komplement je einen Semi-Entscheider: Simulationen abwechselnd ausführen, bis einer akzeptiert.'],
+ '„Hat das Programm höchstens zehn Zustände?“ ist syntaktisch. „Berechnet es überall die Nullfunktion?“ ist eine nichttriviale semantische Eigenschaft und daher unentscheidbar.',
+ 'Unentscheidbar bedeutet nicht, dass keine einzelne Instanz lösbar ist. Rice gilt nicht pauschal für jede Frage über Programme.')
+];
+export const laterTopicById=Object.fromEntries(laterTopics.map(t=>[t.id,t]));
+export const levels={1:'Grundlagen',2:'Anwenden',3:'Transfer'};
+export const kinds={concept:'Verständnis',calculate:'Selbst rechnen',debug:'Fehler finden',construct:'Konstruieren'};
