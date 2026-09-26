@@ -1,3 +1,4 @@
+import {lessonGuides} from './lesson-guides.js';
 // Vertiefende Erklärung direkt in der Aufgabe: der passendste Abschnitt aus der Lektion
 // (bzw. Grundidee und Vorgehen eines späteren Themas), dazu Beispiel und Stolperstelle.
 import { topicById } from './curriculum.js';
@@ -19,6 +20,8 @@ export function explainFor(question) {
   } else {
     blocks = [{title: 'Grundidee', text: topic.intro}, {title: 'Vorgehen', text: topic.steps.map((s, i) => `${i + 1}. ${s}`).join(' ')}];
   }
+  const guide=lessonGuides[question.lesson];
+  if(guide) more.push({title:'Durchgerechneter Lösungsweg: '+guide.worked.prompt,text:guide.worked.steps.join('\n')},{title:'Selbstkontrolle: '+guide.check,text:guide.answer});
   const example = Array.isArray(topic.example) ? {title: `Beispiel: ${topic.example[0]}`, text: topic.example[1]} : {title: 'Beispiel', text: topic.example};
   return {topic: topic.title, source: topic.source, blocks: [...blocks, example, {title: 'Genau hinschauen', text: topic.trap}], more};
 }
