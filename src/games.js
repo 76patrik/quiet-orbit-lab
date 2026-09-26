@@ -1,6 +1,6 @@
 // Spielmodi: Ränge, Tagesmissionen, Karteikarten und Bosskämpfe.
 // Reine Funktionen ohne Speicherzugriff, damit sie sich einzeln testen lassen.
-import { lessons, units, questions } from './curriculum.js';
+import { lessons, units, questions, allTopics } from './curriculum.js';
 
 export const LEVEL_XP = 150;
 export const level = xp => 1 + Math.floor(xp / LEVEL_XP);
@@ -30,12 +30,18 @@ export function questStatus(state, day) {
   return dailyQuests(day).map(q=>{const value=q.value(a);return {...q,progress:Math.min(q.target,value),done:value>=q.target};});
 }
 
-// Karteikarten entstehen aus den Lektionstexten: je Abschnitt eine Karte plus die Stolperstelle.
+// Karteikarten entstehen aus den Lerntexten: je Lektionsabschnitt eine Karte plus die Stolperstelle;
+// spätere Themen liefern Grundidee, Vorgehen und Stolperstelle.
 // Selbsteinschätzung zählt bewusst nicht als unabhängiger Kompetenznachweis.
-export const cards = lessons.flatMap(l=>[
-  ...l.sections.map(([front,back],i)=>({id:`${l.id}:${i+1}`,lesson:l.id,front,back})),
-  {id:`${l.id}:trap`,lesson:l.id,front:'Worauf musst du hier genau achten?',back:l.trap}
-]);
+const trapCard = t => ({id:`${t.id}:trap`,lesson:t.id,front:'Worauf musst du hier genau achten?',back:t.trap});
+export const cards = [
+  ...lessons.flatMap(l=>[...l.sections.map(([front,back],i)=>({id:`${l.id}:${i+1}`,lesson:l.id,front,back})),trapCard(l)]),
+  ...allTopics.filter(t=>t.week>1).flatMap(t=>[
+    {id:`${t.id}:idea`,lesson:t.id,front:'Was ist die Grundidee?',back:t.intro},
+    {id:`${t.id}:steps`,lesson:t.id,front:'In welchen Schritten gehst du vor?',back:t.steps.map((s,i)=>`${i+1}. ${s}`).join(' ')},
+    trapCard(t)
+  ])
+];
 export const cardById = Object.fromEntries(cards.map(c=>[c.id,c]));
 export const CARD_INTERVALS = [0,1,3,7,14,30];
 export const NEW_CARDS_PER_DAY = 10;
@@ -53,5 +59,10 @@ export const unitById = Object.fromEntries(units.map(u=>[u.id,u]));
 export const bossPool = unitId => questions.filter(q=>unitById[unitId].lessons.includes(q.lesson));
 
 // Blitzrunde: 60 Sekunden, nur schnell beantwortbare Aufgaben, keine Auswirkung auf Wiederholungen.
+// Gefragt werden Woche-1-Themen und spätere Themen, die schon geübt wurden – kein unbekannter Stoff unter Zeitdruck.
 export const BLITZ_SECONDS = 60;
-export const blitzPool = () => questions.filter(q=>q.type==='choice'||q.type==='number');
+const lessonIds = new Set(lessons.map(l=>l.id)), topicOf = Object.fromEntries(questions.map(q=>[q.id,q.lesson]));
+export function blitzPool(state = {results:{}}) {
+  const seen = new Set([...lessonIds, ...Object.keys(state.results).map(id=>topicOf[id]).filter(Boolean)]);
+  return questions.filter(q=>(q.type==='choice'||q.type==='number')&&seen.has(q.lesson));
+}

@@ -18,8 +18,8 @@ Die Seite **Spielen** macht aus dem Wiederholen ein Spiel, ohne den Lernnachweis
 
 - **Rang und Level:** alle 150 XP ein Level, alle zwei Level ein neuer Rang (Startrampe → Umlaufbahn → Mondlandung → … → Sternenwanderer).
 - **Tagesmissionen:** drei wechselnde Missionen pro Tag, z. B. Fünferkette, 10 Karteikarten, Blitzrunde, Boss herausfordern. Je 15 XP.
-- **Karteikarten:** 76 Karten aus den Lektionstexten. Selbst erklären, umdrehen, ehrlich einschätzen. Leitner-Fächer mit 1, 3, 7, 14 und 30 Tagen. Tastatur: Leertaste zum Umdrehen, 1–3 zum Bewerten.
-- **Blitzrunde:** 60 Sekunden, so viele richtige Antworten wie möglich, mit Rekord.
+- **Karteikarten:** 106 Karten aus den Lektionstexten und den späteren Themen. Selbst erklären, umdrehen, ehrlich einschätzen. Leitner-Fächer mit 1, 3, 7, 14 und 30 Tagen. Tastatur: Leertaste zum Umdrehen, 1–3 zum Bewerten.
+- **Blitzrunde:** 60 Sekunden, so viele richtige Antworten wie möglich, mit Rekord. Gefragt werden Woche 1 und Themen, die du schon geübt hast.
 - **Bosskämpfe:** Jede Einheit von Woche 1 hat einen Boss. Bis zu zehn Aufgaben, drei Leben, keine Hinweise. Erster Sieg: 75 XP.
 - **Im Quiz:** Antwortketten, XP-Anzeige pro Antwort und Konfetti bei Pokalen oder Level-Aufstieg. Bei „Bewegung reduzieren“ gibt es keine Animationen.
 
@@ -30,7 +30,7 @@ Boss- und Quizantworten zählen wie normale Aufgaben. Karteikarten und Blitzrund
 - **Woche 1:** 19 erklärte Lektionen, 62 Übungsaufgaben und ein separater Check mit 10 Fragen.
 - **Fünf Lernlabore:** Sprachoperationen, RegEx, DEA-Läufe, eigene Automaten und Komplexitätswachstum.
 - **Echte Aufgaben:** Mengen eingeben, RegEx konstruieren und vollständige Übergangstabellen erstellen. RegEx und DEAs werden auf vollständige Sprachgleichheit geprüft; bei Fehlern gibt es ein kürzestes Gegenbeispiel.
-- **Lernfortschritt:** Tagesziele, XP, Levels, 14 Pokale, Lernserie, Fehlerprotokoll, Kompetenzstatus und echte Statistiken.
+- **Lernfortschritt:** Tagesziele, XP, Levels, 18 Pokale, Lernserie, Fehlerprotokoll, Kompetenzstatus und echte Statistiken.
 - **Wiederholungen:** 1, 3, 7 und 14 Tage; falsche Antworten werden erneut fällig. Hinweise zählen nicht als selbstständiger Nachweis.
 - **Neun-Wochen-Plan:** 21.09.–20.11.2026. Wochen 2–9 sind ausdrücklich als Planung markiert; interaktive Inhalte folgen.
 - **Mobil und offline:** responsive Oberfläche, Startbildschirm-App, Offline-Cache nach erstem vollständigem Laden.

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {level,rankFor,dailyQuests,questStatus,questPool,cards,cardDeck,cardsDue,NEW_CARDS_PER_DAY,bossPool,blitzPool,BOSS_XP,QUEST_XP} from '../src/games.js';
 import {blankState,rateCard,recordCombo,recordBoss,recordBlitz,recordFocus,recordAnswer,xpTotal,validateImport,bestBlitz} from '../src/progress.js';
-import {units,lessons} from '../src/curriculum.js';
+import {units,lessons,allTopics,allQuestions} from '../src/curriculum.js';
 test('levels and ranks grow with XP',()=>{
   assert.equal(level(0),1);assert.equal(level(149),1);assert.equal(level(150),2);assert.equal(rankFor(0),'Startrampe');assert.equal(rankFor(300),'Umlaufbahn');assert.equal(rankFor(1e6),'Sternenwanderer');
 });
@@ -16,7 +16,7 @@ test('completed quests award XP once per day and quest',()=>{
   assert.equal(questStatus(s,day).find(q=>q.id==='combo5').done,true);assert.equal(s.activity[day].combo,7);
 });
 test('flashcards come from every lesson and follow a Leitner schedule',()=>{
-  assert.ok(lessons.every(l=>cards.some(c=>c.lesson===l.id&&c.id.endsWith(':trap'))));assert.equal(new Set(cards.map(c=>c.id)).size,cards.length);
+  assert.ok(allTopics.every(t=>cards.some(c=>c.lesson===t.id&&c.id.endsWith(':trap'))));assert.ok(cards.every(c=>c.front&&c.back));assert.equal(new Set(cards.map(c=>c.id)).size,cards.length);
   const s=blankState(),day='2026-09-26';const deck=cardDeck(s,day);assert.equal(deck.length,NEW_CARDS_PER_DAY);
   rateCard(s,deck[0].id,'good',day);assert.deepEqual([s.cards[deck[0].id].box,s.cards[deck[0].id].due],[1,'2026-09-27']);
   rateCard(s,deck[1].id,'again',day);assert.equal(s.cards[deck[1].id].due,day);rateCard(s,deck[2].id,'hard',day);assert.equal(s.cards[deck[2].id].due,'2026-09-27');
@@ -32,6 +32,9 @@ test('boss fights use their unit questions and reward the first win once',()=>{
 });
 test('blitz rounds keep records without changing review schedules',()=>{
   assert.ok(blitzPool().every(q=>q.type==='choice'||q.type==='number'));
+  const fresh=blitzPool(),weekOne=new Set(lessons.map(l=>l.id));assert.ok(fresh.length>0&&fresh.every(q=>weekOne.has(q.lesson)),'no unseen later topics');
+  const later=allQuestions.find(q=>!weekOne.has(q.lesson)&&(q.type==='choice'||q.type==='number'));const seen=blankState();recordAnswer(seen,later.id,false,{day:'2026-09-26'});
+  assert.ok(blitzPool(seen).some(q=>q.lesson===later.lesson));
   const s=blankState();recordAnswer(s,'m1',true,{day:'2026-09-26'});const before=structuredClone(s.results);
   recordBlitz(s,11,13,'2026-09-26');assert.deepEqual(s.results,before);assert.equal(bestBlitz(s),11);assert.ok(s.badges.includes('blitz10'));
 });

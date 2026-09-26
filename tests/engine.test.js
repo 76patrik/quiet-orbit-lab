@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseSet,languageOperation,binaryWords,compileRegex,compareRegex,runDfa,compareDfa,machines,grade,parseNumber,formatNumber} from '../src/engine.js';
-import {lessons,questions,allQuestions,units} from '../src/curriculum.js';
+import {allTopics,lessons,questions,allQuestions,units} from '../src/curriculum.js';
 
 test('ε, empty sets, duplicate words and malformed set input stay distinct',()=>{
   assert.deepEqual(parseSet('{eps,0,0}'),['','0']);assert.deepEqual(parseSet('∅'),[]);
@@ -45,7 +45,7 @@ test('curriculum is connected, unique and has usable assessment answers',()=>{
   assert.equal(new Set(allQuestions.map(q=>q.id)).size,allQuestions.length);
   assert.deepEqual(new Set(units.flatMap(u=>u.lessons)),lids);
   for(const l of lessons)assert.ok(questions.filter(q=>q.lesson===l.id).length>=3,l.id);
-  for(const q of allQuestions){assert.ok(lids.has(q.lesson));const value=q.type==='set'?q.answer.length?`{${q.answer.map(w=>w||'ε').join(',')}}`:'∅':q.answer;assert.equal(grade(q,value),true,q.id);}
+  for(const q of allQuestions){assert.ok(allTopics.some(t=>t.id===q.lesson));const value=q.type==='set'?q.answer.length?`{${q.answer.map(w=>w||'ε').join(',')}}`:'∅':q.answer;assert.equal(grade(q,value),true,q.id);}
 });
 test('numbers accept German and English notation, units and an optional tolerance',()=>{
   for(const [input,n] of [['402',402],['1.234,56',1234.56],['1234,56',1234.56],['1234.56',1234.56],['1,234.56',1234.56],['1.250',1250],['0.125',0.125],['-3,5',-3.5],['−3,5',-3.5],['12 %',12],['300 €',300],['1 000',1000],[',5',0.5]])assert.equal(parseNumber(input),n,input);

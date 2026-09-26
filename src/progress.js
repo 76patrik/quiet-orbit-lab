@@ -1,3 +1,4 @@
+import {validateExamAttempts,examReport} from './exam-engine.js';
 import { lessons, questionById, achievements } from './curriculum.js';
 import { defaultExamDates } from './subjects.js';
 import { questStatus, questById, QUEST_XP, cardById, CARD_INTERVALS, unitById, BOSS_XP } from './games.js';
@@ -7,7 +8,7 @@ export const today=(date=new Date())=>{
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 export const addDays=(day,n)=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);};
-export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',examDates:defaultExamDates(),results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,cards:{},bosses:{},blitz:[]});
+export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',examDates:defaultExamDates(),results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,cards:{},bosses:{},blitz:[],confidence:{},examAttempts:[]});
 export function loadState(storage) {
   try {const raw=storage.getItem(KEY);return {state:raw?validateImport(JSON.parse(raw)):blankState(),error:null};}
   catch {return {state:blankState(),error:'Dein Speicherstand konnte nicht gelesen werden. Er wurde nicht überschrieben. Exportiere vorhandene Sicherungen, bevor du neu speicherst.'};}
@@ -27,7 +28,9 @@ export function touchActivity(state,day=today()) {
 export function dueQuestions(state,day=today()){
   return Object.entries(state.results).filter(([id,r])=>questionById[id]&&r.due<=day).sort((a,b)=>a[1].due.localeCompare(b[1].due)).map(([id])=>questionById[id]);
 }
-export function recordAnswer(state,qid,correct,{assisted=false,day=today(),review=false}={}) {
+export function recordAnswer(state,qid,correct,{assisted=false,day=today(),review=false,confidence=null}={}) {
+  if(!Object.hasOwn(questionById,qid))throw new Error('Unbekannte Aufgabe.');
+  if(['guess','unsure','sure'].includes(confidence)){const c=state.confidence[qid]||{guess:0,unsure:0,sure:0,wrongSure:0,last:null,lastCorrect:false};c[confidence]++;if(confidence==='sure'&&!correct)c.wrongSure++;c.last=confidence;c.lastCorrect=correct;state.confidence[qid]=c;}
   const old=state.results[qid]||{attempts:0,correct:0,stage:0,due:day,successes:[],everWrong:false,repaired:false};
   const wasDue=old.attempts>0&&old.due<=day;
   const wrongBefore=old.everWrong;
@@ -37,7 +40,7 @@ export function recordAnswer(state,qid,correct,{assisted=false,day=today(),revie
     if(wrongBefore)old.repaired=true;
     award(state,`solve:${qid}`,10,day);
     if(review&&wasDue) award(state,`review:${day}:${qid}`,5,day);
-    if(old.lastAdvance!==day){const intervals=[1,3,7,14];old.due=addDays(day,intervals[Math.min(old.stage,3)]);old.stage=Math.min(3,old.stage+1);old.lastAdvance=day;}
+    if(old.lastAdvance!==day){const intervals=[1,3,7,14];old.due=addDays(day,intervals[Math.min(old.stage,3)]);old.stage=Math.min(3,old.stage+1);old.lastAdvance=day;}else if(old.due<=day){old.due=addDays(day,1);}
     if(state.errors[qid])state.errors[qid].resolved=true;
   } else {
     old.stage=0;old.due=day;
@@ -77,7 +80,7 @@ export function recordBlitz(state,score,answered,day=today()){
 export const bestBlitz=state=>Math.max(0,...state.blitz.map(b=>b.score));
 export function updateBadges(state,day=today()){
   if(state.activity[day])for(const q of questStatus(state,day))if(q.done)award(state,`quest:${day}:${q.id}`,QUEST_XP,day);
-  const newly=achievements.filter(a=>!state.badges.includes(a.id)&&a.rule(state,streak(state,day))).map(a=>a.id);
+  const newly=achievements.filter(a=>!state.badges.includes(a.id)&&(a.id==='exam-reflection'?state.examAttempts.some(e=>e.examId.startsWith('full-')&&e.submittedAt!==null&&Object.keys(e.ratings).length>0&&examReport(e).complete):a.rule(state,streak(state,day)))).map(a=>a.id);
   state.badges.push(...newly);return newly;
 }
 export function mastery(state,lessonId) {
@@ -123,5 +126,7 @@ export function validateImport(data) {
   if(data.bosses!==undefined){if(!obj(data.bosses))fail();for(const [id,v] of Object.entries(data.bosses)){if(!Object.hasOwn(unitById,id)||!validDay(v))fail();s.bosses[id]=v;}}
   if(data.blitz!==undefined){if(!Array.isArray(data.blitz)||data.blitz.length>100)fail();s.blitz=data.blitz.map(v=>{if(!obj(v)||!validDay(v.date)||!integer(v.score,1000)||!integer(v.answered,1000)||v.score>v.answered)fail();return {date:v.date,score:v.score,answered:v.answered};});}
   if(!Array.isArray(data.badges)||!data.badges.every(id=>achievements.some(a=>a.id===id)))fail();s.badges=[...new Set(data.badges)];
+  s.examAttempts=validateExamAttempts(data.examAttempts);
+  if(data.confidence!==undefined){if(!obj(data.confidence))fail();for(const [id,v] of Object.entries(data.confidence)){if(!Object.hasOwn(questionById,id)||!obj(v)||!['guess','unsure','sure'].includes(v.last)||typeof v.lastCorrect!=='boolean'||!['guess','unsure','sure','wrongSure'].every(k=>integer(v[k]))||v.wrongSure>v.sure)fail();s.confidence[id]={guess:v.guess,unsure:v.unsure,sure:v.sure,wrongSure:v.wrongSure,last:v.last,lastCorrect:v.lastCorrect};}}
   if(data.lastLesson!==null&&!lids.has(data.lastLesson))fail();s.lastLesson=data.lastLesson;return s;
 }
