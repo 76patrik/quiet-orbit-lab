@@ -1,6 +1,19 @@
 # Lern- und Umsetzungsplanung
 
-## Ziel und Umfang der ersten Version
+## Fächer und Prüfungstermine
+
+Orbit ist ein Lernstudio für mehrere Fächer. Das Orbit-Prinzip (verstehen → nachvollziehen → anwenden → korrigieren → abrufen) gilt für jedes Fach. Theoretische Informatik ist das erste Fach mit fertigen Inhalten.
+
+| Fach | Prüfung | Stand |
+|---|---|---|
+| Theoretische Informatik | 20.11.2026 | Woche 1 interaktiv, Wochen 2–9 geplant |
+| Finanzierung und Rechnungswesen | 27.11.2026 | Angelegt, Lernmaterialien folgen |
+| Mikro- und Makroökonomik | 02.12.2026 | Angelegt, Lernmaterialien folgen |
+
+Für Fächer ohne Lernmaterialien erfindet die App keine Lektionen, Aufgaben oder Wochenpläne. Sie zeigt nur den Prüfungstermin und den Countdown. Inhalte kommen erst dazu, wenn die Unterlagen vorliegen. Die Prüfungstermine lassen sich in den Einstellungen ändern.
+
+
+## Theoretische Informatik: Ziel und Umfang der ersten Version
 
 Die App ergänzt das 42-seitige Woche-1-Skript und den Masterplan mit aktiver Anwendung. Woche 1 ist vollständig erschlossen; die übrigen acht Wochen sind als transparente Roadmap vorhanden. Keine gesperrten oder scheinbar bereits fertigen Folgelektionen.
 
