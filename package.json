@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Orbit – interaktives Lernstudio für Theoretische Informatik",
+  "description": "Orbit – interaktives Lernstudio für die Klausurvorbereitung",
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "start": "node scripts/serve.mjs",

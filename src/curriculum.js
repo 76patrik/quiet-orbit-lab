@@ -12,11 +12,11 @@ export const weeks = [
  {n:9,start:'2026-11-16',end:'2026-11-20',title:'Bereit für den nächsten Schritt',subtitle:'Endspurt zur Klausur',hours:5,tasks:'17.11. neue Simulation; 18.11. letzte Lücken; 19.11. leichte Wiederholung.',goal:'Zwei zeitbegrenzte Durchläufe mit mindestens 80 %. Klausur am 20.11.',topics:['Simulation 3 · 17.11.','Letzte Fehler korrigieren','Leichte Wiederholung','Klausur · 20.11.']}
 ];
 export const units = [
- {title:'Die Bausteine verstehen',subtitle:'Vom Problem zum ersten Wort',icon:'spark',lessons:['motivation','complexity','notation','alphabet','empty']},
- {title:'Mit Sprachen rechnen',subtitle:'Mengen, Verknüpfungen und Abschlüsse',icon:'layers',lessons:['languages','sets','concat','closure','quotient']},
- {title:'Muster beschreiben',subtitle:'Reguläre Ausdrücke lesen und konstruieren',icon:'code',lessons:['regex','construct']},
- {title:'Automaten zum Leben erwecken',subtitle:'Lesen, merken, entscheiden',icon:'nodes',lessons:['dfa','parity','alternate','complement']},
- {title:'Das große Ganze verbinden',subtitle:'Grammatiken, Hierarchie und Transfer',icon:'orbit',lessons:['grammar','hierarchy','transfer']}
+ {id:'bausteine',boss:'Der Symbolwächter',title:'Die Bausteine verstehen',subtitle:'Vom Problem zum ersten Wort',icon:'spark',lessons:['motivation','complexity','notation','alphabet','empty']},
+ {id:'sprachen',boss:'Die Mengenhydra',title:'Mit Sprachen rechnen',subtitle:'Mengen, Verknüpfungen und Abschlüsse',icon:'layers',lessons:['languages','sets','concat','closure','quotient']},
+ {id:'muster',boss:'Der Musterweber',title:'Muster beschreiben',subtitle:'Reguläre Ausdrücke lesen und konstruieren',icon:'code',lessons:['regex','construct']},
+ {id:'automaten',boss:'Die Zustandsmaschine',title:'Automaten zum Leben erwecken',subtitle:'Lesen, merken, entscheiden',icon:'nodes',lessons:['dfa','parity','alternate','complement']},
+ {id:'verbinden',boss:'Der Hierarchiehüter',title:'Das große Ganze verbinden',subtitle:'Grammatiken, Hierarchie und Transfer',icon:'orbit',lessons:['grammar','hierarchy','transfer']}
 ];
 const l=(id,title,minutes,source,intro,sections,example,trap,reflection,lab)=>({id,title,minutes,source,intro,sections,example,trap,reflection,lab});
 export const lessons = [
@@ -235,5 +235,10 @@ export const achievements=[
  {id:'repair',title:'Fehlerforscher',description:'Eine zuvor falsche Aufgabe später richtig lösen.',icon:'search',rule:s=>Object.values(s.results).some(r=>r.repaired)},
  {id:'three',title:'Dranbleiber',description:'An drei aufeinanderfolgenden Tagen üben.',icon:'flame',rule:(_s,streak)=>streak>=3},
  {id:'check',title:'Woche 1 gemeistert',description:'8/10 im Wochencheck und beide Pflicht-DEAs ohne Vorlage.',icon:'trophy',rule:s=>s.checks.some(c=>c.score>=8)&&s.builders.ends1&&s.builders.alternate},
+ {id:'boss1',title:'Bossbezwinger',description:'Einen Bosskampf mit mindestens einem Leben gewinnen.',icon:'shield',rule:s=>Object.keys(s.bosses||{}).length>=1},
+ {id:'bossall',title:'Hüter des Fundaments',description:'Alle fünf Bosse von Woche 1 besiegen.',icon:'flag',rule:s=>units.every(u=>s.bosses?.[u.id])},
+ {id:'blitz10',title:'Geistesblitz',description:'In einer Blitzrunde 10 richtige Antworten schaffen.',icon:'spark',rule:s=>(s.blitz||[]).some(b=>b.score>=10)},
+ {id:'cards30',title:'Kartenmeister',description:'30 Karteikarten mindestens ins dritte Fach bringen.',icon:'layers',rule:s=>Object.values(s.cards||{}).filter(c=>c.box>=3).length>=30},
+ {id:'quests',title:'Missionsheld',description:'An einem Tag alle drei Tagesmissionen erfüllen.',icon:'target',rule:s=>{const per={};for(const k of Object.keys(s.awards))if(k.startsWith('quest:')){const d=k.slice(6,16);per[d]=(per[d]||0)+1;}return Object.values(per).some(n=>n>=3);}},
  {id:'all',title:'Fundament komplett',description:'Alle 19 Lektionen abschließen.',icon:'flag',rule:s=>Object.keys(s.completed).length===lessons.length}
 ];

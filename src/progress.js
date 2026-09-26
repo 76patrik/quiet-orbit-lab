@@ -1,12 +1,14 @@
 import {validateExamAttempts,examReport} from './exam-engine.js';
 import { lessons, questionById, achievements } from './curriculum.js';
+import { defaultExamDates } from './subjects.js';
+import { questStatus, questById, QUEST_XP, cardById, CARD_INTERVALS, unitById, BOSS_XP } from './games.js';
 const KEY='orbit-progress-v1';
 export const today=(date=new Date())=>{
   const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date).map(p=>[p.type,p.value]));
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 export const addDays=(day,n)=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);};
-export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,confidence:{},examAttempts:[]});
+export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',examDates:defaultExamDates(),results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,cards:{},bosses:{},blitz:[],confidence:{},examAttempts:[]});
 export function loadState(storage) {
   try {const raw=storage.getItem(KEY);return {state:raw?validateImport(JSON.parse(raw)):blankState(),error:null};}
   catch {return {state:blankState(),error:'Dein Speicherstand konnte nicht gelesen werden. Er wurde nicht überschrieben. Exportiere vorhandene Sicherungen, bevor du neu speicherst.'};}
@@ -55,7 +57,29 @@ export function completeLesson(state,id,day=today()){
 export function completeBuilder(state,id,day=today()){
   state.builders[id]=day;award(state,`builder:${id}`,50,day);touchActivity(state,day);return updateBadges(state,day);
 }
+// Karteikarten: „nochmal“ bleibt heute fällig, „schwer“ kommt morgen, „gewusst“ rückt ein Fach weiter.
+export function rateCard(state,id,rating,day=today()){
+  if(!cardById[id]||!['again','hard','good'].includes(rating))throw new Error('Unbekannte Karteikarte oder Bewertung.');
+  const c=state.cards[id]||{box:0,due:day,first:day,seen:0};c.seen++;
+  if(rating==='again'){c.box=0;c.due=day;}else if(rating==='hard')c.due=addDays(day,1);else{c.box=Math.min(CARD_INTERVALS.length-1,c.box+1);c.due=addDays(day,CARD_INTERVALS[c.box]);}
+  state.cards[id]=c;const a=touchActivity(state,day);a.cards=(a.cards||0)+1;return updateBadges(state,day);
+}
+export function recordCombo(state,combo,day=today()){const a=touchActivity(state,day);if(combo>(a.combo||0))a.combo=combo;return updateBadges(state,day);}
+export function recordFocus(state,seconds,day=today()){state.focusSeconds+=seconds;const a=touchActivity(state,day);a.focus=(a.focus||0)+seconds;}
+export function recordBoss(state,unitId,won,day=today()){
+  if(!unitById[unitId])throw new Error('Unbekannter Boss.');
+  const a=touchActivity(state,day);a.boss=(a.boss||0)+1;
+  if(won){if(!state.bosses[unitId])state.bosses[unitId]=day;award(state,`boss:${unitId}`,BOSS_XP,day);}
+  return updateBadges(state,day);
+}
+// Blitzrunden verändern keine Wiederholungstermine und geben keine Aufgaben-XP; sie zählen als Rekord und Mission.
+export function recordBlitz(state,score,answered,day=today()){
+  state.blitz.push({date:day,score,answered});if(state.blitz.length>100)state.blitz.splice(0,state.blitz.length-100);
+  const a=touchActivity(state,day);a.blitz=(a.blitz||0)+1;return updateBadges(state,day);
+}
+export const bestBlitz=state=>Math.max(0,...state.blitz.map(b=>b.score));
 export function updateBadges(state,day=today()){
+  if(state.activity[day])for(const q of questStatus(state,day))if(q.done)award(state,`quest:${day}:${q.id}`,QUEST_XP,day);
   const newly=achievements.filter(a=>!state.badges.includes(a.id)&&(a.id==='exam-reflection'?state.examAttempts.some(e=>e.examId.startsWith('full-')&&e.submittedAt!==null&&Object.keys(e.ratings).length>0&&examReport(e).complete):a.rule(state,streak(state,day)))).map(a=>a.id);
   state.badges.push(...newly);return newly;
 }
@@ -78,6 +102,8 @@ export function validateImport(data) {
   if(!obj(data)||data.version!==1)fail();const s=blankState();
   if(![5,10,15].includes(data.goal)||!validDay(data.examDate)||!integer(data.focusSeconds,100000000))fail();
   s.goal=data.goal;s.examDate=data.examDate;s.focusSeconds=data.focusSeconds;
+  // examDates fehlt in Sicherungen vor der Fächerübersicht; dann gelten die Standardtermine.
+  if(data.examDates!==undefined){if(!obj(data.examDates))fail();for(const [id,v] of Object.entries(data.examDates)){if(!Object.hasOwn(s.examDates,id)||!validDay(v))fail();s.examDates[id]=v;}}
   const lids=new Set(lessons.map(l=>l.id));
   for(const key of ['results','completed','notes','errors','builders','activity','awards'])if(!obj(data[key]))fail();
   for(const [id,v] of Object.entries(data.results)){
@@ -90,12 +116,15 @@ export function validateImport(data) {
   for(const [id,v] of Object.entries(data.builders)){if(!['ends1','alternate','contains1','parity'].includes(id)||!validDay(v))fail();s.builders[id]=v;}
   if(!Array.isArray(data.checks)||data.checks.length>10000)fail();
   s.checks=data.checks.map(v=>{if(!obj(v)||!validDay(v.date)||!integer(v.score,10)||!integer(v.seconds,86400))fail();return {date:v.date,score:v.score,seconds:v.seconds};});
-  for(const [day,v] of Object.entries(data.activity)){if(!validDay(day)||!obj(v)||!integer(v.attempts)||!integer(v.correct)||v.correct>v.attempts||!Array.isArray(v.unique)||!v.unique.every(id=>Object.hasOwn(questionById,id)))fail();s.activity[day]={attempts:v.attempts,correct:v.correct,unique:[...new Set(v.unique)]};}
+  for(const [day,v] of Object.entries(data.activity)){if(!validDay(day)||!obj(v)||!integer(v.attempts)||!integer(v.correct)||v.correct>v.attempts||!Array.isArray(v.unique)||!v.unique.every(id=>Object.hasOwn(questionById,id)))fail();s.activity[day]={attempts:v.attempts,correct:v.correct,unique:[...new Set(v.unique)]};for(const k of ['combo','cards','blitz','focus','boss'])if(v[k]!==undefined){if(!integer(v[k],100000))fail();s.activity[day][k]=v[k];}}
   for(const [key,v] of Object.entries(data.awards)){
-    const validKey=key.startsWith('solve:')?Object.hasOwn(questionById,key.slice(6)):key.startsWith('lesson:')?lids.has(key.slice(7)):key.startsWith('builder:')?['ends1','alternate','contains1','parity'].includes(key.slice(8)):key.startsWith('review:')&&validDay(key.slice(7,17))&&Object.hasOwn(questionById,key.slice(18));
-    const expected=key.startsWith('solve:')?10:key.startsWith('lesson:')?25:key.startsWith('builder:')?50:5;
+    const validKey=key.startsWith('quest:')?validDay(key.slice(6,16))&&key[16]===':'&&Object.hasOwn(questById,key.slice(17)):key.startsWith('boss:')?Object.hasOwn(unitById,key.slice(5)):key.startsWith('solve:')?Object.hasOwn(questionById,key.slice(6)):key.startsWith('lesson:')?lids.has(key.slice(7)):key.startsWith('builder:')?['ends1','alternate','contains1','parity'].includes(key.slice(8)):key.startsWith('review:')&&validDay(key.slice(7,17))&&Object.hasOwn(questionById,key.slice(18));
+    const expected=key.startsWith('quest:')?QUEST_XP:key.startsWith('boss:')?BOSS_XP:key.startsWith('solve:')?10:key.startsWith('lesson:')?25:key.startsWith('builder:')?50:5;
     if(!validKey||!obj(v)||v.xp!==expected||!validDay(v.date))fail();s.awards[key]={xp:v.xp,date:v.date};
   }
+  if(data.cards!==undefined){if(!obj(data.cards))fail();for(const [id,v] of Object.entries(data.cards)){if(!Object.hasOwn(cardById,id)||!obj(v)||!integer(v.box,CARD_INTERVALS.length-1)||!validDay(v.due)||!validDay(v.first)||!integer(v.seen))fail();s.cards[id]={box:v.box,due:v.due,first:v.first,seen:v.seen};}}
+  if(data.bosses!==undefined){if(!obj(data.bosses))fail();for(const [id,v] of Object.entries(data.bosses)){if(!Object.hasOwn(unitById,id)||!validDay(v))fail();s.bosses[id]=v;}}
+  if(data.blitz!==undefined){if(!Array.isArray(data.blitz)||data.blitz.length>100)fail();s.blitz=data.blitz.map(v=>{if(!obj(v)||!validDay(v.date)||!integer(v.score,1000)||!integer(v.answered,1000)||v.score>v.answered)fail();return {date:v.date,score:v.score,answered:v.answered};});}
   if(!Array.isArray(data.badges)||!data.badges.every(id=>achievements.some(a=>a.id===id)))fail();s.badges=[...new Set(data.badges)];
   s.examAttempts=validateExamAttempts(data.examAttempts);
   if(data.confidence!==undefined){if(!obj(data.confidence))fail();for(const [id,v] of Object.entries(data.confidence)){if(!Object.hasOwn(questionById,id)||!obj(v)||!['guess','unsure','sure'].includes(v.last)||typeof v.lastCorrect!=='boolean'||!['guess','unsure','sure','wrongSure'].every(k=>integer(v[k]))||v.wrongSure>v.sure)fail();s.confidence[id]={guess:v.guess,unsure:v.unsure,sure:v.sure,wrongSure:v.wrongSure,last:v.last,lastCorrect:v.lastCorrect};}}

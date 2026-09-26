@@ -95,10 +95,25 @@ export function compareRegex(left,right,alphabet=['0','1']) {
   }
   return {equal:true};
 }
+// Zahlen in deutscher oder englischer Schreibweise: 1.234,56 · 1234,56 · 1234.56 · 12 % · 300 €.
+// Ein Punkt vor genau drei Ziffern gilt als Tausenderpunkt (1.250 = 1250); Dezimalstellen bitte mit Komma.
+export function parseNumber(input) {
+  let t=String(input).trim().replace(/[\s\u00a0\u202f€%]|EUR|Euro/gi,'').replace(/[−–]/g,'-');
+  if(!/^[+-]?[\d.,]+$/.test(t)||!/\d/.test(t)) return null;
+  const comma=t.lastIndexOf(','),dot=t.lastIndexOf('.');
+  if(comma>=0&&dot>=0) t=comma>dot?t.replace(/\./g,'').replace(',','.'):t.replace(/,/g,'');
+  else if(comma>=0){if(t.indexOf(',')!==comma)return null;t=t.replace(',','.');}
+  else if(/^[+-]?[1-9]\d{0,2}(\.\d{3})+$/.test(t)) t=t.replace(/\./g,'');
+  else if(t.indexOf('.')!==dot) return null;
+  if(!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(t)) return null;
+  const n=Number(t);return Number.isFinite(n)?n:null;
+}
+export const formatNumber=(n,unit='')=>`${Number(n).toLocaleString('de-DE',{maximumFractionDigits:6})}${unit?` ${unit}`:''}`;
 export function grade(question,value) {
   if(question.type==='choice') return Number(value)===question.answer;
   if(question.type==='set') return equalSets(parseSet(value),question.answer);
   if(question.type==='regex') return compareRegex(value,question.answer).equal;
+  if(question.type==='number'){const n=parseNumber(value);if(n!==null)return Math.abs(n-question.answer)<=(question.tolerance??0)+1e-9;}
   return String(value).trim().toLowerCase().replace(/\s/g,'') === String(question.answer).toLowerCase().replace(/\s/g,'');
 }
 

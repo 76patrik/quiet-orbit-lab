@@ -1,6 +1,40 @@
 # Lern- und Umsetzungsplanung
 
-## Ziel und Umfang der ersten Version
+## Fächer und Prüfungstermine
+
+Orbit ist ein Lernstudio für mehrere Fächer. Das Orbit-Prinzip (verstehen → nachvollziehen → anwenden → korrigieren → abrufen) gilt für jedes Fach. Theoretische Informatik ist das erste Fach mit fertigen Inhalten.
+
+| Fach | Prüfung | Stand |
+|---|---|---|
+| Theoretische Informatik | 20.11.2026 | Woche 1 interaktiv, Wochen 2–9 geplant |
+| Finanzierung und Rechnungswesen | 27.11.2026 | Angelegt, Lernmaterialien folgen |
+| Mikro- und Makroökonomik | 02.12.2026 | Angelegt, Lernmaterialien folgen |
+
+Für Fächer ohne Lernmaterialien erfindet die App keine Lektionen, Aufgaben oder Wochenpläne. Sie zeigt nur den Prüfungstermin und den Countdown. Inhalte kommen erst dazu, wenn die Unterlagen vorliegen. Die Prüfungstermine lassen sich in den Einstellungen ändern. Welche Unterlagen helfen und wie ein Fach aufgebaut ist, steht in `docs/INHALTE.md`.
+
+### Vorschlag: drei Prüfungen in zwölf Tagen
+
+Zwischen der ersten und der letzten Prüfung liegen nur zwölf Tage. Finanzierung/Rechnungswesen und Mikro-/Makroökonomik sollten deshalb nicht erst nach dem 20.11. beginnen. Ein Vorschlag, den die Unterlagen noch bestätigen müssen:
+
+| Zeitraum | Schwerpunkt | Nebenbei |
+|---|---|---|
+| bis 08.11. | TI nach Neun-Wochen-Plan | FiRe und VWL je zwei kurze Einheiten pro Woche, sobald Material da ist |
+| 09.–20.11. | TI-Endspurt und Simulationen | täglich Karteikarten FiRe/VWL |
+| 21.–27.11. | Finanzierung und Rechnungswesen | VWL-Karteikarten |
+| 28.11.–02.12. | Mikro- und Makroökonomik | kurze FiRe-Wiederholung nur bei Bedarf |
+
+## Spielmodi und Fairness
+
+Spielerische Elemente sollen Abrufen üben, nicht Punkte verteilen:
+
+- **Tagesmissionen:** drei pro Tag, aus sechs Missionen per Datum ausgewählt und auf allen Geräten gleich. Jede Mission gibt einmal 15 XP.
+- **Karteikarten:** aus den eigenen Lektionstexten, mit Selbsteinschätzung. Deshalb kein Kompetenznachweis und keine Aufgaben-XP.
+- **Blitzrunde:** 60 Sekunden, nur Auswahl- und Zahlenaufgaben. Verändert keine Wiederholungstermine, zählt nur für Rekord und Mission.
+- **Bosskampf:** bis zu zehn Aufgaben einer Einheit, drei Leben, keine Hinweise. Antworten zählen normal und planen Wiederholungen. Nur der erste Sieg gibt 75 XP.
+- **Feedback:** Antwortketten, XP pro Antwort, Konfetti nur bei Pokal oder Level-Aufstieg, nie bei reduzierter Bewegung.
+
+
+## Theoretische Informatik: Ziel und Umfang der ersten Version
 
 Die App ergänzt das 42-seitige Woche-1-Skript und den Masterplan mit aktiver Anwendung. Woche 1 ist vollständig erschlossen; die übrigen acht Wochen sind als transparente Roadmap vorhanden. Keine gesperrten oder scheinbar bereits fertigen Folgelektionen.
 
