@@ -1,11 +1,12 @@
 import { lessons, questionById, achievements } from './curriculum.js';
+import { defaultExamDates } from './subjects.js';
 const KEY='orbit-progress-v1';
 export const today=(date=new Date())=>{
   const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date).map(p=>[p.type,p.value]));
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 export const addDays=(day,n)=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);};
-export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0});
+export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',examDates:defaultExamDates(),results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0});
 export function loadState(storage) {
   try {const raw=storage.getItem(KEY);return {state:raw?validateImport(JSON.parse(raw)):blankState(),error:null};}
   catch {return {state:blankState(),error:'Dein Speicherstand konnte nicht gelesen werden. Er wurde nicht überschrieben. Exportiere vorhandene Sicherungen, bevor du neu speicherst.'};}
@@ -75,6 +76,8 @@ export function validateImport(data) {
   if(!obj(data)||data.version!==1)fail();const s=blankState();
   if(![5,10,15].includes(data.goal)||!validDay(data.examDate)||!integer(data.focusSeconds,100000000))fail();
   s.goal=data.goal;s.examDate=data.examDate;s.focusSeconds=data.focusSeconds;
+  // examDates fehlt in Sicherungen vor der Fächerübersicht; dann gelten die Standardtermine.
+  if(data.examDates!==undefined){if(!obj(data.examDates))fail();for(const [id,v] of Object.entries(data.examDates)){if(!Object.hasOwn(s.examDates,id)||!validDay(v))fail();s.examDates[id]=v;}}
   const lids=new Set(lessons.map(l=>l.id));
   for(const key of ['results','completed','notes','errors','builders','activity','awards'])if(!obj(data[key]))fail();
   for(const [id,v] of Object.entries(data.results)){
