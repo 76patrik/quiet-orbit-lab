@@ -1,3 +1,4 @@
+import {validateExamAttempts,examReport} from './exam-engine.js';
 import { lessons, questionById, achievements } from './curriculum.js';
 const KEY='orbit-progress-v1';
 export const today=(date=new Date())=>{
@@ -5,7 +6,7 @@ export const today=(date=new Date())=>{
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 export const addDays=(day,n)=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);};
-export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,confidence:{}});
+export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,confidence:{},examAttempts:[]});
 export function loadState(storage) {
   try {const raw=storage.getItem(KEY);return {state:raw?validateImport(JSON.parse(raw)):blankState(),error:null};}
   catch {return {state:blankState(),error:'Dein Speicherstand konnte nicht gelesen werden. Er wurde nicht überschrieben. Exportiere vorhandene Sicherungen, bevor du neu speicherst.'};}
@@ -55,7 +56,7 @@ export function completeBuilder(state,id,day=today()){
   state.builders[id]=day;award(state,`builder:${id}`,50,day);touchActivity(state,day);return updateBadges(state,day);
 }
 export function updateBadges(state,day=today()){
-  const newly=achievements.filter(a=>!state.badges.includes(a.id)&&a.rule(state,streak(state,day))).map(a=>a.id);
+  const newly=achievements.filter(a=>!state.badges.includes(a.id)&&(a.id==='exam-reflection'?state.examAttempts.some(e=>e.examId.startsWith('full-')&&e.submittedAt!==null&&Object.keys(e.ratings).length>0&&examReport(e).complete):a.rule(state,streak(state,day)))).map(a=>a.id);
   state.badges.push(...newly);return newly;
 }
 export function mastery(state,lessonId) {
@@ -96,6 +97,7 @@ export function validateImport(data) {
     if(!validKey||!obj(v)||v.xp!==expected||!validDay(v.date))fail();s.awards[key]={xp:v.xp,date:v.date};
   }
   if(!Array.isArray(data.badges)||!data.badges.every(id=>achievements.some(a=>a.id===id)))fail();s.badges=[...new Set(data.badges)];
+  s.examAttempts=validateExamAttempts(data.examAttempts);
   if(data.confidence!==undefined){if(!obj(data.confidence))fail();for(const [id,v] of Object.entries(data.confidence)){if(!Object.hasOwn(questionById,id)||!obj(v)||!['guess','unsure','sure'].includes(v.last)||typeof v.lastCorrect!=='boolean'||!['guess','unsure','sure','wrongSure'].every(k=>integer(v[k]))||v.wrongSure>v.sure)fail();s.confidence[id]={guess:v.guess,unsure:v.unsure,sure:v.sure,wrongSure:v.wrongSure,last:v.last,lastCorrect:v.lastCorrect};}}
   if(data.lastLesson!==null&&!lids.has(data.lastLesson))fail();s.lastLesson=data.lastLesson;return s;
 }

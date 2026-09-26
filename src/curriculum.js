@@ -223,6 +223,7 @@ export const topicById=Object.fromEntries(allTopics.map(t=>[t.id,t]));
 export const allQuestions=[...questions,...checkQuestions];
 export const questionById=Object.fromEntries(allQuestions.map(q=>[q.id,q]));
 export const achievements=[
+ {id:'exam-reflection',title:'Generalprobe reflektiert',description:'Eine Probeklausur abgeben und alle offenen Antworten selbst anhand des Rasters bewerten.',icon:'target',rule:()=>false},
  {id:'hundred',title:'Wissenssammler',description:'100 verschiedene Aufgaben ohne Hinweis lösen.',icon:'book',rule:s=>Object.values(s.results).filter(r=>r.successes?.length).length>=100},
  {id:'detective',title:'Fehlerdetektiv',description:'10 verschiedene Fehler-Suchaufgaben ohne Hilfe lösen.',icon:'search',rule:s=>questions.filter(q=>q.kind==='debug'&&s.results[q.id]?.successes.length).length>=10},
  {id:'explorer',title:'Horizont erweitert',description:'In fünf Themen ab Woche 2 je drei Aufgaben ohne Hilfe lösen.',icon:'orbit',rule:s=>laterTopics.filter(t=>questions.filter(q=>q.lesson===t.id&&s.results[q.id]?.successes.length).length>=3).length>=5},
