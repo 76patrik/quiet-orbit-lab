@@ -20,6 +20,14 @@
 @media(max-width:720px){.card-rating{grid-template-columns:1fr}.flashcard{min-height:300px}.blitz-time{font-size:26px}.quiz-status{gap:9px}}
 /* Sidebar with ten entries: compact rows, bottom block never overlaps the navigation */
 .sidebar{overflow-y:auto;overscroll-behavior:contain}.nav,.sidebar-bottom{flex-shrink:0}.nav{gap:2px}.nav a{min-height:40px;padding:9px 14px}.brand-sub{margin-bottom:28px}.sidebar-bottom{padding-top:24px}.exam-side{margin-bottom:14px}
+/* Tagesplan und gruppierte Navigation */
+.nav .nav-label{margin:14px 14px 4px;font-size:9px}.nav .nav-label:first-child{margin-top:0}
+.plan-card{margin-bottom:22px;border-color:#4f5d39;background:linear-gradient(135deg,#1f2530,#1d212c 60%)}.plan-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px}.plan-head h2{font-size:22px}
+.plan-steps{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:4px}.plan-step{display:flex;gap:14px;align-items:flex-start;padding:12px;border-radius:12px}.plan-step.current{background:#2a3024;border:1px solid #4f5d39}.plan-step h3{font-size:14px}.plan-step p{font-size:12px;color:var(--muted);margin-top:3px}.plan-step>div{flex:1;min-width:0}
+.plan-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#2c313e;color:var(--muted);font-size:12px;font-weight:650;flex-shrink:0}.plan-step.current .plan-num{background:var(--lime);color:#27311c}.plan-step.done .plan-num{background:#38412b;color:var(--lime)}.plan-step.done h3{color:var(--muted);text-decoration:line-through;text-decoration-color:#58606f}.plan-num .icon{width:15px;height:15px}
+.plan-link{padding:0;text-align:left;font-weight:600}.plan-link:hover{color:var(--lime)}.plan-min{font-size:11px;color:var(--muted);white-space:nowrap}.plan-go{width:100%;min-height:50px;font-size:13px}.plan-notice{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:12px;color:#e4cf8e}.plan-notice .icon{width:16px;height:16px}
+@media(max-width:720px){.plan-head{flex-direction:column}.plan-step{padding:10px 8px}}
+.explain-panel{margin-top:16px;padding:20px;border-radius:12px;background:#23283a;border:1px solid #4b4c6b;font-size:13px;line-height:1.75;color:#dcdcf0;animation:enter .25s}.explain-panel h4{font-size:13px;color:var(--purple);margin:14px 0 4px}.explain-panel .eyebrow+h4{margin-top:0}.explain-panel details{margin-top:12px}.explain-panel summary,.explain-details>summary{cursor:pointer;color:var(--lime);font-size:12px;font-weight:600}.explain-details{margin-top:12px}.explain-panel .help{margin-top:14px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 .exam-side{display:block;color:inherit}.exam-side:hover{border-color:#4a5163;color:inherit}
 /* Training arena */
