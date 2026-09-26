@@ -348,7 +348,7 @@ setInterval(()=>{
   const seconds=Math.min(3,Math.floor((now-focus.last)/1000));if(seconds<=0)return;focus.last=now;
   const counted=Math.min(seconds,focus.remaining);focus.remaining-=counted;recordFocus(state,counted);focus.unsaved+=counted;
   if(focus.unsaved>=15){reward(()=>updateBadges(state));persist();focus.unsaved=0;}
-  if(focus.remaining===0){focus.running=false;persist();toast('25 Minuten geschafft. Zeit für eine kurze Pause.');}
+  if(focus.remaining===0){focus.running=false;focus.unsaved=0;toast('25 Minuten geschafft. Zeit für eine kurze Pause.');reward(()=>updateBadges(state));persist();}
   updateFocusDisplay();
 },1000);
 document.addEventListener('visibilitychange',()=>{focus.last=Date.now();if(document.hidden&&focus.unsaved){persist();focus.unsaved=0;}});
