@@ -2,6 +2,18 @@
 const guide = (goal,recipe,prompt,steps,check,answer,exam,table) =>
   ({goal,recipe,worked:{prompt,steps,table},check,answer,exam});
 export const lessonGuides = {
+ 'regular-grammar': guide('Eine Sprache als RegEx, Automat und rechtslineare Grammatik darstellen.',
+  ['Bedingungen in Phasen zerlegen.','Pro Zustand eine Variable und pro Zeichenübergang eine Regel A→aB notieren.','Endzustände durch ε-Regeln beenden; gültige und ungültige Wörter kontrollieren.'],
+  'Erzeuge genau die Wörter über {a,b}, die mit a beginnen und mindestens ein b enthalten.',
+  ['S→aA erzwingt den Anfang.','A→aA|bB erlaubt weitere a und erzwingt vor dem Abschluss ein b.','B→aB|bB|ε erlaubt anschließend jede Fortsetzung.','S⇒aA⇒abB⇒abaB⇒aba zeigt ein Wort, das auf a endet.'],
+  'Warum wäre B→aA statt B→aB hier falsch?',
+  'Nach einem a müsste erneut ein b entstehen, bevor die Ableitung endet. Das gültige Wort aba würde fehlen.', 'wk2-grammar-original8'),
+ kleene: guide('Beide Richtungen der Äquivalenz mit allgemeinen Konstruktionen begründen.',
+  ['RegEx strukturell als ε-NEA aufbauen.','Den ε-NEA mit Zustandsmengen determinisieren.','Für die Rückrichtung Wege des DEA zu regulären Ausdrücken zusammenfassen.'],
+  'Konstruiere die Verkettung von L1={0} und L2={1}.',
+  ['Der erste Automat liest 0 und erreicht seinen alten Endzustand.','Ein ε-Pfeil verbindet diesen mit dem zweiten Start.','Nur der Endzustand nach der 1 bleibt akzeptierend.','Die neue Sprache ist {01}; das Wort 0 darf nicht genügen.'],
+  'Warum nicht einfach beide alten Endmengen übernehmen?',
+  'Dann könnte der Lauf bereits nach dem ersten Teil akzeptieren. Für L1={0}, L2={1} würde das falsche Wort 0 angenommen.', 'wk2-kleene-concat-final'),
  motivation: guide('Eine Alltagssituation in Eingabe, Entscheidungsfrage und Verfahren übersetzen.',
   ['Benenne die gesamte Eingabemenge.','Formuliere eine eindeutige Ja/Nein-Bedingung.','Trenne die korrekte Antwort von den Kosten ihrer Berechnung.'],
   'Ein System erlaubt Kennungen aus genau drei Binärzeichen. Ist 010 gültig?',

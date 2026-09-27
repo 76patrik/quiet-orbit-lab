@@ -43,7 +43,7 @@ export function todayPlan(state, day) {
   const completedToday = Object.values(state.completed).includes(day);
   if (nextLesson) {
     const l = lessons.find(x=>x.id===nextLesson);
-    steps.push({id:'learn',title:`Lektion: ${l.title}`,detail:`Lesen, Beispiel nachvollziehen und den Lektionscheck mit 80 % bestehen.${plan.week&&plan.week.n>1?' Woche 1 ist noch offen, sie ist die Grundlage für alles Weitere.':''}`,minutes:l.minutes+5,href:`#lesson/${l.id}`,done:false});
+    steps.push({id:'learn',title:`Lektion: ${l.title}`,detail:`Lesen, Beispiel nachvollziehen und sieben verschiedene Aufgaben ohne Hilfe lösen.${plan.week&&plan.week.n>1?' Woche 1 ist noch offen, sie ist die Grundlage für alles Weitere.':''}`,minutes:l.minutes+5,href:`#lesson/${l.id}`,done:false});
   } else if (plan.week) {
     const practiced = practicedTopics(state), open = [...topicsOfWeek(plan.week.n), ...allTopics.filter(t=>t.week>1&&t.week<plan.week.n)].find(t=>!practiced.has(t.id));
     if (open) steps.push({id:'learn',title:`Thema: ${open.title}`,detail:`Kurzüberblick lesen, dann das Thementraining starten (Woche ${open.week}).`,minutes:20,href:`#topic/${open.id}`,done:false});
@@ -62,7 +62,7 @@ export function todayPlan(state, day) {
     const done = best>=8 && builders===2;
     steps.push({id:'week',title:'Wochenziel: Wochencheck',detail:done?'8/10 und beide Pflicht-DEAs geschafft.':`Bisher ${best}/10 im Check und ${builders}/2 Pflicht-DEAs. Ziel: 8/10 und beide DEAs ohne Vorlage.`,minutes:20,href:'#check',done});
   } else if (plan.week) {
-    steps.push({id:'week',title:`Wochenziel Woche ${plan.week.n}`,detail:plan.week.goal,minutes:0,href:'#path',done:false,info:true});
+    steps.push({id:'week',title:`Wochenziel Woche ${plan.week.n}`,detail:plan.week.goal,minutes:0,href:plan.week.n===2?'#week2':'#path',done:false,info:true});
   }
   return {week:plan.week, schedule:plan, steps, minutes:steps.filter(s=>!s.done).reduce((n,s)=>n+s.minutes,0)};
 }

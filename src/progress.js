@@ -1,3 +1,4 @@
+import {week2ChapterById} from './week2-content.js';
 import {validateExamAttempts,examReport} from './exam-engine.js';
 import { lessons, questions, questionById, achievements } from './curriculum.js';
 import { defaultExamDates } from './subjects.js';
@@ -8,7 +9,7 @@ export const today=(date=new Date())=>{
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 export const addDays=(day,n)=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);};
-export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',examDates:defaultExamDates(),results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,cards:{},bosses:{},blitz:[],confidence:{},examAttempts:[]});
+export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',examDates:defaultExamDates(),results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,cards:{},bosses:{},blitz:[],confidence:{},examAttempts:[],week2:{read:[],lastChapter:null}});
 export function loadState(storage) {
   try {const raw=storage.getItem(KEY);return {state:raw?validateImport(JSON.parse(raw)):blankState(),error:null};}
   catch {return {state:blankState(),error:'Dein Speicherstand konnte nicht gelesen werden. Er wurde nicht überschrieben. Exportiere vorhandene Sicherungen, bevor du neu speicherst.'};}
@@ -122,6 +123,11 @@ export function validateImport(data) {
   if(!obj(data)||data.version!==1)fail();const s=blankState();
   if(![5,10,15].includes(data.goal)||!validDay(data.examDate)||!integer(data.focusSeconds,100000000))fail();
   s.goal=data.goal;s.examDate=data.examDate;s.focusSeconds=data.focusSeconds;
+  if(data.week2!==undefined){
+    const w=data.week2;
+    if(!obj(w)||!Array.isArray(w.read)||w.read.length>10||!w.read.every(id=>Object.hasOwn(week2ChapterById,id))||(w.lastChapter!==null&&!Object.hasOwn(week2ChapterById,w.lastChapter)))fail();
+    s.week2={read:[...new Set(w.read)],lastChapter:w.lastChapter};
+  }
   // examDates fehlt in Sicherungen vor der Fächerübersicht; dann gelten die Standardtermine.
   if(data.examDates!==undefined){if(!obj(data.examDates))fail();for(const [id,v] of Object.entries(data.examDates)){if(!Object.hasOwn(s.examDates,id)||!validDay(v))fail();s.examDates[id]=v;}}
   const lids=new Set(lessons.map(l=>l.id));

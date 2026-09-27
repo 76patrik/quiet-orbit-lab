@@ -149,6 +149,7 @@ export const week2Content = {
     table(['DEA-Zustand und Bedeutung','a','b'],[['→ S: noch kein Zeichen','A','X'],['A: korrekt begonnen, noch kein b','A','B'],['* B: korrekt begonnen, b gesehen','B','B'],['X: erstes Zeichen war b','X','X']]),
     p('Eine kompakte rechtslineare Grammatik ist S→aA; A→aA | bB; B→aB | bB | ε. Sie lässt den unproduktiven Fangzustand weg. Die vollständige Übersetzung des DEA würde zusätzlich S→bX und X→aX | bX enthalten; beide Grammatiken erzeugen dieselbe Sprache.'),
     p('Beide Richtungen der Korrektheit: Jedes erzeugte Wort beginnt durch S→aA mit a und muss vor dem Ende über A→bB ein b erhalten. Umgekehrt kannst du jedes erlaubte Wort bis zum ersten b mit S und A erzeugen und den Rest mit B. Die Ableitung endet mit B→ε.'),
+    box('Korrektur zur Musterlösung 8d','Aufgaben_Loesungen.pdf, PDF-S. 10, schreibt B→aA statt B→aB. Damit wird beispielsweise das gültige Wort aba nicht erzeugt: Nach dem letzten a bleibt A übrig und verlangt erneut ein b. Die hier angegebene Regel B→aB erhält dagegen die bereits erfüllten Bedingungen.'),
     check('Leite aaba ab und nenne ein kurzes Gegenbeispiel zu „enthält a und b“.','S ⇒ aA ⇒ aaA ⇒ aabB ⇒ aabaB ⇒ aaba. ba enthält a und b, beginnt aber nicht mit a und gehört deshalb nicht zur geforderten Sprache.'))
   ]},
   {id:'kleene',title:'7 · Satz von Kleene und Komplement',topic:'kleene',minutes:30,goal:'Beide Beweisrichtungen erklären und Abschlusseigenschaften korrekt nutzen.',pages:[

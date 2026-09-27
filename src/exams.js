@@ -1,3 +1,4 @@
+import {week2Exam} from './week2-exam.js';
 import {cyk,cnfExamples,ruleText,nfaStep,determinize,graphSolutions,incrementTrace,incrementRules,minimize} from './algorithms.js';
 import {setLabel} from './engine.js';
 const auto=(id,topic,section,points,type,prompt,answer,solution,options)=>({id,topic,section,points,type,prompt,answer,solution,options});
@@ -145,5 +146,5 @@ function miniExam(i){
  ][i];
  return {id:`mini-${i+1}`,title:`Grundlagencheck ${i+1}`,subtitle:['Wörter, Mengen & erste Automaten','Operationen & Zustandswissen','Gemischter Transfer'][i],kind:'mini',suggestedMinutes:20,questions:rows,points:12,description:'Nur Grundlagen aus Woche 1 · sechs Aufgaben mit eigener Begründung. 20 Minuten als optionaler Trainingswert.'};
 }
-export const exams=[...Array.from({length:3},(_,i)=>miniExam(i)),...Array.from({length:3},(_,i)=>fullExam(i))];
+export const exams=[week2Exam,...Array.from({length:3},(_,i)=>miniExam(i)),...Array.from({length:3},(_,i)=>fullExam(i))];
 export const examById=Object.fromEntries(exams.map(e=>[e.id,e]));

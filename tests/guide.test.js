@@ -6,7 +6,7 @@ import {lessons,units,questions} from '../src/curriculum.js';
 import {cards} from '../src/games.js';
 test('current week follows the calendar of the nine-week plan',()=>{
   assert.equal(currentWeek('2026-09-01').n,1);assert.equal(currentWeek('2026-09-26').n,1);assert.equal(currentWeek('2026-09-28').n,2);assert.equal(currentWeek('2026-11-20').n,9);assert.equal(currentWeek('2026-11-21'),null);
-  assert.deepEqual(topicsOfWeek(2).map(t=>t.id),['nea','minimize']);
+  assert.deepEqual(topicsOfWeek(2).map(t=>t.id),['nea','minimize','regular-grammar','kleene']);
 });
 test('schedule spreads week-one lessons over the week and flags what is behind',()=>{
   const s=blankState();assert.equal(schedule(s,'2026-09-21').expected,3);assert.equal(schedule(s,'2026-09-27').expected,lessons.length);
