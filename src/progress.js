@@ -1,9 +1,10 @@
 import {week2ChapterById} from './week2-content.js';
 import {validateExamAttempts,examReport} from './exam-engine.js';
-import { lessons, questions, questionById, achievements } from './curriculum.js';
+import { lessons, questions, checkQuestions, questionById, achievements } from './curriculum.js';
 import { defaultExamDates } from './subjects.js';
 import { questStatus, questById, QUEST_XP, cardById, CARD_INTERVALS, unitById, BOSS_XP } from './games.js';
 const KEY='orbit-progress-v1';
+const weeklyCheckIds=new Set(checkQuestions.map(q=>q.id));
 export const today=(date=new Date())=>{
   const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date).map(p=>[p.type,p.value]));
   return `${parts.year}-${parts.month}-${parts.day}`;
@@ -105,7 +106,7 @@ export function updateBadges(state,day=today()){
   state.badges.push(...newly);return newly;
 }
 export function mastery(state,lessonId) {
-  const evidence=Object.entries(state.results).filter(([id,r])=>questionById[id]?.lesson===lessonId && !id.startsWith('w') && r.successes.length);
+  const evidence=Object.entries(state.results).filter(([id,r])=>questionById[id]?.lesson===lessonId && !weeklyCheckIds.has(id) && r.successes.length);
   const independent=evidence.some(([a,ra])=>evidence.some(([b,rb])=>a!==b&&ra.successes.some(da=>rb.successes.some(db=>da!==db))));
   const unresolved=Object.keys(state.errors).some(id=>questionById[id]?.lesson===lessonId&&!state.errors[id].resolved);
   if(independent&&!unresolved) return 'safe';
