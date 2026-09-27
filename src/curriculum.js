@@ -229,7 +229,7 @@ export const achievements=[
  {id:'explorer',title:'Horizont erweitert',description:'In fünf Themen ab Woche 2 je drei Aufgaben ohne Hilfe lösen.',icon:'orbit',rule:s=>laterTopics.filter(t=>questions.filter(q=>q.lesson===t.id&&s.results[q.id]?.successes.length).length>=3).length>=5},
  {id:'first',title:'Zündung',description:'Die erste Aufgabe richtig lösen.',icon:'spark',rule:s=>Object.values(s.results).some(r=>r.successes?.length)},
  {id:'ten',title:'Im Lernorbit',description:'10 verschiedene Aufgaben richtig lösen.',icon:'orbit',rule:s=>Object.values(s.results).filter(r=>r.successes?.length).length>=10},
- {id:'lesson',title:'Ein Baustein sitzt',description:'Eine Lektion mit mindestens 80 % abschließen.',icon:'book',rule:s=>Object.keys(s.completed).length>=1},
+ {id:'lesson',title:'Ein Baustein sitzt',description:'Sieben verschiedene Aufgaben einer Lektion ohne Hilfe richtig lösen.',icon:'book',rule:s=>Object.keys(s.completed).length>=1},
  {id:'five',title:'Fundamentbauer',description:'Fünf Lektionen abschließen.',icon:'layers',rule:s=>Object.keys(s.completed).length>=5},
  {id:'builder',title:'Automatenarchitekt',description:'Einen eigenen DEA korrekt konstruieren.',icon:'nodes',rule:s=>Object.keys(s.builders).length>=1},
  {id:'repair',title:'Fehlerforscher',description:'Eine zuvor falsche Aufgabe später richtig lösen.',icon:'search',rule:s=>Object.values(s.results).some(r=>r.repaired)},
