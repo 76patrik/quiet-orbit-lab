@@ -21,6 +21,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Testabhängigkeiten installieren
+        run: npm ci
       - name: Lernlogik testen
         run: npm test
       - name: Statische App bauen

@@ -7,7 +7,7 @@ Mehr Übungs- und Verständnisfragen in allen Themen, mehrere unterschiedliche P
 ## Geplante Lieferpakete
 
 1. **Aufgabenbank:** zusätzliche Verständnisfragen, Fehlerdiagnosen und berechenbare Varianten für jede Woche-1-Lektion; Themenübungen für die späteren Vorlesungskapitel. Filter nach Thema, Schwierigkeit und Aufgabentyp. Neue Varianten zuerst, Fehler gezielt wiederholen.
-2. **Lernschleife:** Einstieg → Anwenden → Transfer. Vor der Auflösung die eigene Sicherheit einschätzen; sichere Fehlantworten gezielt sichtbar machen. Themenmissionen und eigene Aufgabenrunden ergänzen XP und Pokale.
+2. **Lernschleife:** Einstieg → Anwenden → Transfer. Seit 27.09.2026 ohne Sicherheitseinschätzung: direkte Prüfung, konkrete gestufte Hilfen und gezielte Fehlerwiederholung (siehe `TRAINING.md`). Themenmissionen und eigene Aufgabenrunden ergänzen XP und Pokale.
 3. **Klausurraum:** drei unterschiedliche vollständige Probeklausuren sowie kurze Grundlagenchecks. 60-Punkte-Verteilung orientiert an der Altklausur, eigene neue Aufgaben statt Kopien. Offene Begründungen erhalten explizite Bewertungsraster; Selbstbewertung und automatisch geprüfte Punkte bleiben unterscheidbar.
 4. **Robustheit:** laufende Klausuren automatisch lokal sichern und nach Neuladen fortsetzen. Zeitrahmen optional; 75 Minuten sind nur ein vorläufiger Trainingswert. Export/Import alter Lernstände muss erhalten bleiben.
 5. **Abnahme:** mathematische Berechnungen gegen unabhängige Beispiele prüfen; Speicherung, Prüfungsauswertung, Hinweise und Navigation testen. PR-Beschreibung nach jedem Paket aktualisieren.

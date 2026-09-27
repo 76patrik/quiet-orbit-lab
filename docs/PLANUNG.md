@@ -62,7 +62,7 @@ Die Vorschau endlicher Wörter in einem Labor ersetzt keinen mathematischen Bewe
 
 ## Fortschritt ohne Scheinsicherheit
 
-- Abschluss: mindestens 80 % der Lektionsfragen ohne eingeblendete Hilfe.
+- Abschluss seit 27.09.2026: sieben verschiedene Lektionsaufgaben ohne eingeblendete Hilfe richtig lösen, auch über mehrere Runden. Erreichte Haken bleiben erhalten.
 - Kompetenz „sicher“: zwei unterschiedliche Aufgaben an unterschiedlichen Tagen, keine offenen Fehler im Thema.
 - XP werden pro erstmaligem Ergebnis vergeben; fällige Wiederholungen höchstens einmal täglich pro Aufgabe.
 - Freie Laborversuche haben keine beliebig vervielfachbaren Punkte.

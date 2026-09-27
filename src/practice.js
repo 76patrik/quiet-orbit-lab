@@ -1,11 +1,21 @@
 import {questions,allTopics} from './curriculum.js';
 import {today} from './progress.js';
-export function filterQuestions({topic='all',week='all',level='all',kind='all'}={},pool=questions){
- return pool.filter(q=>(topic==='all'||q.lesson===topic)&&(week==='all'||allTopics.find(t=>t.id===q.lesson)?.week===Number(week))&&(level==='all'||q.level===Number(level))&&(kind==='all'||q.kind===kind));
+export function questionStatus(state,qid){
+ const result=state?.results[qid];
+ if(!result)return 'new';
+ if(state.errors[qid]&&!state.errors[qid].resolved)return 'open';
+ return result.successes.length?'solved':'open';
 }
+export function filterQuestions({topic='all',week='all',level='all',kind='all',status='all',search='',day=today()}={},pool=questions,state){
+ const query=search.trim().toLocaleLowerCase('de');
+ return pool.filter(q=>(topic==='all'||q.lesson===topic)&&(week==='all'||allTopics.find(t=>t.id===q.lesson)?.week===Number(week))&&(level==='all'||q.level===Number(level))&&(kind==='all'||q.kind===kind)
+  &&(!query||`${q.id} ${q.prompt} ${allTopics.find(t=>t.id===q.lesson)?.title}`.toLocaleLowerCase('de').includes(query))
+  &&(status==='all'||status==='due'&&state?.results[q.id]?.due<=day||status==='open'&&questionStatus(state,q.id)!=='solved'||status===questionStatus(state,q.id)));
+}
+export const practiceCount=(count,available)=>count==='all'?available:Math.min(available,Math.max(1,Math.floor(Number(count)||10)));
 export function selectPractice(state,options={},pool=questions,random=Math.random){
- const day=options.day||today(),count=Math.max(1,Math.min(20,Number(options.count)||10));
- const ranked=filterQuestions(options,pool).map(q=>{
+ const day=options.day||today(),filtered=filterQuestions(options,pool,state),count=practiceCount(options.count,filtered.length);
+ const ranked=filtered.map(q=>{
   const r=state.results[q.id],error=state.errors[q.id],sureWrong=state.confidence[q.id]?.last==='sure'&&!state.confidence[q.id]?.lastCorrect;
   const priority=error&&!error.resolved?(sureWrong?0:1):r&&r.due<=day?2:!r?3:!r.successes.length?4:5;
   return {q,priority,tie:random()};

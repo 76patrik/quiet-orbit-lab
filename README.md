@@ -38,6 +38,16 @@ Boss- und Quizantworten zählen wie normale Aufgaben. Karteikarten und Blitzrund
 
 Die Original-PDFs sind nicht im öffentlichen Repository. Die App enthält neu formulierte Lerntexte und Quellenstellen aus dem bereitgestellten Woche-1-Skript und Masterplan.
 
+## Training gezielt zusammenstellen
+
+- Runden mit 5, 10, 20, 40 oder **allen passenden Aufgaben**. „Alle“ hat keine versteckte Obergrenze; beim Mengentraining werden beispielsweise alle 45 Aufgaben angeboten.
+- Thema, Stufe, Aufgabenart und Lernstand filtern; nach Begriff oder Aufgaben-ID suchen. „Aufgaben selbst auswählen“ zeigt sämtliche Treffer mit Checkboxen und einem eigenen Startknopf je Aufgabe.
+- 0/1, passende Buchstaben und mathematische Zeichen direkt einfügen; Löschen und Leeren funktionieren an der aktuellen Cursorposition. **Ergebnis prüfen** steht direkt nach der Eingabe. Die Sicherheitseinschätzung entfällt.
+- Mehrstufige Hinweise verwenden konkrete Operanden, erste Rechenschritte oder die Begründung der jeweiligen Aufgabe. Der letzte Schritt zeigt den Lösungsweg samt Ergebnis. Hinweise zählen weiterhin als Unterstützung.
+- ✓ kennzeichnet selbstständig gelöste Aufgaben. Nach einer Runde lassen sich nur die falschen oder mit Hilfe gelösten Aufgaben erneut üben. Beim Zurückgehen zur Arena lässt sich die aktuelle Runde bis zum Neuladen fortsetzen; geprüfte Antworten bleiben auch nach dem Neuladen erhalten.
+
+Details und Prüfnachweise: [Training überarbeiten](docs/TRAINING.md).
+
 ## Öffentlich auf GitHub Pages
 
 1. Unter **Settings → Pages → Build and deployment → Source** die Option **GitHub Actions** wählen.
@@ -50,7 +60,7 @@ Auf dem iPhone: die veröffentlichte Seite in Safari öffnen → Teilen → **Zu
 
 ## Lokal starten
 
-Voraussetzung: Node.js 22 oder neuer. Die App braucht keine installierten npm-Pakete, API-Schlüssel oder laufenden Backend-Dienst.
+Voraussetzung: Node.js 22 oder neuer. Die App selbst braucht keine Laufzeitpakete, API-Schlüssel oder laufenden Backend-Dienst. Für die automatisierten Oberflächentests werden die Entwicklungsabhängigkeiten mit `npm ci` installiert.
 
 ```sh
 npm run dev
@@ -59,6 +69,7 @@ npm run dev
 Dann `http://localhost:4173` öffnen. Alternativ lässt sich dort der GitHub-Unterpfad `http://localhost:4173/quiet-orbit-lab/` prüfen.
 
 ```sh
+npm ci
 npm test
 npm run build
 node scripts/serve.mjs --dist
@@ -66,7 +77,7 @@ node scripts/serve.mjs --dist
 
 ## Was ein Erfolg bedeutet
 
-Eine Lektion ist bei mindestens 80 % korrekten Antworten ohne Hinweise abgeschlossen. „Sicher“ verlangt zwei verschiedene Aufgaben an verschiedenen Tagen ohne Hilfe und ohne offene Fehler. Der Wochenpokal verlangt mindestens 8/10 im Check und die beiden Pflichtautomaten ohne Vorlage. Wiederholte identische Aufgaben sind kein unabhängiger Klausurnachweis.
+Eine Lektion erhält ihren Haken nach sieben verschiedenen, ohne Hilfe richtig gelösten Aufgaben (das bisherige Ziel eines Acht-Aufgaben-Checks). Die Antworten dürfen aus mehreren Runden, der Trainingsarena oder Wiederholungen stammen. Jede geprüfte Antwort und der erreichte Haken werden sofort gespeichert, auch bevor du „Runde abschließen“ drückst. Bereits erreichte Haken bleiben erhalten; ältere Speicherstände mit ausreichenden Nachweisen werden beim Laden ergänzt. „Sicher“ verlangt zwei verschiedene Aufgaben an verschiedenen Tagen ohne Hilfe und ohne offene Fehler. Der Wochenpokal verlangt mindestens 8/10 im Check und die beiden Pflichtautomaten ohne Vorlage. Wiederholte identische Aufgaben sind kein unabhängiger Klausurnachweis.
 
 Freitext-Begründungen werden privat als Notizen gespeichert. Die App bewertet sie nicht automatisch. Handschriftliche Lösungswege bleiben Teil des Lernplans. Die Zeit- und Prozentziele sind Trainingsannahmen, keine verbindlichen Prüfungsregeln.
 

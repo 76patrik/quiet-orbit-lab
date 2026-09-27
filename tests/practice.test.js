@@ -4,7 +4,7 @@ import {allQuestions,questions,allTopics} from '../src/curriculum.js';
 import {grade,compileRegex,binaryWords} from '../src/engine.js';
 import {epsilonClosure,nfaStep,determinize,minimize,cyk,cnfExamples,graphSolutions,incrementTrace} from '../src/algorithms.js';
 import {blankState,recordAnswer,validateImport,dueQuestions} from '../src/progress.js';
-import {selectPractice,filterQuestions} from '../src/practice.js';
+import {selectPractice,filterQuestions,practiceCount} from '../src/practice.js';
 test('all topics have at least eight distinct exercises; saved IDs are unique',()=>{
  assert.equal(new Set(allQuestions.map(q=>q.id)).size,allQuestions.length);
  for(const t of allTopics)assert.ok(questions.filter(q=>q.lesson===t.id).length>=8,t.id);
@@ -51,4 +51,22 @@ test('old backups migrate, confidence survives export, repaired same-day answers
  const s=blankState();delete s.confidence;assert.deepEqual(validateImport(s).confidence,{});
  const fresh=blankState();const day='2026-09-26';recordAnswer(fresh,'m1',true,{day,confidence:'sure'});recordAnswer(fresh,'m1',false,{day,confidence:'sure'});assert.equal(dueQuestions(fresh,day).length,1);recordAnswer(fresh,'m1',true,{day,confidence:'unsure'});assert.equal(dueQuestions(fresh,day).length,0);assert.equal(validateImport(fresh).confidence.m1.wrongSure,1);
  fresh.confidence.m1.wrongSure=100;assert.throws(()=>validateImport(fresh));
+});
+test('all means every matching exercise, including pools above 40, without duplicates',()=>{
+ const s=blankState(),pool=questions.filter(q=>q.lesson==='sets');
+ assert.ok(pool.length>40);
+ for(const count of ['all',45,999]){
+  const selected=selectPractice(s,{topic:'sets',count});
+  assert.equal(selected.length,count==='all'?pool.length:Math.min(count,pool.length));
+  assert.equal(new Set(selected.map(q=>q.id)).size,selected.length);
+ }
+ assert.equal(practiceCount('all',0),0);
+ assert.equal(selectPractice(s,{topic:'sets',count:40}).length,40);
+});
+test('task search and status filters share the same pool as round selection',()=>{
+ const s=blankState();recordAnswer(s,'m1',true);recordAnswer(s,'m2',false);
+ assert.ok(!filterQuestions({status:'open'},questions,s).some(q=>q.id==='m1'));
+ assert.ok(filterQuestions({status:'open'},questions,s).some(q=>q.id==='m2'));
+ assert.deepEqual(filterQuestions({status:'solved',search:'m1'},questions,s).map(q=>q.id),['m1']);
+ assert.deepEqual(selectPractice(s,{status:'due',count:'all'}).map(q=>q.id),['m2']);
 });

@@ -1,5 +1,5 @@
 import {validateExamAttempts,examReport} from './exam-engine.js';
-import { lessons, questionById, achievements } from './curriculum.js';
+import { lessons, questions, questionById, achievements } from './curriculum.js';
 import { defaultExamDates } from './subjects.js';
 import { questStatus, questById, QUEST_XP, cardById, CARD_INTERVALS, unitById, BOSS_XP } from './games.js';
 const KEY='orbit-progress-v1';
@@ -28,6 +28,25 @@ export function touchActivity(state,day=today()) {
 export function dueQuestions(state,day=today()){
   return Object.entries(state.results).filter(([id,r])=>questionById[id]&&r.due<=day).sort((a,b)=>a[1].due.localeCompare(b[1].due)).map(([id])=>questionById[id]);
 }
+// The former eight-question lesson check required seven independent successes.
+// Count distinct exercises across entry points, and save the checkmark immediately.
+export function lessonProgress(state,id){
+  const pool=questions.filter(q=>q.lesson===id);
+  const solved=pool.filter(q=>state.results[q.id]?.successes.length).length;
+  const target=Math.ceil(Math.min(8,pool.length)*.8);
+  return {solved,total:pool.length,target,remaining:Math.max(0,target-solved),completed:!!state.completed[id]};
+}
+export function reconcileLessons(state){
+  for(const lesson of lessons){
+    if(state.completed[lesson.id])continue;
+    const p=lessonProgress(state,lesson.id);
+    if(!p.target||p.solved<p.target)continue;
+    const days=questions.filter(q=>q.lesson===lesson.id&&state.results[q.id]?.successes.length)
+      .map(q=>[...state.results[q.id].successes].sort()[0]).sort();
+    const day=days[p.target-1];
+    state.completed[lesson.id]=day;award(state,`lesson:${lesson.id}`,25,day);
+  }
+}
 export function recordAnswer(state,qid,correct,{assisted=false,day=today(),review=false,confidence=null}={}) {
   if(!Object.hasOwn(questionById,qid))throw new Error('Unbekannte Aufgabe.');
   if(['guess','unsure','sure'].includes(confidence)){const c=state.confidence[qid]||{guess:0,unsure:0,sure:0,wrongSure:0,last:null,lastCorrect:false};c[confidence]++;if(confidence==='sure'&&!correct)c.wrongSure++;c.last=confidence;c.lastCorrect=correct;state.confidence[qid]=c;}
@@ -49,6 +68,7 @@ export function recordAnswer(state,qid,correct,{assisted=false,day=today(),revie
   state.results[qid]=old;
   const a=touchActivity(state,day);a.attempts++;if(correct)a.correct++;
   if(correct&&!assisted&&!a.unique.includes(qid))a.unique.push(qid);
+  reconcileLessons(state);
   return updateBadges(state,day);
 }
 export function completeLesson(state,id,day=today()){
@@ -128,5 +148,7 @@ export function validateImport(data) {
   if(!Array.isArray(data.badges)||!data.badges.every(id=>achievements.some(a=>a.id===id)))fail();s.badges=[...new Set(data.badges)];
   s.examAttempts=validateExamAttempts(data.examAttempts);
   if(data.confidence!==undefined){if(!obj(data.confidence))fail();for(const [id,v] of Object.entries(data.confidence)){if(!Object.hasOwn(questionById,id)||!obj(v)||!['guess','unsure','sure'].includes(v.last)||typeof v.lastCorrect!=='boolean'||!['guess','unsure','sure','wrongSure'].every(k=>integer(v[k]))||v.wrongSure>v.sure)fail();s.confidence[id]={guess:v.guess,unsure:v.unsure,sure:v.sure,wrongSure:v.wrongSure,last:v.last,lastCorrect:v.lastCorrect};}}
-  if(data.lastLesson!==null&&!lids.has(data.lastLesson))fail();s.lastLesson=data.lastLesson;return s;
+  if(data.lastLesson!==null&&!lids.has(data.lastLesson))fail();s.lastLesson=data.lastLesson;
+  // Repair missing checkmarks in old backups using existing dated evidence only.
+  reconcileLessons(s);return s;
 }

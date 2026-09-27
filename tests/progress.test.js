@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {questions} from '../src/curriculum.js';
+import {lessonProgress} from '../src/progress.js';
 import {blankState,recordAnswer,xpTotal,completeLesson,completeBuilder,dueQuestions,mastery,validateImport,streak,addDays,today,updateBadges,loadState,saveState} from '../src/progress.js';
 test('XP cannot be farmed by repeated same-day answers or repeated completions',()=>{
   const s=blankState();for(let i=0;i<20;i++)recordAnswer(s,'m1',true,{day:'2026-09-26',review:true});assert.equal(xpTotal(s),10);assert.equal(s.activity['2026-09-26'].unique.length,1);
@@ -33,4 +35,17 @@ test('backup roundtrip retains learning evidence and rejects malformed imports',
 });
 test('storage failures preserve an explicit error instead of a false success',()=>{
   const broken={getItem:()=>'{broken',setItem:()=>{throw Error('Quota');}};assert.ok(loadState(broken).error);assert.equal(saveState(blankState(),broken),false);
+});
+test('lesson checkmarks are earned immediately across rounds, survive reload and do not reward duplicates',()=>{
+ const s=blankState(),pool=questions.filter(q=>q.lesson==='sets');
+ const target=lessonProgress(s,'sets').target;
+ for(let i=0;i<target-1;i++)recordAnswer(s,pool[i].id,true,{day:'2026-09-27'});
+ recordAnswer(s,pool[0].id,true);assert.equal(s.completed.sets,undefined);
+ recordAnswer(s,pool[target-1].id,true,{assisted:true});assert.equal(s.completed.sets,undefined);
+ recordAnswer(s,pool[target-1].id,true,{day:'2026-09-27'});
+ assert.equal(s.completed.sets,'2026-09-27');assert.equal(s.awards['lesson:sets'].xp,25);
+ assert.equal(validateImport(s).completed.sets,'2026-09-27');
+ delete s.completed.sets;delete s.awards['lesson:sets'];
+ const repaired=validateImport(s);assert.equal(repaired.completed.sets,'2026-09-27');
+ assert.deepEqual(validateImport(repaired),repaired);
 });
