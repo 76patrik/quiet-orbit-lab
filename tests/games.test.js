@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {level,rankFor,dailyQuests,questStatus,questPool,cards,cardDeck,cardsDue,NEW_CARDS_PER_DAY,bossPool,blitzPool,BOSS_XP,QUEST_XP} from '../src/games.js';
 import {blankState,rateCard,recordCombo,recordBoss,recordBlitz,recordFocus,recordAnswer,xpTotal,validateImport,bestBlitz} from '../src/progress.js';
-import {units,lessons,allTopics,allQuestions} from '../src/curriculum.js';
+import {units,week1Lessons,allTopics,allQuestions} from '../src/curriculum.js';
 test('levels and ranks grow with XP',()=>{
   assert.equal(level(0),1);assert.equal(level(149),1);assert.equal(level(150),2);assert.equal(rankFor(0),'Startrampe');assert.equal(rankFor(300),'Umlaufbahn');assert.equal(rankFor(1e6),'Sternenwanderer');
 });
@@ -32,7 +32,7 @@ test('boss fights use their unit questions and reward the first win once',()=>{
 });
 test('blitz rounds keep records without changing review schedules',()=>{
   assert.ok(blitzPool().every(q=>q.type==='choice'||q.type==='number'));
-  const fresh=blitzPool(),weekOne=new Set(lessons.map(l=>l.id));assert.ok(fresh.length>0&&fresh.every(q=>weekOne.has(q.lesson)),'no unseen later topics');
+  const fresh=blitzPool(),weekOne=new Set(week1Lessons.map(l=>l.id));assert.ok(fresh.length>0&&fresh.every(q=>weekOne.has(q.lesson)),'no unseen later topics');
   const later=allQuestions.find(q=>!weekOne.has(q.lesson)&&(q.type==='choice'||q.type==='number'));const seen=blankState();recordAnswer(seen,later.id,false,{day:'2026-09-26'});
   assert.ok(blitzPool(seen).some(q=>q.lesson===later.lesson));
   const s=blankState();recordAnswer(s,'m1',true,{day:'2026-09-26'});const before=structuredClone(s.results);

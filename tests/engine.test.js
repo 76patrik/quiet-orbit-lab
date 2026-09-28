@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseSet,languageOperation,binaryWords,compileRegex,compareRegex,runDfa,compareDfa,machines,grade,parseNumber,formatNumber} from '../src/engine.js';
-import {allTopics,lessons,questions,allQuestions,units} from '../src/curriculum.js';
+import {allTopics,lessons,week1Lessons,questions,allQuestions,units} from '../src/curriculum.js';
 
 test('ε, empty sets, duplicate words and malformed set input stay distinct',()=>{
   assert.deepEqual(parseSet('{eps,0,0}'),['','0']);assert.deepEqual(parseSet('∅'),[]);
@@ -41,7 +41,7 @@ test('DFA builder detects missing transitions and handles arbitrary state labels
   assert.throws(()=>compareDfa({...machines.ends1,transitions:{}},machines.ends1));
 });
 test('curriculum is connected, unique and has usable assessment answers',()=>{
-  const lids=new Set(lessons.map(l=>l.id));assert.equal(lids.size,19);
+  const lids=new Set(lessons.map(l=>l.id));assert.equal(lids.size,25);assert.equal(week1Lessons.length,19);
   assert.equal(new Set(allQuestions.map(q=>q.id)).size,allQuestions.length);
   assert.deepEqual(new Set(units.flatMap(u=>u.lessons)),lids);
   for(const l of lessons)assert.ok(questions.filter(q=>q.lesson===l.id).length>=3,l.id);

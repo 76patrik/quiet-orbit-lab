@@ -1,3 +1,4 @@
+import {week2Lessons,week2Units,week2TopicGroup,assignWeek2Lesson} from './week2-lessons.js';
 import {week2Questions} from './week2-questions.js';
 import {extraQuestions} from './practice-bank.js';
 import {laterTopics} from './topics.js';
@@ -12,15 +13,16 @@ export const weeks = [
  {n:8,start:'2026-11-09',end:'2026-11-15',title:'Wissen unter Beweis',subtitle:'Gemischtes Training & Simulation 2',hours:9,tasks:'22 „Minimierung DEA“ (S. 22), 22 „Turingmaschinen“ (S. 23), 23 „CYK“ (S. 24).',goal:'Mindestens 75 % der Übungspunkte und kein ausgelassener Kernbereich.',topics:['Gezielte Fehlerkorrektur','Neue Aufgabenvarianten','Gemischte Kurzfragen','Simulation 2 · 14.11.']},
  {n:9,start:'2026-11-16',end:'2026-11-20',title:'Bereit für den nächsten Schritt',subtitle:'Endspurt zur Klausur',hours:5,tasks:'17.11. neue Simulation; 18.11. letzte Lücken; 19.11. leichte Wiederholung.',goal:'Zwei zeitbegrenzte Durchläufe mit mindestens 80 %. Klausur am 20.11.',topics:['Simulation 3 · 17.11.','Letzte Fehler korrigieren','Leichte Wiederholung','Klausur · 20.11.']}
 ];
-export const units = [
+export const week1Units = [
  {id:'bausteine',boss:'Der Symbolwächter',title:'Die Bausteine verstehen',subtitle:'Vom Problem zum ersten Wort',icon:'spark',lessons:['motivation','complexity','notation','alphabet','empty']},
  {id:'sprachen',boss:'Die Mengenhydra',title:'Mit Sprachen rechnen',subtitle:'Mengen, Verknüpfungen und Abschlüsse',icon:'layers',lessons:['languages','sets','concat','closure','quotient']},
  {id:'muster',boss:'Der Musterweber',title:'Muster beschreiben',subtitle:'Reguläre Ausdrücke lesen und konstruieren',icon:'code',lessons:['regex','construct']},
  {id:'automaten',boss:'Die Zustandsmaschine',title:'Automaten zum Leben erwecken',subtitle:'Lesen, merken, entscheiden',icon:'nodes',lessons:['dfa','parity','alternate','complement']},
  {id:'verbinden',boss:'Der Hierarchiehüter',title:'Das große Ganze verbinden',subtitle:'Grammatiken, Hierarchie und Transfer',icon:'orbit',lessons:['grammar','hierarchy','transfer']}
 ];
-const l=(id,title,minutes,source,intro,sections,example,trap,reflection,lab)=>({id,title,minutes,source,intro,sections,example,trap,reflection,lab});
-export const lessons = [
+export const units=[...week1Units.map(u=>({...u,week:1})),...week2Units];
+const l=(id,title,minutes,source,intro,sections,example,trap,reflection,lab)=>({id,title,week:1,minutes,source,intro,sections,example,trap,reflection,lab});
+export const week1Lessons = [
  l('motivation','Warum Theoretische Informatik?',8,'Skript W1 · S. 3–4',
  'Bevor du mit Symbolen rechnest, brauchst du eine Idee davon, welche Fragen wir überhaupt stellen.',
  [['Problem, Instanz, Algorithmus','Ein Problem ist die allgemeine Aufgabe, etwa „Sortiere eine Zahlenliste“. Eine Instanz ist eine konkrete Eingabe, etwa [7, 2, 5]. Ein Algorithmus ist ein präzises Verfahren, das solche Eingaben verarbeitet.'],['Drei unterschiedliche Fragen','Kann ich eine Aufgabe exakt beschreiben? Gibt es ein Verfahren, das jede Eingabe entscheidet? Wie viel Zeit und Speicher benötigt es? Beschreibbarkeit, Entscheidbarkeit und Aufwand sind verschiedene Fragen.'],['Warum Sprachen?','Quellcode, Kennungen und Protokollnachrichten sind Zeichenfolgen. Die Menge aller erlaubten Folgen ist eine formale Sprache. Syntax prüft den Aufbau: Ein korrekt formatiertes Kennzeichen muss deshalb noch nicht tatsächlich vergeben sein.']],
@@ -136,6 +138,10 @@ export const lessons = [
  'Ein Automat, der alles akzeptiert, erkennt nicht jede Teilmenge davon. „Enthält alle erlaubten Wörter“ reicht für eine korrekte Sprachbeschreibung nicht.',
  'Erkläre mit De Morgan, warum der Schnitt zweier regulärer Sprachen regulär ist.')
 ];
+export const lessons=[...week1Lessons,...week2Lessons];
+export const lessonsOfWeek=n=>lessons.filter(l=>l.week===n);
+export const unitsOfWeek=n=>units.filter(u=>u.week===n);
+export const lessonNumber=id=>lessonsOfWeek(lessons.find(l=>l.id===id)?.week).findIndex(l=>l.id===id)+1;
 export const lessonById = Object.fromEntries(lessons.map(l=>[l.id,l]));
 
 const q=(id,lesson,prompt,options,answer,explanation,hint)=>({id,lesson,type:'choice',prompt,options,answer,explanation,hint:hint||'Übersetze die Bedingung in eigene Worte und prüfe besonders den kleinsten Fall.'});
@@ -218,13 +224,13 @@ export const checkQuestions = [
  q('w9','complement','Wie komplementierst du einen vollständigen DEA?',['Start und Endzustände vertauschen','F durch Q ∖ F ersetzen','Alle Pfeile umdrehen'],1,'Alle übrigen Bestandteile bleiben gleich.'),
  q('w10','parity','Welche Information genügt für „gerade Anzahl Einsen“?',['Die genaue Wortlänge','Die genaue Anzahl Einsen','Nur gerade oder ungerade'],2,'Eine 1 wechselt zwischen den beiden Möglichkeiten; 0 lässt sie unverändert.')
 ];
-export const questions=[...originalQuestions.map(q=>({...q,level:q.type==='choice'?1:2,kind:q.type==='choice'?'concept':q.type==='regex'?'construct':'calculate',family:q.id})),...extraQuestions,...week2Questions];
-export const allTopics=[...lessons.map(l=>({...l,week:1})),...laterTopics];
+export const questions=[...originalQuestions.map(q=>({...q,level:q.type==='choice'?1:2,kind:q.type==='choice'?'concept':q.type==='regex'?'construct':'calculate',family:q.id})),...extraQuestions,...week2Questions].map(assignWeek2Lesson);
+export const allTopics=[...lessons,...laterTopics.filter(t=>t.week>2)];
 export const topicById=Object.fromEntries(allTopics.map(t=>[t.id,t]));
 export const allQuestions=[...questions,...checkQuestions];
 export const questionById=Object.fromEntries(allQuestions.map(q=>[q.id,q]));
 export const achievements=[
- {id:'week2-skills',title:'Automaten verbunden',description:'In allen vier Themen von Woche 2 je sieben Aufgaben ohne Hilfe lösen.',icon:'nodes',rule:s=>['nea','minimize','regular-grammar','kleene'].every(id=>questions.filter(q=>q.lesson===id&&s.results[q.id]?.successes.length).length>=7)},
+ {id:'week2-skills',title:'Automaten verbunden',description:'In allen vier Themen von Woche 2 je sieben Aufgaben ohne Hilfe lösen.',icon:'nodes',rule:s=>['nea','minimize','regular-grammar','kleene'].every(id=>questions.filter(q=>week2TopicGroup(q.lesson)===id&&s.results[q.id]?.successes.length).length>=7)},
  {id:'exam-reflection',title:'Generalprobe reflektiert',description:'Eine Probeklausur abgeben und alle offenen Antworten selbst anhand des Rasters bewerten.',icon:'target',rule:()=>false},
  {id:'hundred',title:'Wissenssammler',description:'100 verschiedene Aufgaben ohne Hinweis lösen.',icon:'book',rule:s=>Object.values(s.results).filter(r=>r.successes?.length).length>=100},
  {id:'detective',title:'Fehlerdetektiv',description:'10 verschiedene Fehler-Suchaufgaben ohne Hilfe lösen.',icon:'search',rule:s=>questions.filter(q=>q.kind==='debug'&&s.results[q.id]?.successes.length).length>=10},
@@ -238,9 +244,9 @@ export const achievements=[
  {id:'three',title:'Dranbleiber',description:'An drei aufeinanderfolgenden Tagen üben.',icon:'flame',rule:(_s,streak)=>streak>=3},
  {id:'check',title:'Woche 1 gemeistert',description:'8/10 im Wochencheck und beide Pflicht-DEAs ohne Vorlage.',icon:'trophy',rule:s=>s.checks.some(c=>c.score>=8)&&s.builders.ends1&&s.builders.alternate},
  {id:'boss1',title:'Bossbezwinger',description:'Einen Bosskampf mit mindestens einem Leben gewinnen.',icon:'shield',rule:s=>Object.keys(s.bosses||{}).length>=1},
- {id:'bossall',title:'Hüter des Fundaments',description:'Alle fünf Bosse von Woche 1 besiegen.',icon:'flag',rule:s=>units.every(u=>s.bosses?.[u.id])},
+ {id:'bossall',title:'Hüter des Fundaments',description:'Alle fünf Bosse von Woche 1 besiegen.',icon:'flag',rule:s=>week1Units.every(u=>s.bosses?.[u.id])},
  {id:'blitz10',title:'Geistesblitz',description:'In einer Blitzrunde 10 richtige Antworten schaffen.',icon:'spark',rule:s=>(s.blitz||[]).some(b=>b.score>=10)},
  {id:'cards30',title:'Kartenmeister',description:'30 Karteikarten mindestens ins dritte Fach bringen.',icon:'layers',rule:s=>Object.values(s.cards||{}).filter(c=>c.box>=3).length>=30},
  {id:'quests',title:'Missionsheld',description:'An einem Tag alle drei Tagesmissionen erfüllen.',icon:'target',rule:s=>{const per={};for(const k of Object.keys(s.awards))if(k.startsWith('quest:')){const d=k.slice(6,16);per[d]=(per[d]||0)+1;}return Object.values(per).some(n=>n>=3);}},
- {id:'all',title:'Fundament komplett',description:'Alle 19 Lektionen abschließen.',icon:'flag',rule:s=>Object.keys(s.completed).length===lessons.length}
+ {id:'all',title:'Fundament komplett',description:'Alle 19 Lektionen abschließen.',icon:'flag',rule:s=>week1Lessons.every(l=>s.completed[l.id])}
 ];
