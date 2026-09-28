@@ -25,7 +25,8 @@ test('worked hints use actual operands, preserve B · A and distinguish epsilon 
 });
 test('input keyboards include binary digits for sets, regex and word answers',()=>{
  for(const q of questions.filter(q=>['set','regex','text'].includes(q.type))){
-  assert.ok(inputSymbols(q).includes('0'),q.id);assert.ok(inputSymbols(q).includes('1'),q.id);
+  if(q.symbols){for(const symbol of q.symbols)assert.ok(inputSymbols(q).includes(symbol),q.id);}
+  else {assert.ok(inputSymbols(q).includes('0'),q.id);assert.ok(inputSymbols(q).includes('1'),q.id);}
  }
  assert.ok(inputSymbols(questionById['variant-cyk-0-aabb']).includes('S'));
 });

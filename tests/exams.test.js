@@ -5,8 +5,8 @@ import {createAttempt,setExamAnswer,submitAttempt,rateCriterion,remainingSeconds
 import {blankState,validateImport,updateBadges} from '../src/progress.js';
 import {setLabel} from '../src/engine.js';
 const fill=(a)=>{for(const q of examById[a.examId].questions)setExamAnswer(a,q.id,q.type==='open'?'Mein Lösungsweg':q.type==='set'?setLabel(q.answer):String(q.answer));};
-test('six distinct exam variants have consistent points and complete rubrics',()=>{
- assert.equal(exams.length,6);assert.equal(new Set(exams.map(e=>e.id)).size,6);
+test('seven distinct exam variants have consistent points and complete rubrics',()=>{
+ assert.equal(exams.length,7);assert.equal(new Set(exams.map(e=>e.id)).size,7);
  for(const e of exams){assert.equal(new Set(e.questions.map(q=>q.id)).size,e.questions.length);assert.equal(e.questions.reduce((s,q)=>s+q.points,0),e.points);for(const q of e.questions){assert.ok(q.solution);if(q.type==='open')assert.equal(q.rubric.reduce((s,r)=>s+r.points,0),q.points);}
   if(e.kind==='full')assert.deepEqual(examSections.map(s=>e.questions.filter(q=>q.section===s).reduce((n,q)=>n+q.points,0)),[8,10,7,15,10,10]);
  }

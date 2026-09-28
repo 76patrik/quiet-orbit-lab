@@ -1,3 +1,4 @@
+import {week2Questions} from './week2-questions.js';
 import {extraQuestions} from './practice-bank.js';
 import {laterTopics} from './topics.js';
 export const weeks = [
@@ -217,12 +218,13 @@ export const checkQuestions = [
  q('w9','complement','Wie komplementierst du einen vollständigen DEA?',['Start und Endzustände vertauschen','F durch Q ∖ F ersetzen','Alle Pfeile umdrehen'],1,'Alle übrigen Bestandteile bleiben gleich.'),
  q('w10','parity','Welche Information genügt für „gerade Anzahl Einsen“?',['Die genaue Wortlänge','Die genaue Anzahl Einsen','Nur gerade oder ungerade'],2,'Eine 1 wechselt zwischen den beiden Möglichkeiten; 0 lässt sie unverändert.')
 ];
-export const questions=[...originalQuestions.map(q=>({...q,level:q.type==='choice'?1:2,kind:q.type==='choice'?'concept':q.type==='regex'?'construct':'calculate',family:q.id})),...extraQuestions];
+export const questions=[...originalQuestions.map(q=>({...q,level:q.type==='choice'?1:2,kind:q.type==='choice'?'concept':q.type==='regex'?'construct':'calculate',family:q.id})),...extraQuestions,...week2Questions];
 export const allTopics=[...lessons.map(l=>({...l,week:1})),...laterTopics];
 export const topicById=Object.fromEntries(allTopics.map(t=>[t.id,t]));
 export const allQuestions=[...questions,...checkQuestions];
 export const questionById=Object.fromEntries(allQuestions.map(q=>[q.id,q]));
 export const achievements=[
+ {id:'week2-skills',title:'Automaten verbunden',description:'In allen vier Themen von Woche 2 je sieben Aufgaben ohne Hilfe lösen.',icon:'nodes',rule:s=>['nea','minimize','regular-grammar','kleene'].every(id=>questions.filter(q=>q.lesson===id&&s.results[q.id]?.successes.length).length>=7)},
  {id:'exam-reflection',title:'Generalprobe reflektiert',description:'Eine Probeklausur abgeben und alle offenen Antworten selbst anhand des Rasters bewerten.',icon:'target',rule:()=>false},
  {id:'hundred',title:'Wissenssammler',description:'100 verschiedene Aufgaben ohne Hinweis lösen.',icon:'book',rule:s=>Object.values(s.results).filter(r=>r.successes?.length).length>=100},
  {id:'detective',title:'Fehlerdetektiv',description:'10 verschiedene Fehler-Suchaufgaben ohne Hilfe lösen.',icon:'search',rule:s=>questions.filter(q=>q.kind==='debug'&&s.results[q.id]?.successes.length).length>=10},

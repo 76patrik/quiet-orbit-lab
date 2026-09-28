@@ -6,7 +6,7 @@ Orbit ist ein Lernstudio für mehrere Fächer. Das Orbit-Prinzip (verstehen → 
 
 | Fach | Prüfung | Stand |
 |---|---|---|
-| Theoretische Informatik | 20.11.2026 | Woche 1 interaktiv, Wochen 2–9 geplant |
+| Theoretische Informatik | 20.11.2026 | Wochen 1–2 ausgearbeitet, Wochen 3–9 im Lernplan |
 | Finanzierung und Rechnungswesen | 27.11.2026 | Angelegt, Lernmaterialien folgen |
 | Mikro- und Makroökonomik | 02.12.2026 | Angelegt, Lernmaterialien folgen |
 
@@ -36,7 +36,7 @@ Spielerische Elemente sollen Abrufen üben, nicht Punkte verteilen:
 
 ## Theoretische Informatik: Ziel und Umfang der ersten Version
 
-Die App ergänzt das 42-seitige Woche-1-Skript und den Masterplan mit aktiver Anwendung. Woche 1 ist vollständig erschlossen; die übrigen acht Wochen sind als transparente Roadmap vorhanden. Keine gesperrten oder scheinbar bereits fertigen Folgelektionen.
+Die App ergänzt das 42-seitige Woche-1-Skript und den Masterplan mit aktiver Anwendung. Woche 1 ist vollständig erschlossen. Woche 2 hat ein eigenes 29-seitiges Skript, zwei Automatenlabore, 61 zusätzliche Übungen und einen Wochencheck. Die übrigen Wochen bleiben im Lernplan mit Themenübersichten und bestehenden Trainingsaufgaben; vollständige Skripte dafür folgen. Details: [Woche 2](WOCHE_2.md).
 
 ## Lernschleife
 

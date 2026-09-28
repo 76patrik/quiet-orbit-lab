@@ -64,6 +64,7 @@ export function answerText(q){
 
 // Stages use this exercise's operands or reasoning, never a single topic-wide fallback.
 export function hintsFor(q){
+ if(q.hints?.length)return [...q.hints.map((text,i)=>({title:i?'Nächster Rechenschritt':'Ansatz für diese Aufgabe',text})),{title:'Lösungsweg & Ergebnis',text:`${q.explanation}\nErgebnis: ${answerText(q)}`}];
  let steps=[];
  const pair=q.prompt.match(/A\s*=\s*(\{[^}]*\}|∅),\s*B\s*=\s*(\{[^}]*\}|∅)/);
  if(pair&&q.type==='set'&&!firstSteps[q.id]){
@@ -126,6 +127,7 @@ function regexApproach(prompt){
 
 export function inputSymbols(q){
  if(q.type==='choice'||q.type==='number')return [];
+ if(q.symbols)return q.symbols;
  if(q.type==='regex')return ['0','1','ε','∅','∪','(',')','*','+'];
  if(q.type==='set')return ['0','1',...(q.lesson==='cyk'?['S','A','B','C']:q.lesson==='nea'?['p','q','r']:['a','b']),'ε','∅','{','}',','];
  return ['0','1','a','b','ε'];

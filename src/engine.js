@@ -112,7 +112,7 @@ export const formatNumber=(n,unit='')=>`${Number(n).toLocaleString('de-DE',{maxi
 export function grade(question,value) {
   if(question.type==='choice') return Number(value)===question.answer;
   if(question.type==='set') return equalSets(parseSet(value),question.answer);
-  if(question.type==='regex') return compareRegex(value,question.answer).equal;
+  if(question.type==='regex') return compareRegex(value,question.answer,question.alphabet).equal;
   if(question.type==='number'){const n=parseNumber(value);if(n!==null)return Math.abs(n-question.answer)<=(question.tolerance??0)+1e-9;}
   return String(value).trim().toLowerCase().replace(/\s/g,'') === String(question.answer).toLowerCase().replace(/\s/g,'');
 }

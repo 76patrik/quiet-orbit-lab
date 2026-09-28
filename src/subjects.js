@@ -3,7 +3,7 @@
 export const subjects = [
  {id:'ti',title:'Theoretische Informatik',short:'TI',examDate:'2026-11-20',status:'active',
   summary:'Automaten, formale Sprachen, Berechenbarkeit und Komplexität.',
-  note:'Woche 1 ist interaktiv verfügbar. Die Wochen 2–9 sind als Planung hinterlegt.'},
+  note:'Woche 1 ist interaktiv verfügbar. Woche 2 ergänzt ein vollständiges Skript, Automatenlabore, Übungen und einen Wochencheck. Wochen 3–9 bleiben im Lernplan.'},
  {id:'fire',title:'Finanzierung und Rechnungswesen',short:'FiRe',examDate:'2026-11-27',status:'pending',
   summary:'Lernmaterialien folgen.',
   note:'Das Fach ist angelegt. Lektionen und Aufgaben entstehen erst, wenn deine Unterlagen vorliegen.'},
