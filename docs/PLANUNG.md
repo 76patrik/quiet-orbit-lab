@@ -36,7 +36,7 @@ Spielerische Elemente sollen Abrufen üben, nicht Punkte verteilen:
 
 ## Theoretische Informatik: Ziel und Umfang der ersten Version
 
-Die App ergänzt das 42-seitige Woche-1-Skript und den Masterplan mit aktiver Anwendung. Woche 1 ist vollständig erschlossen. Woche 2 hat ein eigenes 29-seitiges Skript, zwei Automatenlabore, 61 zusätzliche Übungen und einen Wochencheck. Die übrigen Wochen bleiben im Lernplan mit Themenübersichten und bestehenden Trainingsaufgaben; vollständige Skripte dafür folgen. Details: [Woche 2](WOCHE_2.md).
+Die App ergänzt das 42-seitige Woche-1-Skript und den Masterplan mit aktiver Anwendung. Woche 1 ist vollständig erschlossen. Woche 2 verwendet denselben interaktiven Lernpfad mit sechs Lektionen in drei Einheiten und 93 Übungen. Ergänzend gibt es ein 29-seitiges Skript, zwei Automatenlabore und einen Wochencheck. Die übrigen Wochen bleiben im Lernplan mit Themenübersichten und bestehenden Trainingsaufgaben; vollständige Skripte dafür folgen. Details: [Woche 2](WOCHE_2.md).
 
 ## Lernschleife
 
