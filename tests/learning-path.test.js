@@ -63,7 +63,7 @@ test('all six lesson checkmarks need seven independent answers and stay separate
 
 test('shared path and new lesson definitions are available in the offline app',async()=>{
  const sw=await readFile(new URL('../sw.js',import.meta.url),'utf8');
- for(const file of ['src/path-view.js','src/week2-lessons.js']){
+ for(const file of ['src/path-view.js','src/week2-lessons.js','assets/Lernskript_Woche_1_Theoretische_Informatik.pdf','assets/Lernskript_Woche_2_Theoretische_Informatik.pdf']){
   assert.ok(sw.includes(`'./${file}'`));await access(new URL('../'+file,import.meta.url));
  }
 });

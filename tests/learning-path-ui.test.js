@@ -27,9 +27,15 @@ test('both weeks share the interactive path and all six new lessons save real pr
  assert.equal(el('[data-week="2"]').getAttribute('aria-pressed'),'true');
  assert.deepEqual([...doc.querySelectorAll('.lesson-num')].map(n=>n.textContent.trim()),['01','02','03','04','05','06']);
  assert.match(el('.week-meta').textContent,/0\/6 Lektionen/);
+ assert.equal(el('a[href="#week2/overview"]').textContent,'Skript öffnen');
+ assert.ok(el('a[download][href="./assets/Lernskript_Woche_2_Theoretische_Informatik.pdf"]'));
  await click('[data-week="1"]');assert.equal(w.location.hash,'#path/1');
  assert.equal(doc.querySelectorAll('.card.unit .lesson-grid .lesson-tile').length,19);
  assert.equal(doc.querySelectorAll('.card.unit').length,5);assert.match(el('.week-meta').textContent,/0\/19 Lektionen/);
+ const scriptLink=el('a[href="./assets/Lernskript_Woche_1_Theoretische_Informatik.pdf"]:not([download])');
+ assert.equal(scriptLink.textContent,'Skript öffnen');assert.equal(scriptLink.target,'_blank');assert.ok(scriptLink.relList.contains('noopener'));
+ assert.equal(el('a[download][href="./assets/Lernskript_Woche_1_Theoretische_Informatik.pdf"]').textContent,'PDF herunterladen');
+ assert.equal(el('a[href="#lab"].btn').textContent,'Lernlabore');
  await click('[data-week="2"]');assert.equal(w.location.hash,'#path/2');
 
  for(const l of lessonsOfWeek(2)){

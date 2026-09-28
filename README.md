@@ -27,7 +27,7 @@ Boss- und Quizantworten zählen wie normale Aufgaben. Karteikarten und Blitzrund
 
 ## Theoretische Informatik: Was bereits funktioniert
 
-- **Woche 1:** 19 erklärte Lektionen, 62 Übungsaufgaben und ein separater Check mit 10 Fragen.
+- **Woche 1:** 19 erklärte Lektionen, 62 Übungsaufgaben und ein separater Check mit 10 Fragen. Im Lernpfad lässt sich das vollständige 42-seitige Lernskript in einem neuen Tab öffnen oder als PDF herunterladen.
 - **Woche 2:** sechs interaktive Lektionen in drei Einheiten mit 93 Aufgaben, ein 29-seitiges Lernskript mit 10 Kapiteln in der App und als PDF, zwei Automatenlabore und ein 40-Punkte-Wochencheck.
 - **Fünf Lernlabore:** Sprachoperationen, RegEx, DEA-Läufe, eigene Automaten und Komplexitätswachstum.
 - **Echte Aufgaben:** Mengen eingeben, RegEx konstruieren und vollständige Übergangstabellen erstellen. RegEx und DEAs werden auf vollständige Sprachgleichheit geprüft; bei Fehlern gibt es ein kürzestes Gegenbeispiel.
@@ -37,7 +37,7 @@ Boss- und Quizantworten zählen wie normale Aufgaben. Karteikarten und Blitzrund
 - **Mobil und offline:** responsive Oberfläche, Startbildschirm-App, Offline-Cache nach erstem vollständigem Laden.
 - **Lokaler Lernstand:** Export/Import als JSON. Kein Konto, kein Tracking und keine automatische Synchronisierung zwischen Geräten.
 
-Die Original-PDFs sind nicht im öffentlichen Repository. Die App enthält neu formulierte Lerntexte mit Quellenstellen aus den bereitgestellten Skripten, Vorlesungsfolien, Aufgaben und dem Masterplan.
+Die ursprünglichen Vorlesungsunterlagen sind nicht im öffentlichen Repository. Die App enthält neu formulierte Lerntexte mit Quellenstellen aus den bereitgestellten Skripten, Vorlesungsfolien, Aufgaben und dem Masterplan. Die daraus erstellten persönlichen Lernskripte für [Woche 1](assets/Lernskript_Woche_1_Theoretische_Informatik.pdf) und [Woche 2](assets/Lernskript_Woche_2_Theoretische_Informatik.pdf) sind als PDF enthalten und nach dem vollständigen Laden der App auch offline verfügbar.
 
 ## Woche 2: vom NEA zur regulären Grammatik
 
