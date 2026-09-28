@@ -2,6 +2,19 @@
 const guide = (goal,recipe,prompt,steps,check,answer,exam,table) =>
   ({goal,recipe,worked:{prompt,steps,table},check,answer,exam});
 export const lessonGuides = {
+ nea: guide('Alle möglichen Zustände nach einem Wort berechnen und die Annahme begründen.',
+  ['Mit dem Startzustand beginnen.','Je Zeichen die Nachfolger jedes möglichen Zustands vereinigen.','Erst nach dem ganzen Wort prüfen, ob ein Endzustand dabei ist.'],
+  'Start p, F={r}: p:0→{p,q},1→{p}; q:1→{r}; übrige Übergänge leer. Vergleiche 001 und 0010.',
+  ['Anfangs ist nur p möglich.','Nach der ersten und nach der zweiten 0 ist die Menge {p,q}.','Nach 001 bleibt p möglich und q erreicht r: {p,r}, also angenommen.','Die nächste 0 ergibt {p,q}; r hat keinen Nachfolger. 0010 wird abgelehnt.'],
+  'Warum macht ein ablehnender Lauf die Annahme von 001 nicht ungültig?',
+  'Die Definition verlangt mindestens einen vollständigen akzeptierenden Lauf. Der Lauf p,p,q,r genügt; weitere ablehnende Läufe ändern das nicht.', 'wk2-suffix-word-3',
+  {headers:['Gelesen','Mögliche Zustände'],rows:[['ε','{p}'],['0','{p,q}'],['00','{p,q}'],['001','{p,r}'],['0010','{p,q}']]}),
+ epsilon: guide('Die vollständige ε-Hülle einschließlich Startzuständen und ε-Kreisen berechnen.',
+  ['Alle Ausgangszustände in die Ergebnismenge aufnehmen.','Unbearbeitete Zustände durchgehen und ihre ε-Nachfolger ergänzen.','Nur neue Zustände erneut bearbeiten; aufhören, wenn keiner mehr dazukommt.'],
+  'Es gibt die ε-Pfeile s→u, u→v und v→u. Zusätzlich führt ein 0-Pfeil von v nach f. Bestimme E({s}).',
+  ['Beginne bei {s}.','s ergänzt u; u ergänzt v.','Von v gelangst du per ε wieder nach u, das schon bearbeitet ist.','Die Hülle ist {s,u,v}. f kommt erst durch ein gelesenes 0 hinzu, nicht durch die ε-Hülle.'],
+  'Warum gehören s zur Hülle, aber f nicht?',
+  'Null ε-Schritte lassen s erreichbar. Der Weg nach f benötigt ein echtes Eingabezeichen und ist deshalb kein ε-Weg.', 'wk2-closure-0'),
  'regular-grammar': guide('Eine Sprache als RegEx, Automat und rechtslineare Grammatik darstellen.',
   ['Bedingungen in Phasen zerlegen.','Pro Zustand eine Variable und pro Zeichenübergang eine Regel A→aB notieren.','Endzustände durch ε-Regeln beenden; gültige und ungültige Wörter kontrollieren.'],
   'Erzeuge genau die Wörter über {a,b}, die mit a beginnen und mindestens ein b enthalten.',
@@ -134,7 +147,7 @@ export const lessonGuides = {
   ['Die Syntaxsprache ist #(0|1)(0|1)*. Ein DEA kann ihre Zugehörigkeit prüfen.','Die Lesezeit eines festen DEA ist linear in der Wortlänge.','Der gewöhnliche DEA ist ein Erkenner und liefert nur Annahme/Ablehnung. Er schreibt keine neue Eingabe.','Für das Entfernen kann ein Transduktor oder gewöhnlicher String-Algorithmus die Zeichen nach # ausgeben. Daraus folgt keine schwierige Berechnungsaufgabe.'],
   'Genügt das Bestehen der Syntaxprüfung als Nachweis, dass eine Kennung existiert?',
   'Nein. Für die Existenzprüfung braucht man zusätzlich die Menge tatsächlich vergebener Kennungen, etwa eine Datenbank.', 'method-equivalence'),
- nea: guide('Einen NEA vollständig determinisieren: Mengen, Übergänge und Endzustände dokumentieren.',
+ determinize: guide('Einen NEA vollständig determinisieren: Mengen, Übergänge und Endzustände dokumentieren.',
   ['Starte mit der ε-Hülle des Startzustands.','Für jedes Zeichen: alle Nachfolger vereinigen, danach ε-Hülle bilden.','Neue Mengen als eigene Zustände aufnehmen, bis keine neue Menge entsteht.'],
   'NEA ohne ε: s:0→{s,p},1→{s}; p:1→{f}; f ohne Übergänge. Start s, F={f}.',
   ['Startmenge A={s}. Bei 0 entsteht B={s,p}, bei 1 wieder A.','Aus B entsteht bei 0 wieder B und bei 1 die neue Menge C={s,f}.','Aus C entsteht bei 0 B und bei 1 A. Damit sind alle erreichbaren Mengen verarbeitet.','Nur C akzeptiert, weil genau diese Menge f enthält. Der DEA erkennt Wörter mit Endung 01.'],

@@ -8,5 +8,6 @@ test('every question gets an in-place explanation with example and pitfall',()=>
 test('the most relevant lesson section is chosen',()=>{
   assert.match(explainFor(questionById.m1).blocks[0].text,/Instanz/);
   const cp2=explainFor(questionById.cp2);assert.ok([cp2.blocks[0],...cp2.more].some(b=>/vollständig/.test(b.text)),'all lesson sections stay reachable');
-  const later=allQuestions.find(q=>q.lesson==='nea');assert.deepEqual(explainFor(later).blocks.slice(0,2).map(b=>b.title),['Grundidee','Vorgehen']);
+  const later=allQuestions.find(q=>q.lesson==='pumping');assert.deepEqual(explainFor(later).blocks.slice(0,2).map(b=>b.title),['Grundidee','Vorgehen']);
+  const nea=explainFor(allQuestions.find(q=>q.id==='extra-nea-1'));assert.equal(nea.blocks[0].title,'Ein erfolgreicher Lauf genügt');
 });

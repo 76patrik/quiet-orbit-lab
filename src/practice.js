@@ -37,7 +37,7 @@ export const missions=[
  {id:'foundations',title:'Grundlagenpilot',text:'8 verschiedene Grundlagenaufgaben lösen.',topics:['notation','alphabet','empty','languages'],target:8},
  {id:'algebra',title:'Sprachlabor',text:'12 verschiedene Aufgaben zu Sprachoperationen lösen.',topics:['sets','concat','closure','quotient'],target:12},
  {id:'machines',title:'Automatencrew',text:'12 verschiedene Automaten- und RegEx-Aufgaben lösen.',topics:['regex','construct','dfa','parity','alternate','complement'],target:12},
- {id:'beyond',title:'Neue Galaxien',text:'12 Aufgaben zu NEA, Minimierung oder Pumping lösen.',topics:['nea','minimize','pumping'],target:12},
+ {id:'beyond',title:'Neue Galaxien',text:'12 Aufgaben zu NEA, Minimierung oder Pumping lösen.',topics:['nea','epsilon','determinize','minimize','pumping'],target:12},
  {id:'parser',title:'Parserwerkstatt',text:'12 Aufgaben zu Grammatiken, CYK oder Kellerautomaten lösen.',topics:['grammar','cnf','cyk','stack'],target:12},
  {id:'limits',title:'Grenzen erkunden',text:'12 Aufgaben zu TM, NP, Reduktionen oder Entscheidbarkeit lösen.',topics:['tm','np','reduction','decidable'],target:12}
 ];
