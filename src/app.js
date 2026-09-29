@@ -1,3 +1,4 @@
+import {questionDfaFeedback,renderDfaFeedback,stepDfaFeedback} from './dfa-view.js';
 import {pathView} from './path-view.js';
 import {week2View,week2Card,week2LabView,week2Ui,setWeek2Word,week2LabAction} from './week2-view.js';
 import {week2ChapterById} from './week2-content.js';
@@ -347,6 +348,7 @@ app.addEventListener('click',async event=>{
   const action=button.dataset.action,id=button.dataset.id;
   try{
     switch(action){
+      case 'dfa-feedback-step':stepDfaFeedback(button,esc);break;
       case 'method-scroll':document.querySelector('#lesson-method')?.scrollIntoView({block:'start'});break;
       case 'w2-read':{
         if(!Object.hasOwn(week2ChapterById,id))break;
