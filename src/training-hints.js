@@ -159,7 +159,7 @@ export function inputSymbols(q){
   return symbols;
  }
  if(q.type==='set'&&q.lesson==='cyk')return ['S','A','B','C','ε','∅','{','}',','];
- if(q.type==='set'&&q.lesson==='nea'){
+ if(q.type==='set'&&(q.lesson==='nea'||q.id.startsWith('variant-subset-'))){
   const states=[...new Set((q.prompt.match(/\b(?:q\d+|[pqr])\b/g)||[]))];
   return [...(states.length?states:['p','q','r']),'ε','∅','{','}',','];
  }
