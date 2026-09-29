@@ -125,10 +125,46 @@ function regexApproach(prompt){
  return 'Platziere den verpflichtenden Block 11. Vor und nach diesem Block ist jede Binärfolge erlaubt.';
 }
 
+const letterSymbols=['0','1','a','b'];
+
+// The keypad follows the actual exercise, not a mixture of both sample alphabets.
+// Explicit metadata takes priority. Other tasks name their symbols in the prompt
+// (often inside A={...}, B={...}) or in the words to be constructed.
+function taskAlphabet(q){
+ const declared=Array.isArray(q.alphabet)?q.alphabet.filter(c=>letterSymbols.includes(c)):[];
+ if(declared.length)return [...new Set(declared)];
+ const prompt=q.prompt||'';
+ const groups=[...prompt.matchAll(/\{([^{}]*)\}/g)];
+ const fromSets=[...new Set(groups.flatMap(([,body])=>body.split(',').map(s=>s.trim()).filter(s=>/^[01ab]+$/.test(s)).flatMap(s=>[...s])))];
+ if(fromSets.length)return letterSymbols.filter(c=>fromSets.includes(c));
+ if(q.type==='regex'){
+  const answer=String(q.answer||'');
+  return /[ab]/.test(answer)&&!/[01]/.test(answer)?['a','b']:['0','1'];
+ }
+ if(q.type==='text'){
+  const block=prompt.match(/\(([01ab]+)\)\s*\^/);
+  if(block)return letterSymbols.filter(c=>block[1].includes(c));
+ }
+ const answers=Array.isArray(q.answer)?q.answer:[q.answer];
+ const inAnswer=[...new Set(answers.filter(s=>typeof s==='string').flatMap(s=>[...s].filter(c=>letterSymbols.includes(c))))];
+ if(inAnswer.length)return letterSymbols.filter(c=>inAnswer.includes(c));
+ return ['0','1'];
+}
+
 export function inputSymbols(q){
  if(q.type==='choice'||q.type==='number')return [];
- if(q.symbols)return q.symbols;
- if(q.type==='regex')return ['0','1','ε','∅','∪','(',')','*','+'];
- if(q.type==='set')return ['0','1',...(q.lesson==='cyk'?['S','A','B','C']:q.lesson==='nea'?['p','q','r']:['a','b']),'ε','∅','{','}',','];
- return ['0','1','a','b','ε'];
+ if(q.symbols){
+  const symbols=[...new Set(q.symbols)];
+  if(q.type==='regex'&&!symbols.includes('|'))symbols.splice(symbols.includes('∪')?symbols.indexOf('∪')+1:symbols.length,0,'|');
+  return symbols;
+ }
+ if(q.type==='set'&&q.lesson==='cyk')return ['S','A','B','C','ε','∅','{','}',','];
+ if(q.type==='set'&&q.lesson==='nea'){
+  const states=[...new Set((q.prompt.match(/\b(?:q\d+|[pqr])\b/g)||[]))];
+  return [...(states.length?states:['p','q','r']),'ε','∅','{','}',','];
+ }
+ const letters=taskAlphabet(q);
+ if(q.type==='regex')return [...letters,'ε','∅','∪','|','(',')','*','+'];
+ if(q.type==='set')return [...letters,'ε','∅','{','}',','];
+ return [...letters,'ε'];
 }
