@@ -24,3 +24,17 @@ Die Auswahl begrenzte Runden unabhängig vom sichtbaren Aufgabenbestand. Die Pr�
 - Die DOM-Tests prüfen keine Pixelgeometrie. Eine visuelle Smartphone-Prüfung ist in dieser Umgebung nicht erfolgt, da die Browserumgebung den lokalen Vorschau-Server nicht erreicht. Die responsive Anordnung muss zusätzlich auf einem Smartphone beurteilt werden.
 
 Die produktive Veröffentlichung erfolgt erst nach dem Merge des Draft-PRs über den bestehenden GitHub-Pages-Workflow. Es gibt weiterhin keine automatische Synchronisation zwischen Geräten.
+
+
+## DEA-Fehler visuell nachvollziehen
+
+Nach einer falschen oder übersprungenen DEA-Aufgabe erscheinen Übergangstabelle und Automatengrafik sofort unter der Rückmeldung. Ein zusätzlicher Klick auf „Warum?“ ist dafür nicht nötig. Das gilt auch für Fehlerprotokoll und Rundenergebnis; in Wochenchecks und Probeklausuren erscheinen die Hilfen erst nach der Abgabe.
+
+- Pfeil zum Startzustand; Doppelkreis bzw. `*` für akzeptierende Zustände.
+- Bei Wortaufgaben einen Schritt auswählen: Der aktuelle Zustand, der zuletzt gelesene Übergang und der Tabellenwert werden gemeinsam hervorgehoben. Die Schrittfolge bleibt vollständig sichtbar.
+- Bei ε gibt es nur den Startschritt und keinen hervorgehobenen Übergang.
+- Konkrete Aufgaben verwenden ihren eigenen Automaten. Allgemeine Regelfragen zeigen ausdrücklich ein Beispiel; zusätzliche Annahmen sind benannt.
+- Große Grafiken und Tabellen lassen sich auf schmalen Bildschirmen seitlich scrollen. Die Tastatur erreicht Schritte und Scrollbereiche ebenfalls.
+- Beim Bauen eines DEA werden der abgegebene Automat und eine korrekte Lösung am selben Gegenbeispiel gezeigt. Nach Sichtbarkeit der Vorlage zählt der Versuch als unterstützt; „Ohne Vorlage neu beginnen“ startet einen neuen Nachweis.
+
+Die Aufgabenmetadaten und `src/dfa-feedback.js` ordnen die Modelle zu; `src/dfa-view.js` stellt Tabelle und Grafik aus denselben Übergängen dar. Neue Module sind im Offline-Cache enthalten. Der Wortlauf verändert weder die abgegebene Antwort noch XP oder Lernfortschritt.

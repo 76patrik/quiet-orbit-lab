@@ -1,3 +1,4 @@
+import {examDfa} from './week2-models.js';
 const auto=(id,topic,section,points,type,prompt,answer,solution,extra={})=>({id,topic,section,points,type,prompt,answer,solution,...extra});
 const open=(id,topic,section,prompt,rubric,solution)=>({id,topic,section,type:'open',prompt,rubric:rubric.map(([points,text])=>({points,text})),points:rubric.reduce((s,[p])=>s+p,0),solution});
 export const week2Exam={
@@ -16,3 +17,5 @@ export const week2Exam={
   open('complement','kleene','5 · Begründen','NEA über {0}: Start s, F={f}, δ(s,0)={s,f}, Rest leer. Warum liefert F↦{s} kein Komplement? Belege es mit 0 und nenne den richtigen Weg.',[[1,'0 wird vorher über s→f und nachher über s→s akzeptiert; konkreter Gegenbeleg.'],[1,'Determinisieren, vollständigen DEA sicherstellen, dann Endzustände invertieren.']], 'Beide Automaten akzeptieren 0, aber im Komplement müsste es abgelehnt werden. Vorher akzeptiert der Lauf nach f, nachher der Lauf nach s. Richtig: Potenzmengenkonstruktion, Vervollständigung, F durch Q∖F ersetzen.')
  ]
 };
+
+for(const id of ['unreachable','minimize'])week2Exam.questions.find(q=>q.id===id).dfaFeedback={machine:examDfa,title:'Der DEA aus dieser Aufgabe'};

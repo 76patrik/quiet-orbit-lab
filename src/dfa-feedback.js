@@ -13,7 +13,8 @@ export const modulo3Dfa = {
   meanings:{r0:'Rest 0',r1:'Rest 1',r2:'Rest 2'}
 };
 const allWords={name:'Alle Wörter über {0,1}',states:['q'],alphabet:['0','1'],start:'q',accept:['q'],transitions:{q:{0:'q',1:'q'}}};
-const complement=m=>({...m,name:`Komplement: ${m.name||'DEA'}`,accept:m.states.filter(s=>!m.accept.includes(s))});
+const exercise7View={...exercise7Dfa,width:940,height:580,positions:{q1:[85,280],q2:[250,115],q3:[250,445],q4:[430,115],q5:[430,445],q6:[620,235],q7:[620,440],q8:[825,280]}};
+const complement=m=>({...m,name:`Komplement: ${m.name||'DEA'}`,accept:m.states.filter(s=>!m.accept.includes(s)),meaningsLabel:'Bedeutung im Original'});
 const example=(machine,word,note='')=>({machine,word,title:'Beispiel zur Regel',note});
 const task=(machine,word)=>({machine,word,title:'Der DEA aus dieser Aufgabe'});
 
@@ -55,7 +56,7 @@ const specific={
   'extra-minimize-7':example(allWords),
   'wk2-min-unreachable':example(examDfa,undefined,'U hat nur Schleifen und ist vom Start A unerreichbar.'),
   'wk2-min-signature':example({...examDfa,alphabet:['a','b'],transitions:Object.fromEntries(examDfa.states.map(s=>[s,{a:examDfa.transitions[s][0],b:examDfa.transitions[s][1]}]))},undefined,'Beispiel: A und B führen bei a beide nach B. Bei b geht A nach C (nicht akzeptierend), B nach D (akzeptierend). Also müssen A und B getrennt werden.'),
-  'wk2-min-witness':{...task(exercise7Dfa),note:'Restwort aa: q1 → q2 → q6 (nicht in F), aber q2 → q6 → q8 (in F). Die Klassen A={q1} und B={q2,q5} sind deshalb verschieden.'},
+  'wk2-min-witness':{...task(exercise7View),note:'Restwort aa: q1 → q2 → q6 (nicht in F), aber q2 → q6 → q8 (in F). Die Klassen A={q1} und B={q2,q5} sind deshalb verschieden.'},
   'wk2-grammar-stop':example(suffixDfa),
   'wk2-grammar-transition':task(suffixDfa,'01'),
   'wk2-grammar-regex-3':task(suffixDfa,'01')
@@ -64,7 +65,7 @@ const specific={
 export function dfaFeedbackFor(question){
   if(question.dfaFeedback)return question.dfaFeedback;
   if(specific[question.id])return specific[question.id];
-  if(question.id.startsWith('wk2-class-')||question.id.startsWith('wk2-min-'))return task(exercise7Dfa);
+  if(question.id.startsWith('wk2-class-')||question.id.startsWith('wk2-min-'))return task(exercise7View);
   switch(question.lesson){
     case 'dfa':return example(machines.ends1,'10');
     case 'parity':return example(machines.parity,'101');

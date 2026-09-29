@@ -1,6 +1,7 @@
+import {ends0Dfa,modulo3Dfa} from './dfa-feedback.js';
 import {week2Exam} from './week2-exam.js';
 import {cyk,cnfExamples,ruleText,nfaStep,determinize,graphSolutions,incrementTrace,incrementRules,minimize} from './algorithms.js';
-import {setLabel} from './engine.js';
+import {setLabel,machines} from './engine.js';
 const auto=(id,topic,section,points,type,prompt,answer,solution,options)=>({id,topic,section,points,type,prompt,answer,solution,options});
 const open=(id,topic,section,prompt,rubric,solution,materials)=>({id,topic,section,type:'open',prompt,rubric:rubric.map(([points,text])=>({points,text})),points:rubric.reduce((s,[p])=>s+p,0),solution,materials});
 const shortRows=[
@@ -95,6 +96,7 @@ function fullExam(index){
  }else if(index===1){
   const dfa={states:['a','b','c','d','u'],alphabet:['0','1'],start:'a',accept:['c','d'],transitions:{a:{0:'b',1:'c'},b:{0:'a',1:'d'},c:{0:'b',1:'c'},d:{0:'a',1:'d'},u:{0:'u',1:'u'}}};const m=minimize(dfa);
   qs.push(auto('reg-algorithm','minimize',examSections[3],4,'number','Vollständiger DEA, Start a, F={c,d}. Übergänge (0,1): a→(b,c), b→(a,d), c→(b,c), d→(a,d), u→(u,u). Wie viele Zustände hat der minimale erreichbare DEA? Notiere die Klassen.',m.groups.length,`u ist unerreichbar. Klassen: ${m.groups.map(setLabel).join(', ')}. Die Klassen sind stabil und durch ε getrennt. Die Zahl wird automatisch gewertet; gleiche die Klassen zusätzlich ab.`));
+  qs.at(-1).dfaFeedback={machine:dfa,title:'Der DEA aus dieser Aufgabe'};
  }else{
   const nfa={states:['s','a','b','f'],alphabet:['0','1'],start:'s',accept:['f'],transitions:{s:{'':['a']},a:{0:['a'],1:['b']},b:{'':['f'],0:['b']},f:{}}};
   const result=nfaStep(nfa,nfaStep(nfa,['s'],'1'),'0');
@@ -104,6 +106,7 @@ function fullExam(index){
  qs.push(auto('reg-regex','construct',examSections[3],3,'regex',`Gib einen regulären Ausdruck über {0,1} an: ${regexPrompt}`,regex,`${regex}. ${why} Gleichwertige Ausdrücke werden vollständig auf Sprachgleichheit geprüft.`));
  const d=dfaVariants[index];
  qs.push(open('reg-dfa','dfa',examSections[3],`Konstruiere einen vollständigen DEA über {0,1}: ${d.title} Gib Zustandsbedeutungen, Start, Endzustände und alle Übergänge an; prüfe mindestens drei passende Randfälle. Du darfst eine Tabelle in das Textfeld schreiben.`,[[2,'Sinnvolle Zustandsbedeutungen (1 P) und Start samt Endzuständen (1 P).'],[3,'Vollständige, korrekte Übergänge: 3 P vollständig; 2 P ein lokaler Fehler; 1 P tragfähige Grundidee; 0 P sonst.'],[1,'Drei begründete Randfälle, darunter ε und ein knapp ungültiges Wort, sofern eines existiert.']],`${d.idea} Start ${d.start}, F=${setLabel(d.accept)}. Übergänge (0,1): ${d.rows.map(([s,a,b])=>`${s}→(${a},${b})`).join('; ')}. Andere Zustandsnamen und äquivalente Konstruktionen sind richtig.`));
+ qs.at(-1).dfaFeedback={machine:{...d,name:d.title,alphabet:['0','1'],transitions:Object.fromEntries(d.rows.map(([s,a,b])=>[s,{0:a,1:b}]))},title:'Eine korrekte DEA-Konstruktion',note:d.idea};
  qs.push(auto('reg-reason','transfer',examSections[3],2,'choice',[
   'Welche Aussage beweist die Nichtgleichheit zweier regulärer Sprachen?',
   'Wie erkennst du die Sprache eines vollständigen komplementierten DEA?',
@@ -144,6 +147,8 @@ function miniExam(i){
   [auto('count','complexity','Grundlagen',2,'number','T(n)=n³. n wächst um Faktor 6. Um welchen Faktor wächst T?',216,'6³=216.'),auto('set','quotient','Sprachen',2,'set','A={100,10,0}, B={0}. Berechne den Rechtsquotienten A/B.',['10','1',''],'Ein abschließendes 0 entfernen: 100→10, 10→1, 0→ε.'),auto('epsilon','closure','Grundlagen',1,'choice','Für L={ε} gilt …',0,'Jedes positive Produkt besteht weiterhin aus ε.',['L⁺=L*={ε}','L⁺=∅','L*={0}']),auto('regex','construct','RegEx',2,'regex','RegEx über {0,1}: Genau eine Null.','1*01*','Die Null ist Pflicht, links und rechts stehen nur Einsen.'),auto('run','parity','Automaten',3,'text','Restautomat für Anzahl Einsen modulo 3: Start r0; 0 bleibt; 1 schaltet r0→r1→r2→r0. Endzustand nach 110101?', 'r1','Das Wort enthält vier Einsen. 4 modulo 3 ist 1.'),open('explain','dfa','Begründen','Warum entscheidet ein früherer Besuch eines Endzustands allein noch nicht die Annahme? Gib ein mögliches Gegenbeispiel.',[[1,'Annahme erst nach der gesamten Eingabe erklärt.'],[1,'Konkreter Lauf, der F besucht und außerhalb endet.']],'Beispiel: Start A, F={B}, bei 1 nach B, bei 0 nach A. Das Wort 10 besucht B, endet aber in A und wird abgelehnt.')],
   [auto('count','alphabet','Grundlagen',2,'number','Wie viele verschiedene Binärwörter haben Länge höchstens 3?',15,'1+2+4+8=15; ε zählt mit.'),auto('set','sets','Sprachen',2,'set','A={ε,01,10,11}, B={ε,10,00}. Berechne A∖B.',['01','11'],'ε und 10 sind auch in B und werden entfernt.'),auto('epsilon','empty','Grundlagen',1,'choice','Welche Gleichung gilt für jede Sprache L?',0,'ε verändert ein verkettetes Wort nicht.',['L·{ε}=L','L·∅=L','L∪∅=∅']),auto('regex','construct','RegEx',2,'regex','RegEx über {0,1}: Genau die drei Wörter ε, 01 und 101.','ε|01|101','Eine endliche Vereinigung der gewünschten Wörter erzeugt genau diese Sprache.'),auto('run','alternate','Automaten',3,'choice','Welche Eingabe verletzt „keine gleichen Nachbarn“?',0,'101101 enthält 11 in der Mitte.',['101101','010101','ε']),open('explain','transfer','Begründen','Jemand testet seine RegEx nur mit gültigen Wörtern. Welche Fehlerart übersieht er? Beschreibe ein Beispiel.',[[1,'Falsche positive Ergebnisse erkannt: unzulässige Wörter werden ebenfalls erzeugt.'],[1,'Konkretes Beispiel mit Ziel, falscher RegEx und Gegenwort.']],'Ziel: genau eine Eins. Falsche RegEx (0|1)* akzeptiert alle gültigen Beispiele, aber auch 11 oder ε. Deshalb müssen beide Inklusionsrichtungen geprüft werden.')]
  ][i];
+ const runModels=[{machine:ends0Dfa,word:'1100'},{machine:modulo3Dfa,word:'110101',note:'Gefragt ist nur der erreichte Zustand. Zur Illustration ist r0 als akzeptierend markiert; diese Wahl ändert den Lauf nicht.'},{machine:machines.alternate,word:'101101'}];
+ rows.find(q=>q.id==='run').dfaFeedback={...runModels[i],title:'Der DEA aus dieser Aufgabe'};
  return {id:`mini-${i+1}`,title:`Grundlagencheck ${i+1}`,subtitle:['Wörter, Mengen & erste Automaten','Operationen & Zustandswissen','Gemischter Transfer'][i],kind:'mini',suggestedMinutes:20,questions:rows,points:12,description:'Nur Grundlagen aus Woche 1 · sechs Aufgaben mit eigener Begründung. 20 Minuten als optionaler Trainingswert.'};
 }
 export const exams=[week2Exam,...Array.from({length:3},(_,i)=>miniExam(i)),...Array.from({length:3},(_,i)=>fullExam(i))];

@@ -124,4 +124,40 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   await click('[data-action="next-question"]');await click('[data-action="retry-round"]');await answer('a1');
   assert.equal(saved().results.a1.attempts,2);assert.equal(saved().errors.a1.resolved,true);
  });
+ await t.test('wrong DEA answers reveal synchronized visuals in training, results and review',async()=>{
+  await start('d3');assert.equal(doc.querySelector('[data-dfa-feedback]'),null);
+  await click('[data-action="select-answer"][data-index="0"]');await click('[data-action="submit-answer"]');
+  assert.ok(el('.dfa-transition-table'));assert.equal(el('.dfa-node.is-current').dataset.state,'A');
+  assert.equal(el('[data-dfa-feedback]').closest('details'),null);
+  const before=JSON.stringify(saved());
+  await click('[data-dfa-feedback] [data-step="2"]');assert.equal(el('.dfa-node.is-current').dataset.state,'B');
+  assert.equal(el('.dfa-active-cell').textContent,'B');assert.equal(JSON.stringify(saved()),before);
+  assert.equal(doc.activeElement.dataset.step,'2');
+  await click('[data-action="next-question"]');assert.ok(el('.quiz-result'));assert.ok(el('[data-dfa-feedback]'));
+  await goto('#review');assert.ok(el('[data-dfa-id="review-d3"]'));assert.equal(el('[data-dfa-id="review-d3"]').closest('details'),null);
+  await start('variant-run-contains1-eps');await click('[data-action="skip"]');
+  assert.equal(doc.querySelectorAll('[data-dfa-feedback] [data-step]').length,1);
+  assert.match(el('.dfa-run-status').textContent,/ε wird abgelehnt/);
+  await start('d3');await answer('d3');assert.equal(doc.querySelector('[data-dfa-feedback]'),null);
+ });
+
+ await t.test('builder mistakes show both machines without awarding independent credit after a solution',async()=>{
+  const {machines}=await import('../src/engine.js');
+  await goto('#lab/builder');
+  for(const input of doc.querySelectorAll('[data-builder-state]')){input.value='A';input.dispatchEvent(new w.Event('change',{bubbles:true}));}
+  await click('[data-action="builder-check"]');
+  assert.equal(doc.querySelectorAll('#builder-output [data-dfa-feedback]').length,2);
+  assert.match(el('#builder-output').textContent,/Gegenbeispiel: 1/);
+  const fillBuilder=()=>{
+    for(const input of doc.querySelectorAll('[data-builder-state]')){input.value=machines.ends1.transitions[input.dataset.builderState][input.dataset.builderChar];input.dispatchEvent(new w.Event('change',{bubbles:true}));}
+    for(const input of doc.querySelectorAll('[data-builder-accept]')){input.checked=machines.ends1.accept.includes(input.dataset.builderAccept);input.dispatchEvent(new w.Event('change',{bubbles:true}));}
+  };
+  fillBuilder();await click('[data-action="builder-check"]');
+  assert.match(el('#builder-output').textContent,/mit Unterstützung/);assert.equal(saved().builders.ends1,undefined);
+  await click('[data-action="builder-reset"]');await click('[data-action="builder-check"]');
+  assert.ok(el('#builder-output .dfa-transition-table'));assert.match(el('#builder-output').textContent,/fehlt/);
+  await click('[data-action="builder-reset"]');fillBuilder();await click('[data-action="builder-check"]');
+  assert.ok(saved().builders.ends1);
+ });
+
 });
