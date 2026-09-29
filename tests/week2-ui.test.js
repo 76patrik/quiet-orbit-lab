@@ -54,12 +54,19 @@ test('week-two reader, labs and new alphabet work through the real application c
 
  await go('#practice/regular-grammar');
  await click('[data-action="practice-single"][data-id="wk2-grammar-regex-0"]');
- assert.ok(el('[data-symbol="a"]'));assert.ok(el('[data-symbol="b"]'));
+ assert.ok(el('[data-symbol="a"]'));assert.ok(el('[data-symbol="b"]'));assert.ok(el('[data-symbol="|"]'));
+ assert.equal(doc.querySelector('.quiz-card [data-symbol="0"]'),null);
+ assert.equal(doc.querySelector('.quiz-card [data-symbol="1"]'),null);
+ assert.match(el('#quiz-input').placeholder,/a\|b/);
  el('#quiz-input').value='(a|b)*b';await click('[data-action="submit-answer"]');
  assert.match(el('.quiz-card .feedback').textContent,/Gegenbeispiel/);
  await go('#practice/regular-grammar');await click('[data-action="practice-single"][data-id="wk2-grammar-regex-0"]');
  el('#quiz-input').value='a(a|b)*b(a|b)*';await click('[data-action="submit-answer"]');
  assert.equal(saved().results['wk2-grammar-regex-0'].correct,1);
+ await go('#practice/regular-grammar');await click('[data-action="practice-single"][data-id="wk2-grammar-regex-2"]');
+ assert.ok(el('.quiz-card [data-symbol="0"]'));assert.ok(el('.quiz-card [data-symbol="1"]'));assert.ok(el('.quiz-card [data-symbol="|"]'));
+ assert.equal(doc.querySelector('.quiz-card [data-symbol="a"]'),null);
+ assert.equal(doc.querySelector('.quiz-card [data-symbol="b"]'),null);
 
  await go('#week2/overview');await change('#duration-week2-check','60');
  await click('[data-action="exam-start"][data-id="week2-check"]');
