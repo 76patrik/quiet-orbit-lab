@@ -65,6 +65,27 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   await click('[data-action="next-question"]');assert.ok(doc.querySelector('.quiz-result'));
  });
 
+ await t.test('task-specific alphabet and regex | buttons work through the real DOM',async()=>{
+  const key=s=>doc.querySelector(`.quiz-card [data-symbol="${s}"]`);
+  await start('variant-build-regex-0');
+  assert.ok(key('0'));assert.ok(key('1'));assert.ok(key('|'));
+  assert.equal(key('a'),null);assert.equal(key('b'),null);
+  fill('(0)');el('#quiz-input').setSelectionRange(2,2);
+  await click('.quiz-card [data-symbol="|"]');assert.equal(el('#quiz-input').value,'(0|)');
+  await click('.quiz-card [data-symbol="1"]');assert.equal(el('#quiz-input').value,'(0|1)');
+  await start('e2');
+  assert.ok(key('a'));assert.ok(key('b'));
+  assert.equal(key('0'),null);assert.equal(key('1'),null);
+  assert.match(el('#quiz-input').placeholder,/a, ab/);
+  await start('a1');
+  assert.ok(key('0'));assert.ok(key('1'));
+  assert.equal(key('a'),null);assert.equal(key('b'),null);
+  await goto('#lab/regex');
+  const input=el('#regex-expression');input.value='(0)';input.setSelectionRange(2,2);
+  await click('[data-target="regex-expression"][data-symbol="|"]');
+  assert.equal(input.value,'(0|)');
+ });
+
  await t.test('concrete hints keep the draft, precede the solution and lead to a clean retry',async()=>{
   await start('co2');fill('aa');
   const input=el('#quiz-input'),action=el('[data-action="submit-answer"]');
