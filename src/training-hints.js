@@ -141,6 +141,7 @@ function taskAlphabet(q){
   const answer=String(q.answer||'');
   return /[ab]/.test(answer)&&!/[01]/.test(answer)?['a','b']:['0','1'];
  }
+ if(q.type==='text'&&/binär/i.test(prompt))return ['0','1'];
  if(q.type==='text'){
   const block=prompt.match(/\(([01ab]+)\)\s*\^/);
   if(block)return letterSymbols.filter(c=>block[1].includes(c));
@@ -159,7 +160,7 @@ export function inputSymbols(q){
   return symbols;
  }
  if(q.type==='set'&&q.lesson==='cyk')return ['S','A','B','C','ε','∅','{','}',','];
- if(q.type==='set'&&q.lesson==='nea'){
+ if(q.type==='set'&&(q.lesson==='nea'||q.id.startsWith('variant-subset-'))){
   const states=[...new Set((q.prompt.match(/\b(?:q\d+|[pqr])\b/g)||[]))];
   return [...(states.length?states:['p','q','r']),'ε','∅','{','}',','];
  }
