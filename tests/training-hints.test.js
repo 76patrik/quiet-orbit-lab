@@ -36,6 +36,7 @@ test('input keyboards follow the task alphabet and include the | regex operator'
  assert.deepEqual(alphabet('variant-union-1'),['0','1']);
  assert.deepEqual(alphabet('variant-union-4'),['a','b']);
  assert.deepEqual(alphabet('variant-build-regex-0'),['0','1']);
+ assert.deepEqual(alphabet('variant-tm-0'),['0','1']);
  assert.deepEqual(alphabet('wk2-grammar-regex-0'),['a','b']);
  assert.deepEqual(alphabet('wk2-grammar-regex-2'),['0','1']);
  assert.ok(inputSymbols(questionById['variant-cyk-0-aabb']).includes('S'));
