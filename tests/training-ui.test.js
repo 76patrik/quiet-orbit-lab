@@ -138,7 +138,8 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   await start('variant-run-contains1-eps');await click('[data-action="skip"]');
   assert.equal(doc.querySelectorAll('[data-dfa-feedback] [data-step]').length,1);
   assert.match(el('.dfa-run-status').textContent,/ε wird abgelehnt/);
-  await start('d3');await answer('d3');assert.equal(doc.querySelector('[data-dfa-feedback]'),null);
+  await start('d3');await answer('d3');assert.ok(el('[data-dfa-feedback]'));
+  await click('[data-action="next-question"]');assert.ok(el('[data-dfa-id="result-d3"]'));
  });
 
  await t.test('builder mistakes show both machines without awarding independent credit after a solution',async()=>{
@@ -157,7 +158,41 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   await click('[data-action="builder-reset"]');await click('[data-action="builder-check"]');
   assert.ok(el('#builder-output .dfa-transition-table'));assert.match(el('#builder-output').textContent,/fehlt/);
   await click('[data-action="builder-reset"]');fillBuilder();await click('[data-action="builder-check"]');
-  assert.ok(saved().builders.ends1);
+  assert.ok(saved().builders.ends1);assert.ok(el('#builder-output .dfa-transition-table'));assert.match(el('#builder-output').textContent,/Dein korrekter DEA/);
+ });
+
+ await t.test('shared lesson examples display their own DEA and replay without earning progress',async()=>{
+  // Opening a lesson updates the existing navigation bookmark, not learning evidence.
+  const evidence=()=>{const {lastLesson,...rest}=saved();return JSON.stringify(rest);};
+  const before=evidence();
+  await goto('#lesson/dfa');
+  const panel=el('.worked-example [data-dfa-feedback]');assert.equal(panel.closest('details'),null);
+  assert.equal(el('.worked-example .dfa-node.is-current').dataset.state,'N');
+  await click('.worked-example [data-step="1"]');assert.equal(el('.worked-example .dfa-node.is-current').dataset.state,'Z');
+  assert.equal(el('.worked-example .dfa-active-cell').textContent,'Z');
+  await goto('#lesson/parity');assert.equal(el('.worked-example .dfa-node.is-current').dataset.state,'r0');
+  await click('.worked-example [data-step="1"]');assert.equal(el('.worked-example .dfa-node.is-current').dataset.state,'r1');
+  await goto('#lesson/minimize');assert.equal(doc.querySelectorAll('.worked-example .dfa-transition-table').length,2);
+  await goto('#lesson/sets');assert.equal(doc.querySelector('.worked-example [data-dfa-feedback]'),null);
+  assert.equal(evidence(),before);
+ });
+
+ await t.test('learning pictures work in lessons and later topics without awarding progress',async()=>{
+  const evidence=()=>{const {lastLesson,...rest}=saved();return JSON.stringify(rest);};
+  const before=evidence();
+  for(const route of ['#lesson/sets','#lesson/epsilon','#topic/cyk','#topic/tm','#topic/reduction']){
+   await goto(route);
+   assert.equal(el('[data-learning-visual]').dataset.visualStep,'0');
+   await click('[data-learning-visual] [data-dir="next"]');
+   assert.equal(el('[data-learning-visual]').dataset.visualStep,'1');
+   assert.ok(doc.activeElement.closest('[data-learning-visual]'));
+   await click('[data-learning-visual] [data-dir="reset"]');
+   assert.equal(el('[data-learning-visual]').dataset.visualStep,'0');
+  }
+  for(let week=1;week<=9;week++){
+   await goto('#path/'+week);assert.ok(doc.querySelector('.lv-route a'));
+  }
+  assert.equal(evidence(),before);
  });
 
 });
