@@ -1,3 +1,4 @@
+import {week2Support,workshopHints} from './week2-learning-support.js';
 import {methodMachines} from './learning-method-models.js';
 import {lessonDfaFeedback} from './dfa-feedback.js';
 import {renderDfaFeedback} from './dfa-view.js';
@@ -7,13 +8,13 @@ import {topicById,lessonById} from './curriculum.js';
 import {today} from './progress.js';
 const sessions=new Map();
 const back=id=>`#${lessonById[id]?'lesson':'topic'}/${id}`;
-const session=(id,mode)=>{const key=id+':'+mode;if(!sessions.has(key)||sessions.get(key).day!==today())sessions.set(key,{day:today(),forcedAssisted:false,level:'solo',answer:'',checked:false,saved:false,seen:false,assisted:false,marks:[],error:'',note:'',tableMode:'study',row:0,round:0,cells:{}});return sessions.get(key);};
+const session=(id,mode)=>{const key=id+':'+mode;if(!sessions.has(key)||sessions.get(key).day!==today())sessions.set(key,{day:today(),forcedAssisted:false,hintCount:0,level:'solo',answer:'',checked:false,saved:false,seen:false,assisted:false,marks:[],error:'',note:'',tableMode:'study',row:0,round:0,cells:{}});return sessions.get(key);};
 export function learningTargets(id,esc){const c=learningContracts[id];if(!c)return '';return `<div class="learn-targets"><div><strong>Wissen</strong><span>${esc(c.recall[0])}</span></div><div><strong>Anwenden</strong><span>${esc(c.method.prompt)}</span></div><div><strong>Begründen</strong><span>${esc(c.reason.prompt)}</span></div></div>`;}
 export function learningPathPanel(id,state,esc){if(!learningContracts[id])return '';return `<section class="card learning-path-panel"><div class="eyebrow">DEIN WEG ZUM KLAUSURFORMAT</div><h2>Jetzt selbst abrufen</h2><p class="help">Die Erklärung bleibt hier. Im Übungsraum löst du ohne sichtbare Musterlösung und vergleichst anschließend anhand eines Rasters.</p><div class="learn-modes">${Object.entries(learningModes).map(([mode,label],i)=>{const status=evidenceStatus(state,id,mode,today());return `<a class="learn-mode" href="#learn/${id}/${mode}"><span>${i+1} · ${label}</span><strong>${id==='hierarchy'&&mode==='recall'?'Chomsky-Tabelle rekonstruieren':mode==='recall'?esc(learningContracts[id].recall[0]):mode==='method'?'Mit Starthilfe → ohne Hilfe':'Eigene Klausurantwort'}</strong><small class="${status.className}">${status.label}</small></a>`;}).join('')}</div><p class="help">Diese drei Nachweise beruhen auf deiner ausdrücklich markierten Selbstbewertung. Der bisherige Lektionshaken zählt separat automatisch geprüfte Aufgaben. Einmal gelöst ist noch kein Beleg für langfristige Klausursicherheit.</p><a class="btn secondary" href="#learn-review">Abrufwissen & Fehler wiederholen →</a></section>`;}
 const modeTabs=(id,mode)=>`<nav class="inline-actions" aria-label="Lernformat">${Object.entries(learningModes).map(([key,label])=>`<a class="btn ${mode===key?'':'secondary'}" href="#learn/${id}/${key}" ${mode===key?'aria-current="page"':''}>${label}</a>`).join('')}</nav>`;
 function taskFor(id,mode,s){const c=learningContracts[id];
- if(mode==='recall')return {prompt:`Erkläre ohne Vorlage: ${c.recall[0]}. Schreibe die zentralen Begriffe, Bedingungen und Zusammenhänge auf.`,solution:c.recall[1],criteria:[`Alle fachlichen Kernaussagen enthalten: ${c.recall[1]}`,'Begriffe, Symbole und Voraussetzungen richtig verwendet; keine widersprechende Aussage.']};
- if(mode==='reason')return {prompt:c.reason.prompt,solution:c.reason.solution,criteria:[`Fachlicher Kern getroffen: ${c.reason.solution}`,'Die Schlussfolgerung ist durch eine Regel, ein Modell, einen Beweisgedanken oder ein Gegenbeispiel begründet.','Die Antwort beantwortet die konkrete Frage ohne fachlichen Widerspruch; notwendige Bedingungen sind genannt.']};
+ if(mode==='recall')return {prompt:`Erkläre ohne Vorlage: ${c.recall[0]}. Schreibe die zentralen Begriffe, Bedingungen und Zusammenhänge auf.`,solution:c.recall[1],criteria:week2Support[id]?.recall||[`Alle fachlichen Kernaussagen enthalten: ${c.recall[1]}`,'Begriffe, Symbole und Voraussetzungen richtig verwendet; keine widersprechende Aussage.']};
+ if(mode==='reason')return {prompt:c.reason.prompt,solution:c.reason.solution,criteria:week2Support[id]?.reason||[`Fachlicher Kern getroffen: ${c.reason.solution}`,'Die Schlussfolgerung ist durch eine Regel, ein Modell, einen Beweisgedanken oder ein Gegenbeispiel begründet.','Die Antwort beantwortet die konkrete Frage ohne fachlichen Widerspruch; notwendige Bedingungen sind genannt.']};
  const task=s.level==='solo'?c.method:c.guided;
  return {prompt:task.prompt,solution:task.steps.join('\n'),criteria:task.steps};
 }
@@ -30,8 +31,9 @@ export function learningWorkshop(id,mode,state,esc){
  <h2>${mode==='reason'?'Entscheidung und Begründung':mode==='method'?'Dein Arbeitsauftrag':'Das musst du abrufen können'}</h2><p class="learn-prompt">${esc(task.prompt)}</p>
  ${shown?`<div class="learn-scaffold"><strong>Diese Schritte sind vorgegeben:</strong><ol>${learningContracts[id].guided.steps.slice(0,shown).map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p>Ergänze die restlichen Schritte und begründe sie.</p></div>`:''}
  ${mode==='method'?'<p class="help">Zeichnungen kannst du auf Papier anfertigen. Halte unten Tabelle, Zwischenstände und Begründung fest, bevor du vergleichst.</p>':''}
+ ${s.hintCount?`<aside class="learn-scaffold" aria-label="Aufgedeckte Hinweise"><strong>Hinweise</strong><ol>${workshopHints(id,mode).slice(0,s.hintCount).map(h=>`<li>${esc(h)}</li>`).join('')}</ol></aside>`:''}
  <label class="field">Deine Antwort<textarea id="learn-answer" maxlength="12000" rows="8" ${s.checked?'readonly':''} placeholder="Ohne nachzuschauen in eigenen Worten antworten …">${esc(s.answer)}</textarea></label>
- ${!s.checked?`<label class="learn-criterion"><input type="checkbox" id="learn-assisted" ${s.assisted?'checked':''}>Ich habe dabei nachgeschaut oder zusätzliche Hilfe benutzt.</label><div class="inline-actions"><button class="btn" data-action="learn-compare">Antwort abgeben & vergleichen</button><button class="btn ghost" data-action="learn-hint">Hinweis anzeigen</button></div>${s.assisted?'<p class="help">Mit Hilfe: Dieser Versuch zählt als Übung, nicht als selbstständiger Abruf.</p>':''}`:`<section class="learn-solution"><h3>Vergleichslösung</h3><p>${esc(task.solution).replaceAll('\n','<br>')}</p></section>${diagrams.map((spec,i)=>renderDfaFeedback(spec,esc,{id:`workshop-${id}-${i}`,step:0})).join('')}${feedbackControls(s,task.criteria,esc)}`}
+ ${!s.checked?`<label class="learn-criterion"><input type="checkbox" id="learn-assisted" ${s.assisted?'checked':''}>Ich habe dabei nachgeschaut oder zusätzliche Hilfe benutzt.</label><div class="inline-actions"><button class="btn" data-action="learn-compare">Antwort abgeben & vergleichen</button><button class="btn ghost" data-action="learn-hint" ${s.hintCount>=workshopHints(id,mode).length?'disabled':''}>Hinweis ${Math.min(s.hintCount+1,workshopHints(id,mode).length)} von ${workshopHints(id,mode).length}</button></div>${s.assisted?'<p class="help">Mit Hilfe: Dieser Versuch zählt als Übung, nicht als selbstständiger Abruf.</p>':''}`:`<section class="learn-solution"><h3>Vergleichslösung</h3><p>${esc(task.solution).replaceAll('\n','<br>')}</p></section>${diagrams.map((spec,i)=>renderDfaFeedback(spec,esc,{id:`workshop-${id}-${i}`,step:0})).join('')}${feedbackControls(s,task.criteria,esc)}`}
  <p id="learn-status" role="status"></p><button class="btn secondary" data-action="learn-reset">Neuer Versuch</button>
  ${record&&s.checked?`<details class="solution-reveal"><summary>Letzte gespeicherte Selbstbewertung</summary><p>${record.score}/${record.max} Kriterien · ${record.assisted?'mit Unterstützung':'ohne angegebene Hilfe'} · ${esc(record.day)}. Wiederholung: ${esc(record.due)}.</p><p class="learn-old-answer">${esc(record.answer)}</p><p>${esc(record.note)}</p></details>`:''}
  </section>`;
@@ -71,12 +73,12 @@ export function handleLearningAction(button,{state,esc,persist,render}){
   else if(!s.answer.trim()){status('Bitte halte zuerst deine eigene Antwort fest.');return true;}
   s.checked=true;s.seen=true;s.marks=[];
  }else if(action==='learn-hint'){
-  s.assisted=true;s.forcedAssisted=true;status('Hinweis: '+(mode==='recall'?learningContracts[id].recall[1]:mode==='reason'?learningContracts[id].reason.solution:taskFor(id,mode,s).criteria[0]));return true;
+  s.assisted=true;s.forcedAssisted=true;s.hintCount=Math.min(s.hintCount+1,workshopHints(id,mode).length);
  }else if(action==='learn-level'){
   const next=button.dataset.level;if(!['solo','guided','faded'].includes(next)||mode!=='method')return true;
   // Guided and independent tasks differ. Returning to the same revealed independent task stays assisted.
-  if(s.level==='solo'&&s.seen)s.soloSeen=true;
-  Object.assign(s,{level:next,answer:'',checked:false,saved:false,seen:false,marks:[],assisted:next==='solo'?!!s.soloSeen:true,forcedAssisted:next==='solo'?!!s.soloSeen:true});
+  if(s.level==='solo'&&(s.seen||s.forcedAssisted||s.assisted))s.soloSeen=true;
+  Object.assign(s,{level:next,hintCount:0,answer:'',checked:false,saved:false,seen:false,marks:[],assisted:next==='solo'?!!s.soloSeen:true,forcedAssisted:next==='solo'?!!s.soloSeen:true});
  }else if(action==='learn-table-mode'){
   if(!['study','cells','row','all'].includes(button.dataset.level))return true;
   Object.assign(s,{tableMode:button.dataset.level,cells:{},checked:false,saved:false,marks:[],assisted:!!s.seen,forcedAssisted:s.seen||s.forcedAssisted});
