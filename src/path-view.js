@@ -1,3 +1,4 @@
+import {lessonTimeLabel} from './learning-time.js';
 import {nextLearningLink} from './learning-next.js';
 import {weekVisualView} from './learning-visuals.js';
 import {weeks,lessonsOfWeek,unitsOfWeek,lessonById,lessonNumber,allTopics} from './curriculum.js';
@@ -12,7 +13,7 @@ export function pathView(week,{state,esc,icon,head,dateShort}){
  const unitCards=units.map((u,index)=>`<section class="card unit">
   <div class="unit-head">${icon(u.icon)}<div><h2>${String(index+1).padStart(2,'0')} · ${esc(u.title)}</h2><p>${esc(u.subtitle)}</p></div><span class="pill gray">${u.lessons.filter(id=>state.completed[id]).length}/${u.lessons.length}</span></div>
   <div class="lesson-grid">${u.lessons.map(id=>{const l=lessonById[id],m=mastery(state,id);return `<a href="#lesson/${id}" class="lesson-tile">
-   <span class="lesson-num ${state.completed[id]?'current':''}">${state.completed[id]?icon('check'):String(lessonNumber(id)).padStart(2,'0')}</span><div><h3>${esc(l.title)}</h3><p><span class="state-dot ${m}"></span>${m==='safe'?'Sicher':m==='learning'?'Im Aufbau':'Noch offen'} · ${l.minutes} Min. Einstieg</p>${state.completed[id]?'<span class="tiny">✓ Abgeschlossen</span>':''}</div></a>`;}).join('')}</div>
+   <span class="lesson-num ${state.completed[id]?'current':''}">${state.completed[id]?icon('check'):String(lessonNumber(id)).padStart(2,'0')}</span><div><h3>${esc(l.title)}</h3><p><span class="state-dot ${m}"></span>${m==='safe'?'Sicher':m==='learning'?'Im Aufbau':'Noch offen'} · ${lessonTimeLabel(l)}</p>${state.completed[id]?'<span class="tiny">✓ Abgeschlossen</span>':''}</div></a>`;}).join('')}</div>
  </section>`).join('');
  return `${head('THEORETISCHE INFORMATIK · DEINE ROUTE BIS ZUR KLAUSUR','Dein Lernpfad','Neun Wochen, ein klares Ziel. Du bestimmst das Tempo.')}
  <div class="week-tabs" role="group" aria-label="Lernwoche auswählen">${weeks.map(w=>`<button data-action="week" data-week="${w.n}" class="${w.n===week?'active':''}" aria-pressed="${w.n===week}">Woche ${String(w.n).padStart(2,'0')}${w.n>2?' · Plan':''}</button>`).join('')}</div>

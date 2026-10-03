@@ -91,6 +91,8 @@ Darkmode der App erhalten; ruhige Karten, klare Hierarchie, konsistente Farben u
 
 Formulare korrekt beschriften; Tabellen mit Zeilen-/Spaltenköpfen; Tastaturbedienung und sichtbarer Fokus; Statusmeldungen für Screenreader. Nutzereingaben vor HTML-Ausgabe escapen. Originalantwort nach Abgabe unverändert zeigen. Bei langen Übungen klar sagen, wann gespeichert wird.
 
+Zeitangaben als Schätzbereich für Erklärung plus Übungen ausweisen; Einstieg separat nennen. Tagesplan und Lektionskarten nutzen dieselbe Berechnung. Aktive Übungszeit getrennt von Planzeit messen; ausgeblendete Tabs und andere App-Seiten nicht mitzählen. Keine falsche Genauigkeit behaupten.
+
 ## 10. Umsetzung und Abnahme
 
 - Vor Beginn Repo-Status und vorhandenen Draft-PR prüfen. Kleine nachvollziehbare Zwischencommits; Änderungen zeitnah pushen. Ohne Auftrag nicht mergen.

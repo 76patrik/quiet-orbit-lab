@@ -1,3 +1,6 @@
+import {methodMachines} from './learning-method-models.js';
+import {lessonDfaFeedback} from './dfa-feedback.js';
+import {renderDfaFeedback} from './dfa-view.js';
 import {learningContracts,learningModes,errorKinds,chomskyColumns,chomskyRows,chomskySourceNote} from './learning-contracts.js';
 import {evidenceStatus,dueLearning,recordLearning} from './learning-evidence.js';
 import {topicById,lessonById} from './curriculum.js';
@@ -18,6 +21,7 @@ function feedbackControls(s,criteria,esc){return `<section class="learn-comparis
 export function learningWorkshop(id,mode,state,esc){
  if(!Object.hasOwn(learningContracts,id)||!Object.hasOwn(learningModes,mode))return '<section class="card"><h1>Lernformat nicht gefunden</h1><a href="#path" class="btn">Zum Lernpfad</a></section>';
  const s=session(id,mode),task=taskFor(id,mode,s),record=state.learning?.[`${id}:${mode}`];
+ const diagrams=mode==='method'?(s.level==='solo'?(methodMachines[id]?[{machine:methodMachines[id],title:'DEA zur Vergleichslösung',note:'Vollständiger Automat der eigenständigen Aufgabe.'}]:[]):lessonDfaFeedback[id]||[]):[];
  const header=`<a class="back-link" href="${back(id)}">← Zur Erklärung</a><header class="page-head"><div><div class="eyebrow">${esc(topicById[id].title)}</div><h1>${learningModes[mode]}</h1><p>Erst deine Antwort festhalten, danach die Lösung vergleichen.</p></div></header>${modeTabs(id,mode)}`;
  if(id==='hierarchy'&&mode==='recall')return header+chomskyWorkshop(s,state,esc);
  const shown=mode==='method'?(s.level==='guided'?Math.max(1,learningContracts[id].guided.steps.length-1):s.level==='faded'?1:0):0;
@@ -27,7 +31,7 @@ export function learningWorkshop(id,mode,state,esc){
  ${shown?`<div class="learn-scaffold"><strong>Diese Schritte sind vorgegeben:</strong><ol>${learningContracts[id].guided.steps.slice(0,shown).map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p>Ergänze die restlichen Schritte und begründe sie.</p></div>`:''}
  ${mode==='method'?'<p class="help">Zeichnungen kannst du auf Papier anfertigen. Halte unten Tabelle, Zwischenstände und Begründung fest, bevor du vergleichst.</p>':''}
  <label class="field">Deine Antwort<textarea id="learn-answer" maxlength="12000" rows="8" ${s.checked?'readonly':''} placeholder="Ohne nachzuschauen in eigenen Worten antworten …">${esc(s.answer)}</textarea></label>
- ${!s.checked?`<label class="learn-criterion"><input type="checkbox" id="learn-assisted" ${s.assisted?'checked':''}>Ich habe dabei nachgeschaut oder zusätzliche Hilfe benutzt.</label><div class="inline-actions"><button class="btn" data-action="learn-compare">Antwort abgeben & vergleichen</button><button class="btn ghost" data-action="learn-hint">Hinweis anzeigen</button></div>${s.assisted?'<p class="help">Mit Hilfe: Dieser Versuch zählt als Übung, nicht als selbstständiger Abruf.</p>':''}`:`<section class="learn-solution"><h3>Vergleichslösung</h3><p>${esc(task.solution).replaceAll('\n','<br>')}</p></section>${feedbackControls(s,task.criteria,esc)}`}
+ ${!s.checked?`<label class="learn-criterion"><input type="checkbox" id="learn-assisted" ${s.assisted?'checked':''}>Ich habe dabei nachgeschaut oder zusätzliche Hilfe benutzt.</label><div class="inline-actions"><button class="btn" data-action="learn-compare">Antwort abgeben & vergleichen</button><button class="btn ghost" data-action="learn-hint">Hinweis anzeigen</button></div>${s.assisted?'<p class="help">Mit Hilfe: Dieser Versuch zählt als Übung, nicht als selbstständiger Abruf.</p>':''}`:`<section class="learn-solution"><h3>Vergleichslösung</h3><p>${esc(task.solution).replaceAll('\n','<br>')}</p></section>${diagrams.map((spec,i)=>renderDfaFeedback(spec,esc,{id:`workshop-${id}-${i}`,step:0})).join('')}${feedbackControls(s,task.criteria,esc)}`}
  <p id="learn-status" role="status"></p><button class="btn secondary" data-action="learn-reset">Neuer Versuch</button>
  ${record&&s.checked?`<details class="solution-reveal"><summary>Letzte gespeicherte Selbstbewertung</summary><p>${record.score}/${record.max} Kriterien · ${record.assisted?'mit Unterstützung':'ohne angegebene Hilfe'} · ${esc(record.day)}. Wiederholung: ${esc(record.due)}.</p><p class="learn-old-answer">${esc(record.answer)}</p><p>${esc(record.note)}</p></details>`:''}
  </section>`;
@@ -92,3 +96,5 @@ export function handleLearningAction(button,{state,esc,persist,render}){
  return true;
 }
 export function changeLearningRow(target,render){if(target.id!=='learn-table-row')return false;const s=session('hierarchy','recall');s.row=Number(target.value);Object.assign(s,{cells:{},checked:false,saved:false,marks:[],assisted:s.seen||s.assisted,forcedAssisted:s.seen||s.forcedAssisted});render();return true;}
+
+export const clearLearningSessions=()=>sessions.clear();

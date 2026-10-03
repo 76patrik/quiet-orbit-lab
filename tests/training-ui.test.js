@@ -195,4 +195,29 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   assert.equal(evidence(),before);
  });
 
+ await t.test('workshops submit before reveal, persist self-ratings, and retain hint use',async()=>{
+  await goto('#learn/dfa/reason');
+  assert.equal(doc.querySelector('.learn-solution'),null);
+  await click('[data-action="learn-compare"]');assert.match(el('#learn-status').textContent,/zuerst/);
+  el('#learn-answer').value='Der Zustand nach dem letzten Zeichen entscheidet.';
+  el('#learn-answer').dispatchEvent(new w.Event('input',{bubbles:true}));
+  await click('[data-action="learn-hint"]');
+  el('#learn-assisted').checked=false;el('#learn-assisted').dispatchEvent(new w.Event('change',{bubbles:true}));
+  await click('[data-action="learn-compare"]');assert.equal(el('#learn-answer').readOnly,true);
+  for(const cb of doc.querySelectorAll('[data-learn-mark]')){cb.checked=true;cb.dispatchEvent(new w.Event('change',{bubbles:true}));}
+  const xp=JSON.stringify(saved().awards);
+  await click('[data-action="learn-save"]');assert.equal(saved().learning['dfa:reason'].assisted,true);
+  assert.equal(JSON.stringify(saved().awards),xp);
+  await goto('#learn-review');assert.match(el('.learn-review-card').textContent,/mit Hilfe/);
+  await goto('#learn/hierarchy/recall');
+  await click('[data-action="learn-table-mode"][data-level="all"]');
+  assert.equal(doc.querySelectorAll('[data-chomsky-cell]').length,20);
+  assert.equal(doc.querySelector('.chomsky-expected'),null);
+  for(const cell of doc.querySelectorAll('[data-chomsky-cell]')){cell.value='weiß ich nicht';cell.dispatchEvent(new w.Event('input',{bubbles:true}));}
+  await click('[data-action="learn-compare"]');assert.equal(doc.querySelectorAll('.chomsky-expected').length,20);
+  await click('[data-action="learn-save"]');assert.equal(saved().learning['hierarchy:table-all'].score,0);
+  await goto('#learn/sets/method');assert.equal(doc.querySelector('.learn-scaffold'),null);
+  await click('[data-action="learn-level"][data-level="faded"]');assert.equal(doc.querySelectorAll('.learn-scaffold li').length,1);
+ });
+
 });
