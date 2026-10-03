@@ -1,3 +1,4 @@
+import {renderNfaFeedback} from './nfa-feedback.js';
 import {lessonGuides} from './lesson-guides.js';
 import {lessonDfaFeedback} from './dfa-feedback.js';
 import {renderDfaFeedback} from './dfa-view.js';
@@ -15,6 +16,7 @@ export function lessonGuideView(id,esc){
  <ol class="method-recipe">${g.recipe.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
  <div class="worked-example"><h3>Einmal gemeinsam durchrechnen</h3><p>${esc(g.worked.prompt)}</p>
  ${automata.map((spec,i)=>renderDfaFeedback(spec,esc,{id:`lesson-${id}-${i}`,step:0})).join('')}
+ ${renderNfaFeedback(`${id}-guided`,esc)}
  <details class="solution-reveal"><summary>Lösungsweg Schritt für Schritt aufdecken</summary>
  <ol class="worked-steps">${g.worked.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
  ${table?`<div class="table-scroll"><table><caption>Ergebnis zum Beispiel</caption><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:''}
