@@ -1,3 +1,4 @@
+import {lessonTime} from './learning-time.js';
 // Tagesplan: beantwortet „Was ist heute dran?“ aus Kalender, Lernstand und Prüfungsterminen.
 // Reine Funktionen ohne Speicherzugriff, damit sie sich einzeln testen lassen.
 import { weeks, lessons, lessonsOfWeek, units, allTopics, questionById } from './curriculum.js';
@@ -39,7 +40,7 @@ export function todayPlan(state, day) {
   const completedToday = Object.values(state.completed).includes(day);
   if (nextLesson) {
     const l = lessons.find(x=>x.id===nextLesson);
-    steps.push({id:'learn',title:`Lektion: ${l.title}`,detail:`Lesen, Beispiel nachvollziehen und sieben verschiedene Aufgaben ohne Hilfe lösen.${plan.week&&plan.week.n>l.week?` Woche ${l.week} ist noch offen; diese Grundlagen helfen dir beim Weiterlernen.`:''}`,minutes:l.minutes+5,href:`#lesson/${l.id}`,done:false});
+    steps.push({id:'learn',title:`Lektion: ${l.title}`,detail:`Planwert für Erklärung und Übungen; Wissen abrufen, rechnen und begründen. Individuelle Wiederholungen können länger dauern.${plan.week&&plan.week.n>l.week?` Woche ${l.week} ist noch offen; diese Grundlagen helfen dir beim Weiterlernen.`:''}`,minutes:lessonTime(l).min,href:`#lesson/${l.id}`,done:false});
   } else if (plan.week&&plan.week.n>2) {
     const practiced = practicedTopics(state), open = [...topicsOfWeek(plan.week.n), ...allTopics.filter(t=>t.week>2&&t.week<plan.week.n)].find(t=>!practiced.has(t.id));
     if (open) steps.push({id:'learn',title:`Thema: ${open.title}`,detail:`Kurzüberblick lesen, dann das Thementraining starten (Woche ${open.week}).`,minutes:20,href:`#topic/${open.id}`,done:false});
