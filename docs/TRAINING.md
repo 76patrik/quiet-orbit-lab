@@ -26,9 +26,9 @@ Die Auswahl begrenzte Runden unabhängig vom sichtbaren Aufgabenbestand. Die Pr�
 Die produktive Veröffentlichung erfolgt erst nach dem Merge des Draft-PRs über den bestehenden GitHub-Pages-Workflow. Es gibt weiterhin keine automatische Synchronisation zwischen Geräten.
 
 
-## DEA-Fehler visuell nachvollziehen
+## DEA-Ergebnisse und Lernbeispiele visuell nachvollziehen
 
-Nach einer falschen oder übersprungenen DEA-Aufgabe erscheinen Übergangstabelle und Automatengrafik sofort unter der Rückmeldung. Ein zusätzlicher Klick auf „Warum?“ ist dafür nicht nötig. Das gilt auch für Fehlerprotokoll und Rundenergebnis; in Wochenchecks und Probeklausuren erscheinen die Hilfen erst nach der Abgabe.
+Nach jeder geprüften DEA-Aufgabe (richtig, falsch oder übersprungen) erscheinen Übergangstabelle und Automatengrafik sofort unter der Rückmeldung. Ein zusätzlicher Klick auf „Warum?“ ist dafür nicht nötig. Das gilt auch für Fehlerprotokoll und Rundenergebnis; in Wochenchecks und Probeklausuren erscheinen die Hilfen erst nach der Abgabe.
 
 - Pfeil zum Startzustand; Doppelkreis bzw. `*` für akzeptierende Zustände.
 - Bei Wortaufgaben einen Schritt auswählen: Der aktuelle Zustand, der zuletzt gelesene Übergang und der Tabellenwert werden gemeinsam hervorgehoben. Die Schrittfolge bleibt vollständig sichtbar.
@@ -38,3 +38,5 @@ Nach einer falschen oder übersprungenen DEA-Aufgabe erscheinen Übergangstabell
 - Beim Bauen eines DEA werden der abgegebene Automat und eine korrekte Lösung am selben Gegenbeispiel gezeigt. Nach Sichtbarkeit der Vorlage zählt der Versuch als unterstützt; „Ohne Vorlage neu beginnen“ startet einen neuen Nachweis.
 
 Die Aufgabenmetadaten und `src/dfa-feedback.js` ordnen die Modelle zu; `src/dfa-view.js` stellt Tabelle und Grafik aus denselben Übergängen dar. Neue Module sind im Offline-Cache enthalten. Der Wortlauf verändert weder die abgegebene Antwort noch XP oder Lernfortschritt.
+
+Auch bei „Einmal gemeinsam durchrechnen“ im Lernpfad sind Grafik und vollständige Tabelle direkt sichtbar. Die Modelle passen zu den Zustandsnamen und Wörtern des jeweiligen Beispiels. Ein Wortlauf beginnt dort bei Schritt 0. Komplement und Minimierung zeigen Ausgangsautomat und Ergebnis getrennt. Das Durchgehen dient dem Verständnis und vergibt keinen Lernfortschritt. Nach einer korrekten Konstruktion bleibt auch der selbst gebaute DEA sichtbar.

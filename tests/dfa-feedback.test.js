@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {allQuestions,questionById} from '../src/curriculum.js';
 import {exams,examById} from '../src/exams.js';
-import {validateDfa,runDfa,binaryWords} from '../src/engine.js';
-import {dfaFeedbackFor} from '../src/dfa-feedback.js';
+import {validateDfa,runDfa,binaryWords,compareDfa} from '../src/engine.js';
+import {dfaFeedbackFor,lessonDfaFeedback} from '../src/dfa-feedback.js';
 import {questionDfaFeedback,renderDfaFeedback} from '../src/dfa-view.js';
 import {attemptView} from '../src/exam-view.js';
 import {createAttempt,setExamAnswer,submitAttempt} from '../src/exam-engine.js';
@@ -71,4 +71,23 @@ test('exams reveal the correct model only after submission, outside closed solut
     const model=examById[id].questions.find(q=>q.id==='reg-dfa').dfaFeedback.machine;
     for(const w of binaryWords(5))assert.equal(runDfa(model,w).accepted,predicates[i](w),`${id}: ${w}`);
   });
+});
+
+
+test('worked lesson automata use the stated names, words and equivalent quotient',()=>{
+  for(const specs of Object.values(lessonDfaFeedback))for(const spec of specs){validateDfa(spec.machine);if(spec.word!==undefined)runDfa(spec.machine,spec.word);}
+  const model=id=>lessonDfaFeedback[id][0].machine;
+  assert.deepEqual(runDfa(model('dfa'),'010').trace,['N','Z','N','Z']);
+  assert.deepEqual(runDfa(model('parity'),'10101').trace,['r0','r1','r1','r2','r2','r0']);
+  assert.deepEqual(runDfa(model('alternate'),'0110').trace,['S','Z','E','X','X']);
+  assert.deepEqual(runDfa(model('regular-grammar'),'aba').trace,['S','A','B','B']);
+  assert.deepEqual(compareDfa(...lessonDfaFeedback.minimize.map(s=>s.machine)),{equal:true});
+  for(const w of binaryWords(4)){
+    assert.equal(runDfa(model('grammar'),w).accepted,/^0*1$/.test(w));
+    assert.equal(runDfa(model('determinize'),w).accepted,w.endsWith('01'));
+    assert.equal(runDfa(model('kleene'),w).accepted,w==='01');
+    assert.notEqual(runDfa(lessonDfaFeedback.complement[0].machine,w).accepted,runDfa(lessonDfaFeedback.complement[1].machine,w).accepted);
+  }
+  const a=createAttempt('mini-1');setExamAnswer(a,'run','B');submitAttempt(a);
+  assert.ok(documentFor(attemptView(a,helpers)).querySelector('[data-dfa-feedback]'),'correct submitted answers also retain the visual');
 });

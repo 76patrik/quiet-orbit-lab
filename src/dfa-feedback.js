@@ -75,3 +75,26 @@ export function dfaFeedbackFor(question){
     default:return null;
   }
 }
+
+// These are the worked examples in lesson-guides.js, not the quiz/lab defaults.
+const lessonEnds0={name:'Endet auf 0',states:['N','Z'],alphabet:['0','1'],start:'N',accept:['Z'],transitions:{N:{0:'Z',1:'N'},Z:{0:'Z',1:'N'}},meanings:{N:'Leer oder letztes Zeichen 1',Z:'Letztes Zeichen 0'}};
+const lessonAlternate={name:'Keine gleichen Nachbarn',states:['S','Z','E','X'],alphabet:['0','1'],start:'S',accept:['S','Z','E'],transitions:{S:{0:'Z',1:'E'},Z:{0:'X',1:'E'},E:{0:'Z',1:'X'},X:{0:'X',1:'X'}},meanings:{S:'Anfang',Z:'Zuletzt 0',E:'Zuletzt 1',X:'Verbot verletzt'}};
+const lessonZeros={name:'Nichtleere Nullwörter · vervollständigt',states:['S','A','X'],alphabet:['0','1'],start:'S',accept:['A'],transitions:{S:{0:'A',1:'X'},A:{0:'A',1:'X'},X:{0:'X',1:'X'}}};
+const lessonMinimize={name:'DEA vor der Minimierung',states:['A','B','C','D'],alphabet:['0','1'],start:'A',accept:['D'],transitions:{A:{0:'B',1:'C'},B:{0:'D',1:'C'},C:{0:'B',1:'C'},D:{0:'D',1:'C'}}};
+const lessonQuotient={name:'Minimaler DEA',states:['{A,C}','{B}','{D}'],alphabet:['0','1'],start:'{A,C}',accept:['{D}'],transitions:{'{A,C}':{0:'{B}',1:'{A,C}'},'{B}':{0:'{D}',1:'{A,C}'},'{D}':{0:'{D}',1:'{A,C}'}}};
+const worked=(machine,word,title='DEA zum gemeinsamen Beispiel',note='')=>({machine,word,title,note});
+export const lessonDfaFeedback={
+  dfa:[worked(lessonEnds0,'010')],
+  parity:[worked(modulo3Dfa,'10101')],
+  alternate:[worked(lessonAlternate,'0110')],
+  complement:[
+    worked(lessonZeros,'00','1. Fehlende Übergänge ergänzen','X ergänzt die zuvor fehlenden Übergänge bei 1 und bleibt bei beiden Zeichen in X.'),
+    worked(complement(lessonZeros),'00','2. Endzustände vertauschen','Jetzt akzeptieren S und X. ε endet in S und 1 in X; 00 endet in A und wird abgelehnt.')
+  ],
+  grammar:[worked({name:'Beliebig viele Nullen, genau eine abschließende Eins',states:['S','F','X'],alphabet:['0','1'],start:'S',accept:['F'],transitions:{S:{0:'S',1:'F'},F:{0:'X',1:'X'},X:{0:'X',1:'X'}}},'001')],
+  'regular-grammar':[worked({name:'Beginnt mit a und enthält b',states:['S','A','B','X'],alphabet:['a','b'],start:'S',accept:['B'],transitions:{S:{a:'A',b:'X'},A:{a:'A',b:'B'},B:{a:'B',b:'B'},X:{a:'X',b:'X'}}},'aba','DEA zur rechtslinearen Grammatik','X vervollständigt den Automaten: Eine Eingabe mit erstem b verletzt die Bedingung.')],
+  determinize:[worked({...suffixDfa,name:'Ergebnis der Potenzmengenkonstruktion',meanings:{A:'{s}',B:'{s,p}',C:'{s,f}'}},'01','Der konstruierte DEA','A, B und C stehen jeweils für eine ganze Menge von NEA-Zuständen.')],
+  minimize:[worked(lessonMinimize,undefined,'1. Ausgangsautomat'),worked(lessonQuotient,undefined,'2. Zustände als Äquivalenzklassen','A und C werden zusammengefasst. Die Klassen bilden die Zustände des minimalen DEA.')],
+  transfer:[worked({name:'Kennung mit # und mindestens einem Binärzeichen',states:['S','H','B','X'],alphabet:['#','0','1'],start:'S',accept:['B'],transitions:{S:{'#':'H',0:'X',1:'X'},H:{'#':'X',0:'B',1:'B'},B:{'#':'X',0:'B',1:'B'},X:{'#':'X',0:'X',1:'X'}}},'#01')],
+  kleene:[worked({name:'Genau das Wort 01',states:['S','A','F','X'],alphabet:['0','1'],start:'S',accept:['F'],transitions:{S:{0:'A',1:'X'},A:{0:'X',1:'F'},F:{0:'X',1:'X'},X:{0:'X',1:'X'}}},'01','Äquivalenter DEA für die Verkettung','Die Konstruktion im Text verwendet einen ε-NEA. Hier siehst du einen vollständigen DEA für dieselbe Sprache {01}.')]
+};

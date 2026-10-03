@@ -161,4 +161,20 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   assert.ok(saved().builders.ends1);assert.ok(el('#builder-output .dfa-transition-table'));assert.match(el('#builder-output').textContent,/Dein korrekter DEA/);
  });
 
+ await t.test('shared lesson examples display their own DEA and replay without earning progress',async()=>{
+  // Opening a lesson updates the existing navigation bookmark, not learning evidence.
+  const evidence=()=>{const {lastLesson,...rest}=saved();return JSON.stringify(rest);};
+  const before=evidence();
+  await goto('#lesson/dfa');
+  const panel=el('.worked-example [data-dfa-feedback]');assert.equal(panel.closest('details'),null);
+  assert.equal(el('.worked-example .dfa-node.is-current').dataset.state,'N');
+  await click('.worked-example [data-step="1"]');assert.equal(el('.worked-example .dfa-node.is-current').dataset.state,'Z');
+  assert.equal(el('.worked-example .dfa-active-cell').textContent,'Z');
+  await goto('#lesson/parity');assert.equal(el('.worked-example .dfa-node.is-current').dataset.state,'r0');
+  await click('.worked-example [data-step="1"]');assert.equal(el('.worked-example .dfa-node.is-current').dataset.state,'r1');
+  await goto('#lesson/minimize');assert.equal(doc.querySelectorAll('.worked-example .dfa-transition-table').length,2);
+  await goto('#lesson/sets');assert.equal(doc.querySelector('.worked-example [data-dfa-feedback]'),null);
+  assert.equal(evidence(),before);
+ });
+
 });

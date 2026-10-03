@@ -1,4 +1,6 @@
 import {lessonGuides} from './lesson-guides.js';
+import {lessonDfaFeedback} from './dfa-feedback.js';
+import {renderDfaFeedback} from './dfa-view.js';
 
 export function learningGoal(id,esc){
  const g=lessonGuides[id];
@@ -7,11 +9,12 @@ export function learningGoal(id,esc){
 
 export function lessonGuideView(id,esc){
  const g=lessonGuides[id];if(!g)return '';
- const table=g.worked.table;
+ const automata=lessonDfaFeedback[id]||[],table=automata.length?null:g.worked.table;
  return `<section class="reading-section lesson-method" id="lesson-method">
  <div class="eyebrow">VOM VERSTEHEN ZUM LÖSEN</div><h2>Dein Lösungsrezept</h2>
  <ol class="method-recipe">${g.recipe.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
  <div class="worked-example"><h3>Einmal gemeinsam durchrechnen</h3><p>${esc(g.worked.prompt)}</p>
+ ${automata.map((spec,i)=>renderDfaFeedback(spec,esc,{id:`lesson-${id}-${i}`,step:0})).join('')}
  <details class="solution-reveal"><summary>Lösungsweg Schritt für Schritt aufdecken</summary>
  <ol class="worked-steps">${g.worked.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
  ${table?`<div class="table-scroll"><table><caption>Ergebnis zum Beispiel</caption><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:''}
