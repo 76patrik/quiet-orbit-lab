@@ -150,7 +150,7 @@ function picture(f,esc,key){
   return edges.map(([a,b])=>`<path d="M${pts[a]} L${pts[b]}" class="lv-edge ${checked&&a<3&&b<3?'checked':''}"/>`).join('')+pts.map(([x,y],i)=>node(x,y,['A','B','C','D'][i],i<3)).join('');
  };
  if(f.kind==='graph')return svg(graph(120,false,f.data)+text(240,220,'Doppelrand = ausgewählte Knoten'),245);
- if(f.kind==='complement-graph')return svg(graph(25)+graph(275,true)+text(130,220,'G: Clique A,B,C')+text(370,220,'G̅: A,B,C unabhängig'),245);
+ if(f.kind==='complement-graph')return svg(graph(25)+graph(270,true)+text(130,220,'G: Clique A,B,C')+text(370,220,'G̅: A,B,C unabhängig'),245);
  return '';
 }
 

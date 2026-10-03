@@ -177,4 +177,22 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   assert.equal(evidence(),before);
  });
 
+ await t.test('learning pictures work in lessons and later topics without awarding progress',async()=>{
+  const evidence=()=>{const {lastLesson,...rest}=saved();return JSON.stringify(rest);};
+  const before=evidence();
+  for(const route of ['#lesson/sets','#lesson/epsilon','#topic/cyk','#topic/tm','#topic/reduction']){
+   await goto(route);
+   assert.equal(el('[data-learning-visual]').dataset.visualStep,'0');
+   await click('[data-learning-visual] [data-dir="next"]');
+   assert.equal(el('[data-learning-visual]').dataset.visualStep,'1');
+   assert.ok(doc.activeElement.closest('[data-learning-visual]'));
+   await click('[data-learning-visual] [data-dir="reset"]');
+   assert.equal(el('[data-learning-visual]').dataset.visualStep,'0');
+  }
+  for(let week=1;week<=9;week++){
+   await goto('#path/'+week);assert.ok(doc.querySelector('.lv-route a'));
+  }
+  assert.equal(evidence(),before);
+ });
+
 });

@@ -1,5 +1,5 @@
 @font-face{font-family:OrbitSans;src:local('Inter'),local('Aptos'),local('Segoe UI');font-display:swap}
-/* DEA feedback is visible immediately after mistakes, including on narrow screens. */
+/* DEA feedback is visible after answers, including on narrow screens. */
 .dfa-feedback{margin-top:22px;padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);min-width:0;overflow-wrap:anywhere}
 .dfa-feedback>h3{margin-bottom:8px}.dfa-note{font-size:13px;margin-top:14px}.dfa-replay{margin-top:18px;font-size:13px}
 .dfa-steps{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.dfa-steps button{border:1px solid var(--line);border-radius:10px;padding:8px 13px;min-height:52px;background:var(--card)}
