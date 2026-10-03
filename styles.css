@@ -141,3 +141,4 @@
 .nfa-feedback .inline-actions{margin:16px 0;flex-wrap:wrap}
 .nfa-feedback button{min-height:44px;min-width:44px}
 .nfa-feedback p,.reading-section p{overflow-wrap:anywhere}
+.nfa-feedback svg text{fill:currentColor}
