@@ -138,7 +138,8 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   await start('variant-run-contains1-eps');await click('[data-action="skip"]');
   assert.equal(doc.querySelectorAll('[data-dfa-feedback] [data-step]').length,1);
   assert.match(el('.dfa-run-status').textContent,/ε wird abgelehnt/);
-  await start('d3');await answer('d3');assert.equal(doc.querySelector('[data-dfa-feedback]'),null);
+  await start('d3');await answer('d3');assert.ok(el('[data-dfa-feedback]'));
+  await click('[data-action="next-question"]');assert.ok(el('[data-dfa-id="result-d3"]'));
  });
 
  await t.test('builder mistakes show both machines without awarding independent credit after a solution',async()=>{
@@ -157,7 +158,7 @@ test('training flows: full selection, symbols, hints, retry, immediate checkmark
   await click('[data-action="builder-reset"]');await click('[data-action="builder-check"]');
   assert.ok(el('#builder-output .dfa-transition-table'));assert.match(el('#builder-output').textContent,/fehlt/);
   await click('[data-action="builder-reset"]');fillBuilder();await click('[data-action="builder-check"]');
-  assert.ok(saved().builders.ends1);
+  assert.ok(saved().builders.ends1);assert.ok(el('#builder-output .dfa-transition-table'));assert.match(el('#builder-output').textContent,/Dein korrekter DEA/);
  });
 
 });
