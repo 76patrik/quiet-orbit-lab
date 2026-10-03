@@ -1,3 +1,4 @@
+import {stepNfaFeedback} from './nfa-feedback.js';
 import {week2Prerequisites,week2Sources} from './week2-learning-support.js';
 import {lessonTime,lessonTimeLabel,createActivityClock,tickActivityClock} from './learning-time.js';
 import {learningTargets,learningPathPanel,learningWorkshop,learningReview,captureLearningInput,handleLearningAction,changeLearningRow,clearLearningSessions} from './learning-workshop.js';
@@ -372,6 +373,7 @@ app.addEventListener('click',async event=>{
   try{
     switch(action){
       case 'learning-visual-step':stepLearningVisual(button,esc);break;
+      case 'nfa-step':stepNfaFeedback(button,esc);break;
       case 'dfa-feedback-step':stepDfaFeedback(button,esc);break;
       case 'method-scroll':document.querySelector('#lesson-method')?.scrollIntoView({block:'start'});break;
       case 'w2-read':{
