@@ -3,6 +3,12 @@ import {nextLearningLink} from './learning-next.js';
 import {weekVisualView} from './learning-visuals.js';
 import {weeks,lessonsOfWeek,unitsOfWeek,lessonById,lessonNumber,allTopics} from './curriculum.js';
 import {mastery} from './progress.js';
+import {pathTabsExtra} from './walkthrough-view.js';
+
+// Wochen-Reiter plus die Reiter „Aufgaben“ und „Altklausur“. active=null markiert die gewählte Woche.
+export function pathTabs(week,active){
+ return `<div class="week-tabs" role="group" aria-label="Lernwoche oder Aufgabensammlung auswählen">${pathTabsExtra(active)}<span class="wt-tab-sep" aria-hidden="true"></span>${weeks.map(w=>{const on=!active&&w.n===week;return `<button data-action="week" data-week="${w.n}" class="${on?'active':''}" aria-pressed="${on}">Woche ${String(w.n).padStart(2,'0')}${w.n>2?' · Plan':''}</button>`;}).join('')}</div>`;
+}
 
 // Both interactive weeks deliberately use exactly the same cards and lesson tiles.
 export function pathView(week,{state,esc,icon,head,dateShort}){
@@ -16,7 +22,7 @@ export function pathView(week,{state,esc,icon,head,dateShort}){
    <span class="lesson-num ${state.completed[id]?'current':''}">${state.completed[id]?icon('check'):String(lessonNumber(id)).padStart(2,'0')}</span><div><h3>${esc(l.title)}</h3><p><span class="state-dot ${m}"></span>${m==='safe'?'Sicher':m==='learning'?'Im Aufbau':'Noch offen'} · ${lessonTimeLabel(l)}</p>${state.completed[id]?'<span class="tiny">✓ Abgeschlossen</span>':''}</div></a>`;}).join('')}</div>
  </section>`).join('');
  return `${head('THEORETISCHE INFORMATIK · DEINE ROUTE BIS ZUR KLAUSUR','Dein Lernpfad','Neun Wochen, ein klares Ziel. Du bestimmst das Tempo.')}
- <div class="week-tabs" role="group" aria-label="Lernwoche auswählen">${weeks.map(w=>`<button data-action="week" data-week="${w.n}" class="${w.n===week?'active':''}" aria-pressed="${w.n===week}">Woche ${String(w.n).padStart(2,'0')}${w.n>2?' · Plan':''}</button>`).join('')}</div>
+ ${pathTabs(week,null)}
  <section class="card week-intro"><div><span class="pill ${lessons.length?'':'gray'}">${lessons.length?'INTERAKTIV VERFÜGBAR':w.n<=7?'ERKLÄRUNGEN & PRÜFUNGSÜBUNGEN':'WIEDERHOLUNG & SIMULATION'}</span><h2 style="margin-top:15px">${esc(w.title)}</h2><p>${esc(w.subtitle)}</p><div class="week-meta"><span>${dateShort(w.start)} – ${dateShort(w.end)}2026</span><span>ca. ${w.hours} Stunden</span><span>${lessons.length?`${completed}/${lessons.length} Lektionen abgeschlossen`:'Lernziel aus deinem Masterplan'}</span></div></div><span class="week-number" aria-hidden="true">${String(w.n).padStart(2,'0')}</span></section>
  ${lessons.length&&completed===lessons.length?`<section class="card"><h2>Woche ${week} abgeschlossen</h2>${nextLearningLink(state,{week},esc)}</section>`:''}${weekVisualView(week,esc)}
  ${lessons.length?`${unitCards}<section class="card"><div class="card-title"><h2>Dein Wochenabschluss</h2>${icon('flag')}</div><p class="small muted">${esc(w.goal)} Für die Übungen und handschriftlichen Lösungswege sind weitere Arbeitsblöcke vorgesehen.</p><div class="inline-actions" style="margin-top:20px">${week===1?`<a href="#check" class="btn">Wochencheck öffnen ${icon('arrow')}</a>`:`<button class="btn" data-action="exam-start" data-id="week2-check">Wochencheck öffnen ${icon('arrow')}</button>`}<a href="#stats" class="btn ghost">Kompetenzen ansehen</a></div></section>
