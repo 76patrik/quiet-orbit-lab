@@ -24,4 +24,4 @@ Keine Browser-Screenshot- oder physische Geräteprüfung: Chromium war nicht ver
 
 ## Veröffentlichung
 
-Nur eigener Anwendungscode, eigene Lerntexte und das selbst erzeugte Skript sind Bestandteil dieses Branches. Keine bereitgestellten Original-PDFs hinzugefügt. Zwischencommits lokal gespeichert; Draft-PR vorgesehen, kein Merge beauftragt. Frühere Push-Versuche wurden von der automatischen Freigabeprüfung blockiert. Veröffentlichungsstatus wird nach dem abschließenden Push aktualisiert.
+Nur eigener Anwendungscode, eigene Lerntexte und das selbst erzeugte Skript sind Bestandteil dieses Branches. Keine bereitgestellten Original-PDFs hinzugefügt. Zwischencommits lokal gespeichert; Draft-PR vorgesehen, kein Merge beauftragt. Frühere Push-Versuche wurden von der automatischen Freigabeprüfung blockiert. Der abschließende Push am 11.10. scheiterte an fehlender GitHub-Authentifizierung (`could not read Username`). Der Branch ist nur lokal vorhanden; kein Draft-PR erstellt und nicht live.
