@@ -310,3 +310,12 @@
  .wt-hero h1{font-size:32px}.wt-hero .week-number{font-size:56px}
 }
 @media(max-width:720px){.wt-completion .btn{width:100%}.wt-task .inline-actions .btn{white-space:normal}.wt-stepnav button small{display:block}.wt-stepnav li{flex:1 1 130px}.wt-stepnav button{width:100%;max-width:none}}
+
+/* Keep the complete chapter and its navigation within the available viewport. */
+.content{width:100%;min-width:0}
+.wt-task{max-width:100%}
+@media(min-width:721px){
+ .week-tabs{flex-wrap:wrap;overflow:visible}
+ .week-tabs .wt-tab-sep{flex-basis:100%;height:1px;margin:4px 0}
+ .week-tabs button,.week-tabs .wt-tab{max-width:100%}
+}
