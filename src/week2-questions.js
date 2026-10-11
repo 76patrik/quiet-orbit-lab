@@ -1,6 +1,12 @@
 import {epsilonClosure,nfaStep,determinize,minimize} from './algorithms.js';
 import {exercise6Nfa,suffixNfa,exercise7Dfa,nfaLabel} from './week2-models.js';
 const items=[];
+function wordSteps(nfa,word){
+ let states=epsilonClosure(nfa,[nfa.start]);const steps=[`Start bei ${nfa.start}; ε-Hülle: ${nfaLabel(states)}.`];
+ for(const c of word){const contributions=states.map(s=>`${s}: ${nfaLabel(nfa.transitions[s]?.[c]||[])}`).join('; ');const next=nfaStep(nfa,states,c);steps.push(`Zeichen ${c}, Ausgang ${nfaLabel(states)}. Beiträge: ${contributions||'kein aktiver Zustand'}. Vereinigen und ε-Hülle ergänzen: ${nfaLabel(next)}.`);states=next;}
+ steps.push(`Nach dem ganzen Wort ${word||'ε'}: ${nfaLabel(states)}. ${states.some(s=>nfa.accept.includes(s))?'Ein Endzustand ist enthalten: angenommen.':'Kein Endzustand enthalten: abgelehnt.'}`);return steps;
+}
+
 function add(id,lesson,type,prompt,answer,explanation,hints,{level=2,kind='calculate',...rest}={}){
  items.push({id:`wk2-${id}`,lesson,type,prompt,answer,explanation,hints,hint:hints[0],level,kind,family:`wk2-${id}`,...rest});
 }
@@ -18,7 +24,7 @@ for(const [tag,nfa,description,words] of examples){
   add(`${tag}-word-${i}`,'nea','set',`${description} Welche Zustandsmenge ist nach ${word||'ε'} möglich?`,states,
    `Mengenfolge: ${trace.join(' → ')}. ${states.some(s=>nfa.accept.includes(s))?'Mindestens ein Endzustand ist enthalten.':'Kein Endzustand ist enthalten.'}`,
    [`Beginne bei der ε-Hülle des Starts ${nfa.start}. Lies ${word?`die ${word.length} Zeichen von ${word} einzeln`:'kein Zeichen; nur die Start-Hülle ist gefragt'}.`, `Vereinige je Zeichen alle Nachfolger und ergänze die ε-Hülle. Der erste Zustand ist ${trace[0]}.`],
-   {symbols:[...nfa.states,...nfa.alphabet,'ε','∅','{','}',',']});
+   {symbols:[...nfa.states,...nfa.alphabet,'ε','∅','{','}',','],nfaFeedback:{machine:nfa,word},solutionSteps:wordSteps(nfa,word)});
  }
  const rows=determinize(nfa);
  add(`${tag}-reachable`,'nea','number',`${description} Wie viele erreichbare Zustandsmengen liefert die Potenzmengenkonstruktion (vor Minimierung)?`,rows.length,
@@ -45,7 +51,7 @@ for(const state of exercise7Dfa.states){
  add(`class-${state}`,'minimize','set',`${minTable} Welche Zustände gehören nach vollständiger Minimierung zur Äquivalenzklasse von ${state} (einschließlich ${state})?`,answer,
   `Stabile Klassen: ${groups.map(nfaLabel).join(' | ')}. Die gesuchte Klasse ist ${nfaLabel(answer)}.`,
   ['Trenne End- und Nichtendzustände, dann prüfe die Zielgruppen für a und b.','q6 und q7 erreichen bei a sofort q8. Verwende diese neue Gruppe in der nächsten Runde.'],
-  {level:3,symbols:[...exercise7Dfa.states,'{','}',',']});
+  {level:3,symbols:[...exercise7Dfa.states,'{','}',','],solutionSteps:[...minimize(exercise7Dfa).rounds.map((r,i)=>`P${i}: ${r.map(nfaLabel).join(' | ')}. Vergleiche die Zielgruppen für a und b mit der vorigen Runde.`),`Stabil: kein Block zerfällt mehr. Die Klasse von ${state} ist ${nfaLabel(answer)}.`]});
 }
 for(const [id,prompt,options,why,hints] of [
  ['min-epsilon','Welches Restwort trennt q8 in Aufgabe 7 sofort von jedem anderen Zustand?',['ε','a','b'],'q8 ist akzeptierend, die übrigen nicht. Bereits ohne Zeichen unterscheiden sich die Entscheidungen.',['Prüfe zuerst den aktuellen Akzeptanzstatus.','Ein Wort mit Länge null lässt den Zustand unverändert.']],

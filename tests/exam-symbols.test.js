@@ -56,5 +56,5 @@ test('real exam controller inserts, replaces, deletes and persists symbols befor
  const tmIndex=examById['full-a'].questions.findIndex(q=>q.id==='tm-output');
  await click(`[data-action="exam-jump"][data-index="${tmIndex}"]`);await click('[data-symbol="0"]');await click('[data-symbol="1"]');
  assert.equal(el('#exam-input').value,'01');assert.ok(doc.querySelector('[data-symbol="□"]'));
- await goto('#path/3');assert.ok(doc.querySelector('#week3-plan-title'));assert.match(doc.body.textContent,/480 MINUTEN/);assert.match(doc.body.textContent,/noch nicht umgesetzt/);
+ await goto('#path/3');assert.ok(doc.querySelector('#week3-plan-title'));assert.match(doc.body.textContent,/480 MINUTEN/);assert.match(doc.body.textContent,/digitalem Wochencheck sind verfügbar/);
 });

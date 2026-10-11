@@ -1,6 +1,6 @@
 # Woche 3: Grenzen, Syntaxbäume und CNF
 
-Stand: 07.10.2026. Planungsauftrag; noch kein vollständiger interaktiver Wochenkurs. Der konkrete Ablauf ist im Lernpfad unter Woche 3 sichtbar, die vorhandenen Themenräume sind verlinkt. Grundlage: `LERNPFAD_REGELN.md`.
+Stand: 07.10.2026. Umgesetzt als vollständiger interaktiver Wochenkurs mit vier Lektionen, 41 neuen Kurzaufgaben, vier Eigenaufträgen, Schrittgrafiken, 29-seitigem PDF-Skript und digitalem Wochencheck. Der konkrete Ablauf ist unter Woche 3 sichtbar. Grundlage: `LERNPFAD_REGELN.md`.
 
 ## Zeit und Reihenfolge
 
@@ -56,6 +56,10 @@ Wochencheck auf Papier: 50 Min. bearbeiten + 25 Min. selbst korrigieren, 20 Punk
 
 Ziel mindestens 16/20 als eigene Trainingsmarke; beide CNF-Aufgaben bearbeiten. Bei Fehlern: Kategorie, persönliche Korrekturregel, neue Variante und späterer Abruf. Lesen vergibt keine XP.
 
-## Noch umzusetzen
+## Umsetzung und Abnahme
 
-Vollständiges W3-Skript mit Öffnen/PDF, vier ausgearbeitete Lektionen im gemeinsamen Renderer, neue schrittweise Grafiken, Aufgabenpools und digitaler Wochencheck. Der Plan markiert diese Teile ausdrücklich als offen. Vorhandene Themenübungen bleiben nutzbar. Für die spätere Abnahme Eingabe-vor-Lösung, Hilfen, Selbstbewertung, Zeitmessung, Navigation und mobile Grafikdarstellung prüfen.
+Alle vier Lektionen nutzen den gemeinsamen Renderer und die drei Übungsformate Wissen, Anwenden und Begründen. Die Eigenaufträge besitzen unterschiedliche Vergleichsgrafiken; die Lösungen erscheinen im Übungsraum erst nach eigener Antwort. Das PDF und der HTML-Leser sind direkt im Lernpfad erreichbar. Der digitale Wochencheck umfasst 20 Punkte (4 automatisch, 16 Selbstbewertung): Grundlagen 4, Speicherargument 1, Pumping 2, Syntaxbäume 3 und zwei CNF-Umformungen je 5. Er ersetzt das oben ursprünglich vorgeschlagene reine Papierraster; Zeichnungen und längere Rechnungen können weiterhin auf Papier erfolgen.
+
+Fehlerhilfen enthalten gesicherte Abweichungen, konkrete Rechenschritte und eine unterstützte Miniübung. Lernstände und vorhandene IDs bleiben bestehen. Prüfdetails in `WOCHE3_KLAUSURZEICHEN_PRUEFUNG.md`.
+
+PDF reproduzieren: `node scripts/export-week3.mjs`, danach `python3 scripts/build-week3-pdf.py` (ReportLab und DejaVu-Schriften erforderlich).

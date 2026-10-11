@@ -11,7 +11,7 @@ test('current week follows the calendar of the nine-week plan',()=>{
 test('schedule spreads week-one lessons over the week and flags what is behind',()=>{
   const s=blankState();assert.equal(schedule(s,'2026-09-21').expected,3);assert.equal(schedule(s,'2026-09-27').expected,week1Lessons.length);
   for(const l of lessons.slice(0,3))completeLesson(s,l.id,'2026-09-21');assert.ok(schedule(s,'2026-09-21').onTrack);
-  const w3=schedule(s,'2026-10-06');assert.ok(w3.missing.includes('nea')&&w3.missing.includes(lessons[3].id)&&!w3.missing.includes('pumping'));
+  const w3=schedule(s,'2026-10-06');assert.ok(w3.missing.includes('nea')&&w3.missing.includes(lessons[3].id)&&w3.missing.includes('pumping'));
 });
 test('fresh start: next lesson, a daily round and the weekly check',()=>{
   const plan=todayPlan(blankState(),'2026-09-26');assert.deepEqual(plan.steps.map(s=>s.id),['learn','daily','week']);

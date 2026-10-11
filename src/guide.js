@@ -23,7 +23,7 @@ export function schedule(state, day) {
   const earlier = lessons.filter(l=>l.week<n).map(l=>l.id);
   const current = lessonsOfWeek(n);
   const elapsed = week ? Math.max(1, Math.min(7, Math.round((Date.parse(day+'T12:00:00Z')-Date.parse(week.start+'T12:00:00Z'))/86400000)+1)) : 7;
-  const expected = [...earlier, ...current.slice(0,Math.ceil(current.length*elapsed/7)).map(l=>l.id), ...allTopics.filter(t=>t.week>2&&t.week<n).map(t=>t.id)];
+  const expected = [...earlier, ...current.slice(0,Math.ceil(current.length*elapsed/7)).map(l=>l.id), ...allTopics.filter(t=>!lessonIds.includes(t.id)&&t.week<n).map(t=>t.id)];
   const missing = expected.filter(id=>lessonIds.includes(id)?!state.completed[id]:!practiced.has(id));
   return {week, expected:expected.length, missing, onTrack:missing.length===0};
 }
@@ -42,7 +42,7 @@ export function todayPlan(state, day) {
     const l = lessons.find(x=>x.id===nextLesson);
     steps.push({id:'learn',title:`Lektion: ${l.title}`,detail:`Planwert für Erklärung und Übungen; Wissen abrufen, rechnen und begründen. Individuelle Wiederholungen können länger dauern.${plan.week&&plan.week.n>l.week?` Woche ${l.week} ist noch offen; diese Grundlagen helfen dir beim Weiterlernen.`:''}`,minutes:lessonTime(l).min,href:`#lesson/${l.id}`,done:false});
   } else if (plan.week&&plan.week.n>2) {
-    const practiced = practicedTopics(state), open = [...topicsOfWeek(plan.week.n), ...allTopics.filter(t=>t.week>2&&t.week<plan.week.n)].find(t=>!practiced.has(t.id));
+    const practiced = practicedTopics(state), open = [...topicsOfWeek(plan.week.n), ...allTopics.filter(t=>!lessonIds.includes(t.id)&&t.week<plan.week.n)].find(t=>!practiced.has(t.id));
     if (open) steps.push({id:'learn',title:`Thema: ${open.title}`,detail:`Kurzüberblick lesen, dann das Thementraining starten (Woche ${open.week}).`,minutes:20,href:`#topic/${open.id}`,done:false});
   }
   if (completedToday && !steps.some(s=>s.id==='learn'&&!s.done)) steps.push({id:'learn',title:'Neue Lektion abgeschlossen',detail:'Stark. Morgen geht es mit dem nächsten Baustein weiter.',minutes:0,href:'#path',done:true});

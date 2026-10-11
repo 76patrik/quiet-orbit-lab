@@ -22,7 +22,7 @@ export function remedialFeedback(q,value,esc){
  if(!recovery[q.lesson])return '';
  let diagnosis='Deine Antwort stimmt nicht mit dem geprüften Ergebnis überein. Deinen Gedankengang kennt die App nicht; vergleiche deshalb die folgenden Schritte.';
  if(q.type==='set')try{const actual=parseSet(value),missing=q.answer.filter(s=>!actual.includes(s)),extra=actual.filter(s=>!q.answer.includes(s));diagnosis=`In deiner Menge fehlen: ${setLabel(missing)}. Zusätzlich enthalten, aber hier nicht richtig: ${setLabel(extra)}. ∅ bedeutet hier: keine Abweichung in dieser Gruppe.`;}catch{diagnosis='Die Eingabe konnte nicht als Menge gelesen werden. Verwende z. B. {p,q} und für die leere Menge ∅.';}
- if(q.type==='choice')diagnosis=`Gewählt: ${q.options[Number(value)]||'Keine Antwort'}. Richtig ist: ${answerText(q)}. Warum das gilt, zeigen die Schritte unten.`;
+ if(q.type==='choice')diagnosis=`Gewählt: ${value===null||value===undefined||value===''?'Keine Antwort':q.options[Number(value)]||'Keine Antwort'}. Richtig ist: ${answerText(q)}. Warum das gilt, zeigen die Schritte unten.`;
  const steps=q.solutionSteps||[...hintsFor(q).slice(0,-1).map(h=>h.text),q.explanation];
  return `<section class="recovery-detail"><h2>So kommst du vom Fehler zum Verständnis</h2><p>${esc(diagnosis)}</p><h3>Diese Aufgabe Schritt für Schritt</h3><ol>${steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol><details><summary>Das Verfahren noch einmal langsam</summary><ol>${(lessonGuides[q.lesson]?.recipe||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ol></details>${recoveryView(q.lesson,esc)}</section>`;
 }
