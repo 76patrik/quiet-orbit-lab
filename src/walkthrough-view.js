@@ -1,5 +1,5 @@
 // Lernpfad-Reiter „Aufgaben“ und „Altklausur“: Übersicht wie eine Lernwoche, jede Aufgabe als eigene Seite.
-// Lesen, Schritte und eingeblendete Lösungen vergeben bewusst keine XP und keine Aufgabenhaken.
+// Manual chapter marks are stored separately; reading and solutions award no exercise XP.
 import {visualView} from './solution-visuals.js';
 import {walkthroughSets,taskById} from './walkthroughs.js';
 
@@ -17,21 +17,23 @@ export function pathTabsExtra(active){
  return walkthroughSets.map(s=>`<a href="#path/${s.key}" class="wt-tab${active===s.key?' active':''}"${active===s.key?' aria-current="page"':''}>${s.tab}</a>`).join('');
 }
 
-function taskTile(task,esc,icon){
+function taskTile(task,esc,icon,state){
+ const done=!!state.walkthroughCompleted?.[task.id];
  const parts=task.parts.length,warn=task.parts.some(p=>p.warning)||task.warning;
- return `<a href="#path/${task.set}/${task.id}" class="lesson-tile wt-tile-link"><span class="lesson-num">${esc(task.n)}</span><div><h3>${esc(task.title)}</h3><p>${esc(task.topics.join(' · '))}</p><p class="wt-tile-meta">${parts} ${parts===1?'Teil':'Teile'}${task.points?` · ${esc(task.points)}`:''}${warn?' · <span class="wt-flag">⚠ Musterlösung korrigiert</span>':''}</p></div>${icon('chevron')}</a>`;
+ return `<a href="#path/${task.set}/${task.id}" class="lesson-tile wt-tile-link${done?' is-complete':''}"><span class="lesson-num ${done?'current':''}">${done?icon('check'):esc(task.n)}</span><div><h3>${esc(task.title)}</h3>${done?'<span class="wt-complete-label">✓ Abgeschlossen</span>':''}<p>${esc(task.topics.join(' · '))}</p><p class="wt-tile-meta">${parts} ${parts===1?'Teil':'Teile'}${task.points?` · ${esc(task.points)}`:''}${warn?' · <span class="wt-flag">⚠ Musterlösung korrigiert</span>':''}</p></div>${icon('chevron')}</a>`;
 }
 
-export function walkthroughOverview(setKey,{esc,icon,head,tabs}){
+export function walkthroughOverview(setKey,{state={},esc,icon,head,tabs}){
  const set=walkthroughSets.find(s=>s.key===setKey);
  const total=set.units.reduce((n,u)=>n+u.tasks.length,0),fixes=set.units.flatMap(u=>u.tasks).filter(t=>t.warning||t.parts.some(p=>p.warning)).length;
  return `${head('THEORETISCHE INFORMATIK · '+set.eyebrow,set.heading,set.lead)}
  ${tabs}
  <section class="card week-intro wt-intro"><div><span class="pill">${total} AUFGABEN · SCHRITT FÜR SCHRITT</span><h2 style="margin-top:15px">${esc(set.introTitle)}</h2>${paras(set.intro,esc)}
+ <p class="wt-completion-count">${set.units.flatMap(u=>u.tasks).filter(t=>state.walkthroughCompleted?.[t.id]).length}/${total} Kapitel abgeschlossen</p>
  <ol class="wt-howto"><li><strong>Aufgabe ansehen</strong><span>Grafik und Vorgaben genau lesen.</span></li><li><strong>Wissen klären</strong><span>„Das brauchst du“ vorher wiederholen.</span></li><li><strong>Selbst versuchen</strong><span>Idee notieren – oder ehrlich „weiß ich nicht“.</span></li><li><strong>Schritt für Schritt</strong><span>Weiter/Zurück, bis zur Musterlösung.</span></li></ol>
  ${fixes?`<div class="wt-warning" style="margin-top:18px"><strong>⚠ ${fixes} ${fixes===1?'Aufgabe enthält':'Aufgaben enthalten'} Fehler in der Original-Musterlösung.</strong>Die Stellen sind in der jeweiligen Aufgabe markiert und fachlich korrigiert. Lerne die korrigierte Fassung; im Zweifel bei der Lehrperson nachfragen.</div>`:''}
  </div><span class="week-number" aria-hidden="true">${set.badge}</span></section>
- ${set.units.map((u,i)=>`<section class="card unit"><div class="unit-head">${icon(u.icon||'book')}<div><h2>${String(i+1).padStart(2,'0')} · ${esc(u.title)}</h2><p>${esc(u.subtitle)}</p></div><span class="pill gray">${u.tasks.length} ${u.tasks.length===1?'Aufgabe':'Aufgaben'}</span></div><div class="lesson-grid">${u.tasks.map(t=>taskTile(t,esc,icon)).join('')}</div></section>`).join('')}
+ ${set.units.map((u,i)=>`<section class="card unit"><div class="unit-head">${icon(u.icon||'book')}<div><h2>${String(i+1).padStart(2,'0')} · ${esc(u.title)}</h2><p>${esc(u.subtitle)}</p></div><span class="pill gray">${u.tasks.filter(t=>state.walkthroughCompleted?.[t.id]).length}/${u.tasks.length} abgeschlossen · ${u.tasks.length===1?'Aufgabe':'Aufgaben'}</span></div><div class="lesson-grid">${u.tasks.map(t=>taskTile(t,esc,icon,state)).join('')}</div></section>`).join('')}
  <p class="help" style="margin-top:20px">${esc(set.footnote)}</p>`;
 }
 
@@ -60,7 +62,7 @@ export function partView(task,index,esc){
  return `<section class="card wt-part is-open" id="${dom}">${headline}${note!==undefined?`<div class="wt-mynote"><strong>${note?'Deine Idee':'Du hast „weiß ich nicht“ gewählt.'}</strong>${note?`<p>${esc(note)}</p>`:'<p>Völlig in Ordnung – geh die Schritte langsam durch und versuch danach die Aufgabe noch einmal ohne Hilfe.</p>'}</div>`:''}${nav}${body}${controls}</section>`;
 }
 
-export function walkthroughTask(setKey,id,{esc,icon,head,tabs}){
+export function walkthroughTask(setKey,id,{state={},esc,icon,head,tabs}){
  const task=taskById[id];if(!task||task.set!==setKey)return null;
  const set=walkthroughSets.find(s=>s.key===setKey),list=set.units.flatMap(u=>u.tasks),i=list.indexOf(task),prev=list[i-1],next=list[i+1];
  return `<a href="#path/${setKey}" class="back-link">${icon('back')} Zur Übersicht ${esc(set.tab)}</a>
@@ -73,6 +75,10 @@ export function walkthroughTask(setKey,id,{esc,icon,head,tabs}){
  ${task.parts.map((_,pi)=>partView(task,pi,esc)).join('')}
  ${task.tips?.length?`<section class="card wt-section wt-tricks"><div class="card-title"><h2>Tipps & Tricks für die Klausur</h2>${icon('spark')}</div><ul>${task.tips.map(t=>`<li>${rich(t,esc)}</li>`).join('')}</ul></section>`:''}
  ${task.mistakes?.length?`<section class="card wt-section"><div class="card-title"><h2>Typische Fehler</h2>${icon('flag')}</div><ul class="wt-mistakes">${task.mistakes.map(t=>`<li>${rich(t,esc)}</li>`).join('')}</ul></section>`:''}
+ <section class="card wt-completion" aria-label="Kapitelabschluss">
+ <div><h2>${state.walkthroughCompleted?.[id]?'✓ Kapitel abgeschlossen':'Kapitel fertig bearbeitet?'}</h2><p class="help">Deine Markierung wird gespeichert und in der Übersicht grün angezeigt. Sie ist deine eigene Einschätzung und vergibt keine Aufgaben-XP.</p></div>
+ <button class="btn ${state.walkthroughCompleted?.[id]?'secondary':''}" data-action="wt-complete" data-id="${esc(id)}" aria-pressed="${!!state.walkthroughCompleted?.[id]}">${state.walkthroughCompleted?.[id]?'Kapitel wieder öffnen':'Kapitel abschließen'}</button>
+ </section>
  <nav class="wt-pager" aria-label="Weitere Aufgaben">${prev?`<a class="btn secondary" href="#path/${setKey}/${prev.id}">← Aufgabe ${esc(prev.n)}: ${esc(prev.title)}</a>`:'<span></span>'}${next?`<a class="btn" href="#path/${setKey}/${next.id}">Aufgabe ${esc(next.n)}: ${esc(next.title)} →</a>`:`<a class="btn" href="#path/${setKey}">Zur Übersicht</a>`}</nav>
  </article>`;
 }

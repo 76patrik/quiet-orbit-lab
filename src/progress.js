@@ -1,3 +1,4 @@
+import {taskById} from './walkthroughs.js';
 import {validateLearning} from './learning-evidence.js';
 import {week2ChapterById} from './week2-content.js';
 import {validateExamAttempts,examReport} from './exam-engine.js';
@@ -11,7 +12,7 @@ export const today=(date=new Date())=>{
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 export const addDays=(day,n)=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);};
-export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',examDates:defaultExamDates(),results:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,cards:{},bosses:{},blitz:[],confidence:{},examAttempts:[],learning:{},week2:{read:[],lastChapter:null}});
+export const blankState=()=>({version:1,goal:5,examDate:'2026-11-20',examDates:defaultExamDates(),results:{},walkthroughCompleted:{},completed:{},notes:{},errors:{},builders:{},checks:[],activity:{},awards:{},badges:[],lastLesson:null,focusSeconds:0,cards:{},bosses:{},blitz:[],confidence:{},examAttempts:[],learning:{},week2:{read:[],lastChapter:null}});
 export function loadState(storage) {
   try {const raw=storage.getItem(KEY);return {state:raw?validateImport(JSON.parse(raw)):blankState(),error:null};}
   catch {return {state:blankState(),error:'Dein Speicherstand konnte nicht gelesen werden. Er wurde nicht überschrieben. Exportiere vorhandene Sicherungen, bevor du neu speicherst.'};}
@@ -74,6 +75,12 @@ export function recordAnswer(state,qid,correct,{assisted=false,day=today(),revie
   reconcileLessons(state);
   return updateBadges(state,day);
 }
+// Manual chapter completion is separate from independently graded learning evidence.
+export function setWalkthroughCompleted(state,id,done,day=today()){
+  if(!Object.hasOwn(taskById,id))throw new Error('Unbekanntes Kapitel.');
+  state.walkthroughCompleted ||= {};
+  if(done)state.walkthroughCompleted[id]=day;else delete state.walkthroughCompleted[id];
+}
 export function completeLesson(state,id,day=today()){
   state.completed[id]=day;award(state,`lesson:${id}`,25,day);return updateBadges(state,day);
 }
@@ -124,6 +131,13 @@ function fail(){throw new Error('Diese Datei ist kein gültiger Orbit-Speicherst
 export function validateImport(data) {
   if(!obj(data)||data.version!==1)fail();const s=blankState();
   s.learning=validateLearning(data.learning);
+  if(data.walkthroughCompleted!==undefined){
+    if(!obj(data.walkthroughCompleted))fail();
+    for(const [id,day] of Object.entries(data.walkthroughCompleted)){
+      if(!Object.hasOwn(taskById,id)||!validDay(day))fail();
+      s.walkthroughCompleted[id]=day;
+    }
+  }
   if(![5,10,15].includes(data.goal)||!validDay(data.examDate)||!integer(data.focusSeconds,100000000))fail();
   s.goal=data.goal;s.examDate=data.examDate;s.focusSeconds=data.focusSeconds;
   if(data.week2!==undefined){

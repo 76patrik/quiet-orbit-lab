@@ -1,3 +1,4 @@
+import {week3Exam} from './week3-exam.js';
 import {ends0Dfa,modulo3Dfa} from './dfa-feedback.js';
 import {week2Exam} from './week2-exam.js';
 import {cyk,cnfExamples,ruleText,nfaStep,determinize,graphSolutions,incrementTrace,incrementRules,minimize} from './algorithms.js';
@@ -151,5 +152,5 @@ function miniExam(i){
  rows.find(q=>q.id==='run').dfaFeedback={...runModels[i],title:'Der DEA aus dieser Aufgabe'};
  return {id:`mini-${i+1}`,title:`Grundlagencheck ${i+1}`,subtitle:['Wörter, Mengen & erste Automaten','Operationen & Zustandswissen','Gemischter Transfer'][i],kind:'mini',suggestedMinutes:20,questions:rows,points:12,description:'Nur Grundlagen aus Woche 1 · sechs Aufgaben mit eigener Begründung. 20 Minuten als optionaler Trainingswert.'};
 }
-export const exams=[week2Exam,...Array.from({length:3},(_,i)=>miniExam(i)),...Array.from({length:3},(_,i)=>fullExam(i))];
+export const exams=[week3Exam,week2Exam,...Array.from({length:3},(_,i)=>miniExam(i)),...Array.from({length:3},(_,i)=>fullExam(i))];
 export const examById=Object.fromEntries(exams.map(e=>[e.id,e]));

@@ -49,3 +49,14 @@ test('lesson checkmarks are earned immediately across rounds, survive reload and
  const repaired=validateImport(s);assert.equal(repaired.completed.sets,'2026-09-27');
  assert.deepEqual(validateImport(repaired),repaired);
 });
+
+
+test('manual chapter completion imports safely and old backups remain compatible',()=>{
+ const old=blankState();delete old.walkthroughCompleted;
+ assert.deepEqual(validateImport(old).walkthroughCompleted,{});
+ for(const value of [[],{'unknown':'2026-10-11'},{'ak-1':'2026-02-30'},{'ak-1':true}]){
+  assert.throws(()=>validateImport({...blankState(),walkthroughCompleted:value}));
+ }
+ const state=blankState();state.walkthroughCompleted={'ak-1':'2026-10-11'};
+ assert.deepEqual(validateImport(JSON.parse(JSON.stringify(state))).walkthroughCompleted,state.walkthroughCompleted);
+});

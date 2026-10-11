@@ -65,11 +65,11 @@ test('both weeks share the interactive path and all six new lessons save real pr
  await go('#lesson/minimize');await click('[data-action="lesson-lab"]');assert.equal(el('[data-w2-select="min"]').value,'original7');
  await go('#week2');assert.equal(doc.querySelectorAll('.lesson-tile').length,6);
  await click('a[href="#week2/overview"]');assert.match(el('h1').textContent,/Lernskript Woche 2/);
- await go('#stats');assert.match(el('.stats-grid').textContent,/6\/25/);
+ await go('#stats');assert.match(el('.stats-grid').textContent,/6\/29/);
  await go('#path/1');assert.match(el('.week-meta').textContent,/0\/19 Lektionen/);
  await go('#path/2');await click('[data-action="exam-start"][data-id="week2-check"]');
  assert.equal(saved().examAttempts.at(-1).examId,'week2-check');assert.equal(saved().examAttempts.at(-1).limitSeconds,3600);
  await go('#path/2');await click('[data-action="exam-start"][data-id="week2-check"]');assert.equal(saved().examAttempts.length,1,'an existing check is resumed');
- await go('#play');assert.equal(doc.querySelectorAll('.boss-card').length,8);assert.ok(el('[data-action="start-boss"][data-id="w2-laeufe"]'));
+ await go('#play');assert.equal(doc.querySelectorAll('.boss-card').length,10);assert.ok(el('[data-action="start-boss"][data-id="w2-laeufe"]'));
  await go('#path/999');assert.match(el('h1').textContent,/Hier ist noch kein Lernpfad/);
 });

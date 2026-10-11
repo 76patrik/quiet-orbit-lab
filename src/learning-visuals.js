@@ -1,3 +1,4 @@
+import {week3Visuals,syntaxTreeSvg} from './week3-visuals.js';
 // Independently authored teaching examples. Viewing steps never awards progress.
 const frame=(label,note,kind,data)=>({label,note,kind,data});
 const flow=(label,note,...data)=>frame(label,note,'flow',data);
@@ -125,7 +126,9 @@ export const learningVisuals={
   tiles('Rice anwenden','Rice betrifft nichttriviale semantische Eigenschaften partiell berechenbarer Funktionen. Keine pauschale Aussage über jeden Programmtext.',['≤ 10 Zustände?','syntaktisch · kein Rice-Fall'],['Überall Nullfunktion?','semantisch und nichttrivial · unentscheidbar']))
 };
 
+Object.assign(learningVisuals,week3Visuals);
 function picture(f,esc,key){
+ if(f.kind==='w3tree')return syntaxTreeSvg(f.data,esc);
  const text=(x,y,s,cls='')=>`<text x="${x}" y="${y}" class="${cls}" text-anchor="middle">${esc(s)}</text>`;
  const line=(x1,y1,x2,y2,label='')=>`<path d="M${x1},${y1} L${x2},${y2}" class="lv-edge" marker-end="url(#${key}-arrow)"/>${label?text((x1+x2)/2,(y1+y2)/2-10,label):''}`;
  const node=(x,y,s,end=false)=>`<circle cx="${x}" cy="${y}" r="25" class="lv-node"/>${end?`<circle cx="${x}" cy="${y}" r="20" class="lv-inner"/>`:''}${text(x,y+6,s)}`;
@@ -172,7 +175,7 @@ export function stepLearningVisual(button,esc){
 const routes={
  1:[['alphabet','Zeichen & Wörter'],['sets','Sprachen verknüpfen'],['construct','Muster bauen'],['dfa','Automaten verstehen'],['hierarchy','Modelle einordnen']],
  2:[['nea','Mögliche Läufe'],['epsilon','ε ergänzen'],['determinize','Mengen → Zustände'],['minimize','Zustände vereinen'],['kleene','Darstellungen verbinden']],
- 3:[['pumping','Grenzen des DEA'],['cnf','Grammatik & Syntaxbaum']],
+ 3:[['limits','Endlicher Speicher'],['pumping','Pumping begründen'],['syntax','Syntaxbäume'],['cnf','Normalform']],
  4:[['cyk','Wörter mit CYK prüfen'],['stack','Mit Keller speichern']],
  5:[['hierarchy','Sprachklassen'],['tm','Band & Kopf'],['np','Aufwand einordnen']],
  6:[['np','Zertifikate prüfen'],['reduction','Probleme übersetzen']],
@@ -180,7 +183,7 @@ const routes={
  8:[['minimize','Automaten wiederholen'],['cyk','CYK wiederholen'],['tm','TM wiederholen'],['exams','Simulation starten']],
  9:[['review','Fehler wiederholen'],['exams','Letzter Probelauf'],['hierarchy','Überblick festigen']]
 };
-const later=new Set(['pumping','cnf','cyk','stack','tm','np','reduction','decidable']);
+const later=new Set(['cyk','stack','tm','np','reduction','decidable']);
 export function weekVisualView(week,esc){
  const route=routes[week];if(!route)return '';
  return `<section class="card lv-week"><div class="eyebrow">DEINE VISUELLE ROUTE</div><h2>So hängen die Themen zusammen</h2><p>Öffne einen Baustein und gehe sein Beispiel Bild für Bild durch.</p><nav aria-label="Visuelle Themenroute Woche ${week}" class="lv-route">${route.map(([id,label],i)=>`<a href="#${['review','exams'].includes(id)?id:(later.has(id)?'topic/':'lesson/')+id}"><span>${String(i+1).padStart(2,'0')}</span><strong>${esc(label)}</strong><span aria-hidden="true">→</span></a>`).join('')}</nav></section>`;

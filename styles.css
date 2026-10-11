@@ -142,6 +142,12 @@
 .nfa-feedback button{min-height:44px;min-width:44px}
 .nfa-feedback p,.reading-section p{overflow-wrap:anywhere}
 .nfa-feedback svg text{fill:currentColor}
+
+.recovery-detail{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.recovery-detail li{margin:12px 0;line-height:1.7}.recovery-detail ol{padding-left:24px}
+.recovery{margin:20px 0;background:var(--surface)}.recovery h3,.recovery h4{margin:14px 0}.recovery p{margin:12px 0;line-height:1.7}
+.recovery [data-recovery-result]:not(:empty){padding:14px;border:1px solid var(--line);border-radius:10px}
+.w3-tree{display:block;width:100%;min-width:360px;max-height:420px;color:var(--text,#edf1f7);font-size:16px}.w3-script .card{margin:22px 0}.w3-script p,.w3-script li{line-height:1.8}.w3-script ol{padding-left:24px}.w3-script h3{margin-top:22px}
 /* Lernpfad-Reiter „Aufgaben“ und „Altklausur“: jede Aufgabe als Lernpfad mit Schrittfolge. */
 .week-tabs .wt-tab{display:inline-flex;align-items:center;white-space:nowrap;border:1px solid #4b415b;padding:10px 16px;border-radius:10px;color:#d0bdfd;background:#2a2636;font-size:12px;font-weight:600;min-height:44px}
 .week-tabs .wt-tab.active{border-color:var(--purple);background:#3a3150;color:#efe6ff}.week-tabs .wt-tab:hover{color:#efe6ff}
@@ -284,3 +290,23 @@
 .wt-visual,.wt-vgroup>div,.wt-step,.wt-part,.wt-answer,.wt-figure{min-width:0;max-width:100%}
 .wt-round>*{min-width:0}
 .wt-hero>div{min-width:0}.wt-hero h1{overflow-wrap:anywhere;hyphens:auto}@media(max-width:720px){.wt-hero h1{font-size:26px}}
+
+/* Intrinsic grid/flex sizes must not widen a chapter beyond the laptop viewport. */
+.wt-task{width:100%;min-width:0;grid-template-columns:minmax(0,1fr)}
+.wt-task>*{min-width:0;max-width:100%}
+.wt-task p,.wt-task li,.wt-task code,.wt-part-head>div,.wt-tile-link>div{overflow-wrap:anywhere;min-width:0}
+.wt-stepnav{flex-wrap:wrap;overflow:visible}
+.wt-stepnav li{min-width:0;max-width:100%}
+.wt-know{grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr))}
+.wt-vgroup.is-row{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
+.wt-scroll,.wt-tape-cells,.wt-stacks,.wt-task .table-scroll{min-width:0;width:100%;max-width:100%;overflow:auto}
+.wt-tile-link.is-complete{border-color:#62936d;background:#223329}
+.wt-complete-label{color:var(--green);font-size:12px;font-weight:650}
+.wt-completion{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.wt-completion>div{flex:1 1 280px;min-width:0}
+.wt-completion .btn{white-space:normal;min-height:44px}
+@media(min-width:721px) and (max-width:1440px){
+ .content{padding:26px 28px 36px}.wt-task{gap:18px}.wt-task>.card{padding:20px}
+ .wt-hero h1{font-size:32px}.wt-hero .week-number{font-size:56px}
+}
+@media(max-width:720px){.wt-completion .btn{width:100%}.wt-task .inline-actions .btn{white-space:normal}.wt-stepnav button small{display:block}.wt-stepnav li{flex:1 1 130px}.wt-stepnav button{width:100%;max-width:none}}

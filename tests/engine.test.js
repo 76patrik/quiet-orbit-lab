@@ -41,7 +41,7 @@ test('DFA builder detects missing transitions and handles arbitrary state labels
   assert.throws(()=>compareDfa({...machines.ends1,transitions:{}},machines.ends1));
 });
 test('curriculum is connected, unique and has usable assessment answers',()=>{
-  const lids=new Set(lessons.map(l=>l.id));assert.equal(lids.size,25);assert.equal(week1Lessons.length,19);
+  const lids=new Set(lessons.map(l=>l.id));assert.equal(lids.size,29);assert.equal(week1Lessons.length,19);
   assert.equal(new Set(allQuestions.map(q=>q.id)).size,allQuestions.length);
   assert.deepEqual(new Set(units.flatMap(u=>u.lessons)),lids);
   for(const l of lessons)assert.ok(questions.filter(q=>q.lesson===l.id).length>=3,l.id);

@@ -122,3 +122,19 @@ Vor dem Bauen ausfüllen:
 - Offene Quellenkonflikte oder noch nicht umgesetzte Teile:
 
 Diese Regeldatei bei neuen Nutzerentscheidungen gezielt aktualisieren und im selben PR dokumentieren. Sie beschreibt den Sollstandard; unfertige Teile niemals allein durch eine Dokumentationsbehauptung als implementiert ausgeben.
+
+## 12. Aus einem Fehler wieder ins Lernen finden
+
+Nach einer falschen Antwort reicht eine Musterlösung oder Grafik allein nicht. Zeige direkt einen nachvollziehbaren Lernweg:
+
+1. Gesicherte Abweichung benennen (bei Mengen fehlende/zusätzliche Elemente); keinen unbekannten Denkfehler behaupten.
+2. Die Regel in einfachen Worten erklären und auf die konkrete Aufgabe anwenden.
+3. Zwischenstände zeigen, z. B. die Beiträge jedes NEA-Zustands vor der Vereinigung und ε-Hülle.
+4. Eine kleine fokussierte Nachübung mit erklärtem Feedback anbieten, anschließend den Weg zum gemeinsamen Beispiel und zu einer anderen vollständigen Aufgabe.
+5. Persönlichen Merksatz und spätere Wiederholung nutzen. Miniübungen nach der Lösung sind unterstützt und vergeben keine unabhängigen Nachweise/XP.
+
+Freie Antworten behalten ein ausdrücklich gekennzeichnetes Selbstbewertungsraster. In Klausuren bleiben sämtliche Hilfen und Lösungen bis zur Abgabe verborgen. Der erklärende Lernweg ist auch aus Fehlerprotokoll und Auswertung erreichbar. Woche 3 und weitere Wochen übernehmen diese Anforderung von Anfang an.
+
+## 13. Aufgaben- und Altklausurkapitel abschließen
+
+Auf Wunsch vom 11.10.2026 haben einzelne Kapitel in „Aufgaben“ und „Altklausur“ einen Button „Kapitel abschließen“. Die manuelle Markierung wird dauerhaft gespeichert, exportiert und in der Übersicht grün mit Text und Haken angezeigt. „Kapitel wieder öffnen“ macht sie rückgängig. Sie bleibt getrennt von automatisch geprüften Lektionsnachweisen und vergibt keine XP. Alte Sicherungen ohne dieses Feld bleiben gültig. Auf Laptop-Bildschirmen dürfen Schrittleisten und Grafiken die Seite nicht verbreitern; breite Tabellen scrollen in ihrer eigenen Karte.
