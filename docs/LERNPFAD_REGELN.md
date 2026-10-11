@@ -134,3 +134,7 @@ Nach einer falschen Antwort reicht eine Musterlösung oder Grafik allein nicht. 
 5. Persönlichen Merksatz und spätere Wiederholung nutzen. Miniübungen nach der Lösung sind unterstützt und vergeben keine unabhängigen Nachweise/XP.
 
 Freie Antworten behalten ein ausdrücklich gekennzeichnetes Selbstbewertungsraster. In Klausuren bleiben sämtliche Hilfen und Lösungen bis zur Abgabe verborgen. Der erklärende Lernweg ist auch aus Fehlerprotokoll und Auswertung erreichbar. Woche 3 und weitere Wochen übernehmen diese Anforderung von Anfang an.
+
+## 13. Aufgaben- und Altklausurkapitel abschließen
+
+Auf Wunsch vom 11.10.2026 haben einzelne Kapitel in „Aufgaben“ und „Altklausur“ einen Button „Kapitel abschließen“. Die manuelle Markierung wird dauerhaft gespeichert, exportiert und in der Übersicht grün mit Text und Haken angezeigt. „Kapitel wieder öffnen“ macht sie rückgängig. Sie bleibt getrennt von automatisch geprüften Lektionsnachweisen und vergibt keine XP. Alte Sicherungen ohne dieses Feld bleiben gültig. Auf Laptop-Bildschirmen dürfen Schrittleisten und Grafiken die Seite nicht verbreitern; breite Tabellen scrollen in ihrer eigenen Karte.

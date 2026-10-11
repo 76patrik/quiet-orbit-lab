@@ -1,24 +1,27 @@
-# Prüfung: Woche-3-Plan und Klausurzeichen
+# Prüfung: Woche 3, Fehlerhilfen und Kapitelabschluss
 
-07.10.2026 · Branch `codex/woche3-plan-klausurzeichen`.
+11.10.2026 · Branch `codex/woche3-plan-klausurzeichen`.
 
 ## Änderungen
 
-- Konkreter Woche-3-Plan mit 480 Minuten, Vorwissenslinks, Nachweisen, Quellenkorrekturen, Wiederholung und Übergang zu Woche 4. Status ausdrücklich Planung; vorhandene Themenräume bleiben nutzbar.
-- Klausuren: Zeichenleisten für RegEx, Mengen, offene Antworten und kurze Textantworten. Zeichen richten sich nach Aufgabenstellung, Thema und angegebenem Alphabet. Auswahl verwendet keine Antwort, Musterlösung oder Bewertungsrubrik.
-- Passende a/b-Beschriftung im Woche-2-RegEx-Feld statt festem 0/1.
-- Gemeinsamer Renderer für Training und Klausuren, Einfügen am Cursor, Auswahl ersetzen, Rücktaste, Leeren; bestehende Speicherung und Eingabelimits bleiben wirksam.
-- Neue Module im Offline-Cache, Cache-Version 21. Lernstände und Aufgaben-IDs unverändert.
+- Woche 3: vier vollständige Lektionen, 41 neue Kurzaufgaben, geführte und eigenständige Verfahren, Schrittgrafiken, Syntaxbäume, 20-Punkte-Wochencheck, HTML-Skript und eigenes 29-seitiges PDF. 480-Minuten-Plan und Übergang zu Woche 4.
+- Woche 2/3: falsche Antworten zeigen bekannte Abweichungen, konkrete Zwischenstände, Erklärungen und Miniübungen. NEA-Beiträge vor Vereinigung und ε-Hülle werden sichtbar. Unterstützte Nachübungen erzeugen keine unabhängigen Erfolge.
+- Klausurzeichen: aufgabengerechte Zeichenleisten, Einfügen am Cursor, Auswahl ersetzen, Löschen und Speicherung. Tastenauswahl verwendet keine Lösungen.
+- Aktuellen Hauptbranch mit „Aufgaben“ und „Altklausur“ integriert. Kapitel können manuell abgeschlossen und wieder geöffnet werden. Grüner Haken, Text und Zähler in der Übersicht; Speicherung und Backup bleiben getrennt von Aufgaben-XP und automatisch geprüften Lektionen.
+- Laptop-Layout: begrenzte Grid-Spalten, umbrechende Schrittleisten, flexible Wissenskarten, lokale Scrollbereiche für breite Grafiken/Tabellen. Offline-Cache Version 23.
 
 ## Ausgeführt
 
-- `npm test`: 107 Tests erfolgreich, 0 fehlgeschlagen (20 Testdateien).
+- `npm test`: 131 Tests erfolgreich, 0 fehlgeschlagen.
 - `npm run build`: erfolgreich.
 - `git diff --check`: erfolgreich.
-- Neue Regressionen prüfen Alphabete und Mengenelemente aller bestehenden Klausuren, keine Lösungsdaten bei Tastenauswahl, reale App-Ereignisse in JSDOM, Cursor/Auswahl/Löschen, lokale Speicherung, Wiederaufnahme, 4000-Zeichen-Limit, kurze TM-Eingabe sowie sichtbaren Plan und 480-Minuten-Summe.
+- JSDOM: alle vier Woche-3-Lektionen und zwölf Übungsräume, Hinweise, Lösungsvergleich, Selbstbewertung, Klausurabgabe, Fehlernacharbeit, beide Kapitelreiter samt Abschluss/Zurücknehmen/Übersicht/Speicherung.
+- Import: alte Sicherungen ohne Kapitelfeld bleiben gültig; unbekannte Kapitel und ungültige Datumswerte werden abgelehnt. Bestehende XP und Nachweise unverändert.
+- Fachlich: CNF-Regelformen und begrenzter Sprachvergleich gegen Ausgangsgrammatiken, Syntaxbaumregeln und Blattwörter, Fragenbewertung, NEA-Läufe und vorhandene Altklausurmodelle.
+- PDF-Seiten gerendert und gesichtet; korrigierte Syntaxbaumdarstellung zusätzlich einzeln geprüft.
 
-Keine Browser-Screenshot- oder physische Mobilgeräteprüfung durchgeführt. Vorhandene CSS-Regeln erlauben umbrechende Zeichenleisten und mindestens 44 px große Tasten. Der Testumfang belegt Verhalten im DOM, nicht die visuelle Darstellung auf einem echten Gerät.
+Keine Browser-Screenshot- oder physische Geräteprüfung: Chromium war nicht verfügbar, der Browserdownload scheiterte. DOM-Tests prüfen Verhalten, nicht die tatsächliche Darstellung auf einem Laptop. Die responsive CSS-Anpassung ist implementiert, eine visuelle Browserabnahme bleibt offen.
 
 ## Veröffentlichung
 
-Zwischencommits lokal gespeichert. Der Push wurde durch die automatische Freigabeprüfung blockiert: Sie verlangt eine ausdrückliche Freigabe zur Veröffentlichung der Änderungen einschließlich eigener, aus den bereitgestellten Unterlagen abgeleiteter Lerntexte im öffentlichen Repository `76patrik/quiet-orbit-lab`. Keine Original-PDFs aufgenommen. Neuer Draft-PR daher noch nicht erstellt; nichts gemergt oder live geschaltet.
+Nur eigener Anwendungscode, eigene Lerntexte und das selbst erzeugte Skript sind Bestandteil dieses Branches. Keine bereitgestellten Original-PDFs hinzugefügt. Zwischencommits lokal gespeichert; Draft-PR vorgesehen, kein Merge beauftragt. Frühere Push-Versuche wurden von der automatischen Freigabeprüfung blockiert. Veröffentlichungsstatus wird nach dem abschließenden Push aktualisiert.

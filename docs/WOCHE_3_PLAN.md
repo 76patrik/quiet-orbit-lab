@@ -47,18 +47,19 @@ Diese Vergleichslösungen stehen nur in der Planungsdokumentation. Im späteren 
 
 Je Thema: vollständiges gemeinsames Beispiel → Schritte mit Lücken → nur Startschritt → neue Aufgabe ohne Hilfe. Zwei Hinweise: zuerst Verfahrenswahl, dann nächster lokaler Schritt; keine vollständige Lösung im Hinweis. Wissen, Anwenden, Begründen getrennt erfassen. Freie Beweise, Bäume und Grammatiken ausdrücklich selbst bewerten; kurze Worttests sind keine vollständige Äquivalenzprüfung.
 
-Wochencheck auf Papier: 50 Min. bearbeiten + 25 Min. selbst korrigieren, 20 Punkte:
+Digitaler Wochencheck: 50 Min. bearbeiten + 25 Min. selbst korrigieren, 20 Punkte:
 
-- Speicherargument 3: unbeschränkter Vergleich, endliche Zustände, Abgrenzung zu modulo je 1.
-- Pumping 3: Wortwahl nach p, alle zulässigen Zerlegungen, Pumpfaktor/Widerspruch je 1.
-- Baum/Mehrdeutigkeit 4: zwei regelkonforme Bäume je 1, identisches Blattwort 1, Unterschied der Struktur begründet 1.
-- Zwei neue kleine CNF-Aufgaben je 5: ε/Start 1, ε- und Kettenelimination 1, Terminalersetzung/Binarisierung 1, vollständige zulässige Zielregeln 1, Spracherhaltung/Randfälle erklärt 1.
+- Grundlagen: vier automatisch geprüfte Fragen zu je 1 Punkt.
+- Speicherargument: 1 Punkt (Selbstbewertung).
+- Pumping: 2 Punkte (Selbstbewertung).
+- Syntaxbäume/Mehrdeutigkeit: 3 Punkte (Selbstbewertung).
+- Zwei neue CNF-Aufgaben: je 5 Punkte mit eigenem Bewertungsraster.
 
 Ziel mindestens 16/20 als eigene Trainingsmarke; beide CNF-Aufgaben bearbeiten. Bei Fehlern: Kategorie, persönliche Korrekturregel, neue Variante und späterer Abruf. Lesen vergibt keine XP.
 
 ## Umsetzung und Abnahme
 
-Alle vier Lektionen nutzen den gemeinsamen Renderer und die drei Übungsformate Wissen, Anwenden und Begründen. Die Eigenaufträge besitzen unterschiedliche Vergleichsgrafiken; die Lösungen erscheinen im Übungsraum erst nach eigener Antwort. Das PDF und der HTML-Leser sind direkt im Lernpfad erreichbar. Der digitale Wochencheck umfasst 20 Punkte (4 automatisch, 16 Selbstbewertung): Grundlagen 4, Speicherargument 1, Pumping 2, Syntaxbäume 3 und zwei CNF-Umformungen je 5. Er ersetzt das oben ursprünglich vorgeschlagene reine Papierraster; Zeichnungen und längere Rechnungen können weiterhin auf Papier erfolgen.
+Alle vier Lektionen nutzen den gemeinsamen Renderer und die drei Übungsformate Wissen, Anwenden und Begründen. Die Eigenaufträge besitzen unterschiedliche Vergleichsgrafiken; die Lösungen erscheinen im Übungsraum erst nach eigener Antwort. Das PDF und der HTML-Leser sind direkt im Lernpfad erreichbar. Der digitale Wochencheck umfasst 20 Punkte (4 automatisch, 16 Selbstbewertung): Grundlagen 4, Speicherargument 1, Pumping 2, Syntaxbäume 3 und zwei CNF-Umformungen je 5. Zeichnungen und längere Rechnungen können weiterhin auf Papier erfolgen.
 
 Fehlerhilfen enthalten gesicherte Abweichungen, konkrete Rechenschritte und eine unterstützte Miniübung. Lernstände und vorhandene IDs bleiben bestehen. Prüfdetails in `WOCHE3_KLAUSURZEICHEN_PRUEFUNG.md`.
 
