@@ -51,6 +51,15 @@ Der zusätzliche Skriptleser erklärt NEA, ε-Hülle, Potenzmenge, Minimierung, 
 - Der Wochencheck hat optional 60 Minuten. 7 Punkte werden automatisch geprüft, 33 anhand eines Rasters selbst bewertet. Bekannte Varianten gelten als Wiederholung.
 - [Skript als PDF](assets/Lernskript_Woche_2_Theoretische_Informatik.pdf) und [Details, Quellenkorrektur und Prüfung](docs/WOCHE_2.md).
 
+## Aufgaben und Altklausur Schritt für Schritt
+
+Im **Lernpfad** stehen vor den Wochen zwei weitere Reiter:
+
+- **Aufgaben:** alle 24 Übungsaufgaben, nach Themen gruppiert.
+- **Altklausur:** alle sechs Klausuraufgaben (60 Punkte) mit Punkteverteilung.
+
+Jede Aufgabe ist ein eigener kleiner Lernpfad: Aufgabe mit neu gezeichneter Grafik, benötigtes Hintergrundwissen mit Link zur Lektion, erst selbst versuchen (oder „weiß ich nicht“), dann den Lösungsweg Schritt für Schritt bis zur Musterlösung, dazu Tipps & Tricks. Automaten, Partitionen, CYK-Tabellen, Turingbänder, Graphen und Syntaxbäume werden pro Schritt hervorgehoben. Fehler in den Original-Musterlösungen sind markiert und korrigiert. Details: [Aufgaben und Altklausur](docs/AUFGABEN_ALTKLAUSUR.md).
+
 ## Training gezielt zusammenstellen
 
 - Runden mit 5, 10, 20, 40 oder **allen passenden Aufgaben**. „Alle“ hat keine versteckte Obergrenze; beim Mengentraining werden beispielsweise alle 45 Aufgaben angeboten.
@@ -110,6 +119,8 @@ Freitext-Begründungen werden privat als Notizen gespeichert. Die App bewertet s
 | `src/week2-models.js` | Übergänge der Originalaufgaben und eigenen Varianten |
 | `src/week2-questions.js`, `src/week2-exam.js` | 61 Übungen und 40-Punkte-Wochencheck |
 | `scripts/build-week2-pdf.py` | Druckfassung aus dem gemeinsamen Lerntext erzeugen |
+| `src/walkthroughs*.js`, `src/walkthrough-view.js` | Reiter „Aufgaben“ und „Altklausur“: Inhalte, Schrittfolge |
+| `src/solution-models.js`, `src/solution-diagrams.js`, `src/solution-visuals.js` | Geprüfte Modelle und SVG-Grafiken der Lösungswege |
 | `src/app.js` | Oberfläche und Interaktionen |
 | `styles.css` | Desktop- und Smartphone-Layout |
 | `sw.js` | Offline-Cache innerhalb des App-Pfads |
