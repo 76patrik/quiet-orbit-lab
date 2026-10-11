@@ -1,3 +1,4 @@
+import {week3Contracts} from './week3-content.js';
 import {lessonGuides} from './lesson-guides.js';
 // Exact recall targets; explanations are assessed by an explicit self-check, not an AI guess.
 const facts={
@@ -83,3 +84,5 @@ export const chomskyRows=[
  ['3','Regulär','Durchgehend rechtslinear: A→aB, A→a, A→ε (oder durchgehend linkslinear)','Endlicher Automat (DEA / NEA)','Bei festem DEA in O(n)','a*']
 ];
 export const chomskySourceNote='Abweichung in den Unterlagen: TGI_01_Einfuehrung, Folie 42, nennt bei Typ 1 NP-vollständig. Für das allgemeine Wortproblem kontextsensitiver Grammatiken lautet die fachliche Einordnung PSPACE-vollständig. Diese Zelle nicht blind als sichere Klausurvorgabe lernen; die erwartete Formulierung mit der Lehrperson klären. Quelle: Aarts, Uniform Recognition for Acyclic Context-Sensitive Grammars, Einleitung.';
+
+Object.assign(learningContracts,week3Contracts);

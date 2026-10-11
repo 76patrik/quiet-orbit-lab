@@ -1,3 +1,4 @@
+import {week3Support} from './week3-content.js';
 // PDF page numbers verified against the supplied originals; exercises are our own variants.
 const source1='TGI_02_01_RegulaereSprachen.pdf',source2='TGI_02_02_RegulaereSprachen.pdf';
 export const week2Support={
@@ -11,3 +12,5 @@ export const week2Support={
 export function week2Prerequisites(id,esc,title){const c=week2Support[id];return c?`<section class="reading-section"><h2>Das brauchst du vorher</h2><p>Kannst du diese Grundlagen noch erklären? Wiederhole sie bei Bedarf:</p><div class="inline-actions">${c.pre.map(p=>`<a class="btn secondary" href="#lesson/${p}">${esc(title(p))}</a>`).join('')}</div></section>`:'';}
 export function week2Sources(id,esc){const c=week2Support[id];return c?`<section class="reading-section"><h2>Fundstelle in deinen Unterlagen</h2><p>${esc(c.source[0])} · PDF-Seiten ${esc(c.source[1])} (Seitenposition in der Datei).</p><p class="help">Die Beispiele und Übungsvarianten hier sind eigenständig erstellt. Die Originaldatei ist nicht öffentlich eingebunden.</p></section>`:'';}
 export function workshopHints(id,mode){return week2Support[id]?.hints[mode]||['Zerlege den Arbeitsauftrag in die verlangten Teilantworten.','Notiere die passende Regel und prüfe ihre Voraussetzungen an der Aufgabe.'];}
+
+Object.assign(week2Support,week3Support);

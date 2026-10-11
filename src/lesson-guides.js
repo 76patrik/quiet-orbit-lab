@@ -1,3 +1,4 @@
+import {week3Guides} from './week3-content.js';
 // Independently authored examples. No quiz completion or XP is granted for reading.
 const guide = (goal,recipe,prompt,steps,check,answer,exam,table) =>
   ({goal,recipe,worked:{prompt,steps,table},check,answer,exam});
@@ -211,3 +212,5 @@ export const lessonGuides = {
   'Gilt Rice für „Der Programmtext enthält eine Schleife“?',
   'Nein. Das ist syntaktisch und lässt sich am endlichen Text prüfen. Rice betrifft nichttriviale Eigenschaften der berechneten Funktion, unabhängig von ihrer Schreibweise.', 'method-decidable')
 };
+
+Object.assign(lessonGuides,week3Guides);

@@ -1,3 +1,5 @@
+import {week3Questions} from './week3-questions.js';
+import {week3Lessons,week3Units} from './week3-content.js';
 import {week2Lessons,week2Units,week2TopicGroup,assignWeek2Lesson} from './week2-lessons.js';
 import {week2Questions} from './week2-questions.js';
 import {extraQuestions} from './practice-bank.js';
@@ -20,7 +22,7 @@ export const week1Units = [
  {id:'automaten',boss:'Die Zustandsmaschine',title:'Automaten zum Leben erwecken',subtitle:'Lesen, merken, entscheiden',icon:'nodes',lessons:['dfa','parity','alternate','complement']},
  {id:'verbinden',boss:'Der Hierarchiehüter',title:'Das große Ganze verbinden',subtitle:'Grammatiken, Hierarchie und Transfer',icon:'orbit',lessons:['grammar','hierarchy','transfer']}
 ];
-export const units=[...week1Units.map(u=>({...u,week:1})),...week2Units];
+export const units=[...week1Units.map(u=>({...u,week:1})),...week2Units,...week3Units];
 const l=(id,title,minutes,source,intro,sections,example,trap,reflection,lab)=>({id,title,week:1,minutes,source,intro,sections,example,trap,reflection,lab});
 export const week1Lessons = [
  l('motivation','Warum Theoretische Informatik?',8,'Skript W1 · S. 3–4',
@@ -138,7 +140,7 @@ export const week1Lessons = [
  'Ein Automat, der alles akzeptiert, erkennt nicht jede Teilmenge davon. „Enthält alle erlaubten Wörter“ reicht für eine korrekte Sprachbeschreibung nicht.',
  'Erkläre mit De Morgan, warum der Schnitt zweier regulärer Sprachen regulär ist.')
 ];
-export const lessons=[...week1Lessons,...week2Lessons];
+export const lessons=[...week1Lessons,...week2Lessons,...week3Lessons];
 export const lessonsOfWeek=n=>lessons.filter(l=>l.week===n);
 export const unitsOfWeek=n=>units.filter(u=>u.week===n);
 export const lessonNumber=id=>lessonsOfWeek(lessons.find(l=>l.id===id)?.week).findIndex(l=>l.id===id)+1;
@@ -224,8 +226,8 @@ export const checkQuestions = [
  q('w9','complement','Wie komplementierst du einen vollständigen DEA?',['Start und Endzustände vertauschen','F durch Q ∖ F ersetzen','Alle Pfeile umdrehen'],1,'Alle übrigen Bestandteile bleiben gleich.'),
  q('w10','parity','Welche Information genügt für „gerade Anzahl Einsen“?',['Die genaue Wortlänge','Die genaue Anzahl Einsen','Nur gerade oder ungerade'],2,'Eine 1 wechselt zwischen den beiden Möglichkeiten; 0 lässt sie unverändert.')
 ];
-export const questions=[...originalQuestions.map(q=>({...q,level:q.type==='choice'?1:2,kind:q.type==='choice'?'concept':q.type==='regex'?'construct':'calculate',family:q.id})),...extraQuestions,...week2Questions].map(assignWeek2Lesson);
-export const allTopics=[...lessons,...laterTopics.filter(t=>t.week>2)];
+export const questions=[...originalQuestions.map(q=>({...q,level:q.type==='choice'?1:2,kind:q.type==='choice'?'concept':q.type==='regex'?'construct':'calculate',family:q.id})),...extraQuestions,...week2Questions,...week3Questions].map(assignWeek2Lesson);
+export const allTopics=[...lessons,...laterTopics.filter(t=>!lessons.some(l=>l.id===t.id))];
 export const topicById=Object.fromEntries(allTopics.map(t=>[t.id,t]));
 export const allQuestions=[...questions,...checkQuestions];
 export const questionById=Object.fromEntries(allQuestions.map(q=>[q.id,q]));

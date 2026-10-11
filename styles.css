@@ -147,3 +147,4 @@
 .recovery-detail li{margin:12px 0;line-height:1.7}.recovery-detail ol{padding-left:24px}
 .recovery{margin:20px 0;background:var(--surface)}.recovery h3,.recovery h4{margin:14px 0}.recovery p{margin:12px 0;line-height:1.7}
 .recovery [data-recovery-result]:not(:empty){padding:14px;border:1px solid var(--line);border-radius:10px}
+.w3-tree{display:block;width:100%;min-width:360px;max-height:420px;color:var(--text,#edf1f7);font-size:16px}.w3-script .card{margin:22px 0}.w3-script p,.w3-script li{line-height:1.8}.w3-script ol{padding-left:24px}.w3-script h3{margin-top:22px}
