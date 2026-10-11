@@ -24,4 +24,6 @@ Keine Browser-Screenshot- oder physische Geräteprüfung: Chromium war nicht ver
 
 ## Veröffentlichung
 
-Nur eigener Anwendungscode, eigene Lerntexte und das selbst erzeugte Skript sind Bestandteil dieses Branches. Keine bereitgestellten Original-PDFs hinzugefügt. Zwischencommits lokal gespeichert; Draft-PR vorgesehen, kein Merge beauftragt. Frühere Push-Versuche wurden von der automatischen Freigabeprüfung blockiert. Der abschließende Push am 11.10. scheiterte an fehlender GitHub-Authentifizierung (`could not read Username`). Der Branch ist nur lokal vorhanden; kein Draft-PR erstellt und nicht live.
+Nur eigener Anwendungscode, eigene Lerntexte und das selbst erzeugte Skript sind Bestandteil dieses Branches. Keine bereitgestellten Original-PDFs hinzugefügt.
+
+Der direkte Git-Push scheiterte an fehlender GitHub-Authentifizierung. Am 11.10. wurden die Zwischencommits über die autorisierte GitHub-Verbindung übertragen. Alle übertragenen Git-Trees stimmen mit den lokalen Dateiprüfsummen überein; die Commit-IDs unterscheiden sich durch die Übertragung über die API. Die Merge-Eltern und die Reihenfolge der Zwischencommits bleiben erhalten. Veröffentlichung als Draft-PR, ohne Merge oder Live-Schaltung. Die visuelle Browserabnahme bleibt offen.
