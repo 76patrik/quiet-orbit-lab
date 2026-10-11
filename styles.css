@@ -142,3 +142,8 @@
 .nfa-feedback button{min-height:44px;min-width:44px}
 .nfa-feedback p,.reading-section p{overflow-wrap:anywhere}
 .nfa-feedback svg text{fill:currentColor}
+
+.recovery-detail{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.recovery-detail li{margin:12px 0;line-height:1.7}.recovery-detail ol{padding-left:24px}
+.recovery{margin:20px 0;background:var(--surface)}.recovery h3,.recovery h4{margin:14px 0}.recovery p{margin:12px 0;line-height:1.7}
+.recovery [data-recovery-result]:not(:empty){padding:14px;border:1px solid var(--line);border-radius:10px}

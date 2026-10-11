@@ -1,3 +1,4 @@
+import {recoveryAction} from './remediation.js';
 import {symbolKeyboard as renderSymbolKeyboard} from './symbol-keyboard.js';
 import {stepNfaFeedback} from './nfa-feedback.js';
 import {week2Prerequisites,week2Sources} from './week2-learning-support.js';
@@ -431,6 +432,7 @@ app.addEventListener('click',async event=>{
       case 'hint':if(session&&!session.feedback&&session.type!=='check'&&session.type!=='boss'){session.input=document.querySelector('#quiz-input')?.value||'';session.hintCount=Math.min(hintsFor(session.items[session.index]).length,session.hintCount+1);session.hint=true;render();}break;
       case 'save-note':state.notes[id]=document.querySelector('#lesson-note').value;if(persist())document.querySelector('#note-status').textContent='Deine Erklärung ist auf diesem Gerät gespeichert.';break;
       case 'save-error':state.errors[id].note=document.querySelector(`#error-note-${id}`).value;state.errors[id].rule=document.querySelector(`#error-rule-${id}`).value;if(persist())toast('Deine Fehlernotiz ist gespeichert.');break;
+      case 'recovery-check':recoveryAction(button);break;
       case 'symbol':case 'erase-symbol':case 'clear-input':editInput(button);break;
       case 'set-check':runSetLab(true);break;
       case 'set-solve':runSetLab(false);break;
